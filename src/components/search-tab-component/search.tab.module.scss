@@ -35,7 +35,7 @@
       cursor: pointer;
       .selectedOption {
         @include typography('s');
-        color: $carter-brand-600;
+        color: $oura1-brand-600;
         font-weight: 500;
         padding: 5px;
       }
@@ -75,7 +75,7 @@
     }
     .resultContent {
       all: unset;
-      border-bottom: 1px solid $carter-grey-200;
+      border-bottom: 1px solid $oura1-grey-200;
       padding: 10px 8px;
       box-sizing: border-box;
       width: 100%;
@@ -94,7 +94,7 @@
       margin: 8px;
     }
     .savedResultContent {
-      border-bottom: 1px solid $carter-grey-200;
+      border-bottom: 1px solid $oura1-grey-200;
       padding: 10px 8px;
       width: 100%;
       cursor: pointer;

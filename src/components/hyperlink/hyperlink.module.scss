@@ -6,14 +6,14 @@ $font-weights: (
 );
 
 $colors: (
-  primary: $carter-brand-600,
-  link: $carter-links-blue,
-  secondary: $carter-text-500,
-  success: $carter-green-500,
-  error: $carter-red-500,
-  warning: $carter-yellow-500,
-  info: $carter-brand-400,
-  black: $carter-text-900,
+  primary: $oura1-brand-600,
+  link: $oura1-links-blue,
+  secondary: $oura1-text-500,
+  success: $oura1-green-500,
+  error: $oura1-red-500,
+  warning: $oura1-yellow-500,
+  info: $oura1-brand-400,
+  black: $oura1-text-900,
 );
 
 @mixin font-weights {
@@ -34,7 +34,7 @@ $colors: (
 
 .container {
   span {
-    color: $carter-links-blue;
+    color: $oura1-links-blue;
     @include typography('xs');
     line-height: 20px;
     font-weight: 500;

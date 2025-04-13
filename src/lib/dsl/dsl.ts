@@ -17,7 +17,7 @@ export {
 } from 'shyftlabs-dsl';
 
 // Colors and Styles
-export { carterColors } from 'shyftlabs-dsl';
+export { carterColors as ouraColors } from 'shyftlabs-dsl';
 
 // Types
 export type {

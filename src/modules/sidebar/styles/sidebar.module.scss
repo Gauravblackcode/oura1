@@ -20,7 +20,7 @@
     cursor: pointer;
     width: 24px;
     height: 24px;
-    background: $brand-600;
+    background: $oura1-brand-100;
     border-radius: 0px 50% 50% 0px;
     svg {
       transition: all 0.3s ease-in-out;
@@ -56,9 +56,9 @@
     }
     &:hover {
       cursor: pointer;
-      background-color: $carter-brand-100;
+      background-color: $oura1-brand-100;
       span {
-        color: $carter-brand-600;
+        color: $oura1-brand-600;
         font-weight: 600;
       }
     }

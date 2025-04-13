@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { ChevronDown, ChevronUp, CornerDownRight } from 'lucide-react';
 import { useRef, useState } from 'react';
-import { carterColors } from 'shyftlabs-dsl';
+import { ouraColors } from '@/lib/dsl/dsl';
 import useElementPosition from '@/contexts/useElementPosition/useElementPosition.hook';
 
 export type SidebarItemType = {
@@ -30,7 +30,7 @@ interface SidebarItemProps {
 }
 
 const ItemContainer = styled.div<{ active?: boolean; isSubItem?: boolean }>`
-  color: ${props => (props.active ? carterColors['brand-600'] : '#456173')};
+  color: ${props => (props.active ? ouraColors['brand-600'] : '#456173')};
   font-family: inherit;
   font-size: 14px;
   font-style: normal;
@@ -45,14 +45,14 @@ const ItemContainer = styled.div<{ active?: boolean; isSubItem?: boolean }>`
   align-items: center;
 
   &:hover {
-    color: ${carterColors['brand-600']};
+    color: ${ouraColors['brand-600']};
     background-color: #f2f2fd;
   }
 
   ${props =>
     props.active &&
     `
-    color: ${carterColors['brand-600']};
+    color: ${ouraColors['brand-600']};
     background-color: #f2f2fd;
   `}
 `;
@@ -99,7 +99,7 @@ const StyledSubItemIndicator = styled.div<{ isActive: boolean; positionTop: numb
   align-items: flex-start;
   flex-direction: column;
   width: 2px;
-  background: ${carterColors['brand-600']};
+  background: ${ouraColors['brand-600']};
   height: ${({ isActive }) => (isActive ? '20px' : '40px')};
   top: ${({ positionTop }) => `${positionTop - 4}px`};
 `;

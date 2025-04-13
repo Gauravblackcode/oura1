@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
-import { carterColors, CarterInput, Typography, Button } from '@/lib/dsl/dsl';
+import { ouraColors, CarterInput, Typography, Button } from '@/lib/dsl/dsl';
 import Link from 'next/link';
 import { forgotPasswordSchema } from '@/common/schemas.yup';
 import EmailSentIcon from '@/assets/images/mail_folder.png';
@@ -50,10 +50,10 @@ const ForgotPasswordForm = () => {
         {!isEmailSent ? (
           <div className={styles.body}>
             <div className={styles.header}>
-              <Typography variant="h2-bold" color={carterColors['brand-900']}>
+              <Typography variant="h2-bold" color={ouraColors['brand-900']}>
                 Forgot Password?
               </Typography>
-              <Typography variant="body-medium" color={carterColors['text-600']}>
+              <Typography variant="body-medium" color={ouraColors['text-600']}>
                 Enter your email to reset password
               </Typography>
             </div>
@@ -78,20 +78,20 @@ const ForgotPasswordForm = () => {
                 disabled={!(!errors.username && values.username.length > 0)}
               />
               <Link href={ROUTES.AUTH.LOGIN}>
-                <Typography variant="body-large-semibold" color={carterColors['brand-600']}>
+                <Typography variant="body-large-semibold" color={ouraColors['brand-600']}>
                   Back to log in
                 </Typography>
               </Link>
             </div>
             <div className={styles.formFooter}>
-              <Link href={client?.website ?? ''} color={carterColors['links-blue']}>
-                <Typography color={carterColors['links-blue']}>Visit Website</Typography>
+              <Link href={client?.website ?? ''} color={ouraColors['links-blue']}>
+                <Typography color={ouraColors['links-blue']}>Visit Website</Typography>
               </Link>
-              <Link href={client?.termsAndCondition ?? ''} color={carterColors['links-blue']}>
-                <Typography color={carterColors['links-blue']}>Terms & Conditions</Typography>
+              <Link href={client?.termsAndCondition ?? ''} color={ouraColors['links-blue']}>
+                <Typography color={ouraColors['links-blue']}>Terms & Conditions</Typography>
               </Link>
-              <Link href={client?.privacyPolicy ?? ''} color={carterColors['links-blue']}>
-                <Typography color={carterColors['links-blue']}>Privacy Policy</Typography>
+              <Link href={client?.privacyPolicy ?? ''} color={ouraColors['links-blue']}>
+                <Typography color={ouraColors['links-blue']}>Privacy Policy</Typography>
               </Link>
             </div>
           </div>
@@ -99,7 +99,7 @@ const ForgotPasswordForm = () => {
           <div className={styles.body}>
             <Image src={EmailSentIcon} alt="email-sent-icon" />
             <div className={styles.notice_field}>
-              <Typography variant="h1-bold" color={carterColors['brand-900']}>
+              <Typography variant="h1-bold" color={ouraColors['brand-900']}>
                 Please verify your email
               </Typography>
               <Typography>{`We've sent a reset link to ${getCodedEmail()}`}</Typography>
@@ -111,19 +111,19 @@ const ForgotPasswordForm = () => {
               </Typography>
             </div>
             <Link href={ROUTES.AUTH.LOGIN}>
-              <Typography variant="body-large-semibold" color={carterColors['brand-600']}>
+              <Typography variant="body-large-semibold" color={ouraColors['brand-600']}>
                 Back to log in
               </Typography>
             </Link>
             <div className={styles.formFooter}>
-              <Link href={client?.website ?? ''} color={carterColors['links-blue']}>
-                <Typography color={carterColors['links-blue']}>Visit Website</Typography>
+              <Link href={client?.website ?? ''} color={ouraColors['links-blue']}>
+                <Typography color={ouraColors['links-blue']}>Visit Website</Typography>
               </Link>
-              <Link href={client?.termsAndCondition ?? ''} color={carterColors['links-blue']}>
-                <Typography color={carterColors['links-blue']}>Terms & Conditions</Typography>
+              <Link href={client?.termsAndCondition ?? ''} color={ouraColors['links-blue']}>
+                <Typography color={ouraColors['links-blue']}>Terms & Conditions</Typography>
               </Link>
-              <Link href={client?.privacyPolicy ?? ''} color={carterColors['links-blue']}>
-                <Typography color={carterColors['links-blue']}>Privacy Policy</Typography>
+              <Link href={client?.privacyPolicy ?? ''} color={ouraColors['links-blue']}>
+                <Typography color={ouraColors['links-blue']}>Privacy Policy</Typography>
               </Link>
             </div>
           </div>

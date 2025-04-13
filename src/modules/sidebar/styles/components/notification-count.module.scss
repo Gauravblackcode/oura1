@@ -1,10 +1,10 @@
 .approvalCount {
-  color: $white-100;
+  color: $oura1-grey-100;
   min-width: 30px;
   height: 20px;
   text-align: center;
   padding: 0px 6px 20px;
-  background-color: $blue-400;
+  background-color: $oura1-brand-600;
   border: 1px solid $blue-400;
   border-radius: 12px;
   @include typography('xxs', 'small');

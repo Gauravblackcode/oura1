@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
-import { CarterInput, Typography, Button, carterColors } from '@/lib/dsl/dsl';
+import { CarterInput, Typography, Button, ouraColors } from '@/lib/dsl/dsl';
 import Link from 'next/link';
 import { PASSWORD_PATTERN } from '@/common/constants';
 import { passwordSchema } from '@/common/schemas.yup';
@@ -203,14 +203,14 @@ const SetPasswordForm: React.FC<ISetPasswordForm> = props => {
       </div>
       {authToRender()}
       <div className={styles.formFooter}>
-        <Link href={client?.website ?? ''} color={carterColors['links-blue']}>
-          <Typography color={carterColors['links-blue']}>Visit Website</Typography>
+        <Link href={client?.website ?? ''} color={ouraColors['links-blue']}>
+          <Typography color={ouraColors['links-blue']}>Visit Website</Typography>
         </Link>
-        <Link href={client?.termsAndCondition ?? ''} color={carterColors['links-blue']}>
-          <Typography color={carterColors['links-blue']}>Terms & Conditions</Typography>
+        <Link href={client?.termsAndCondition ?? ''} color={ouraColors['links-blue']}>
+          <Typography color={ouraColors['links-blue']}>Terms & Conditions</Typography>
         </Link>
-        <Link href={client?.privacyPolicy ?? ''} color={carterColors['links-blue']}>
-          <Typography color={carterColors['links-blue']}>Privacy Policy</Typography>
+        <Link href={client?.privacyPolicy ?? ''} color={ouraColors['links-blue']}>
+          <Typography color={ouraColors['links-blue']}>Privacy Policy</Typography>
         </Link>
       </div>
     </div>

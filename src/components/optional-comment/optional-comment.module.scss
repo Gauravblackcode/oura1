@@ -8,7 +8,7 @@
     gap: 10px;
     span {
       @include typography('sm', 'medium');
-      color: $carter-text-900;
+      color: $oura1-text-900;
       p {
         @include typography('xs');
         color: $text-color-dark;
@@ -46,7 +46,7 @@
   gap: 12px;
   justify-content: flex-end;
   .skip_btn {
-    color: $carter-brand-600;
+    color: $oura1-brand-600;
     font-size: 14px;
     font-weight: 500;
   }

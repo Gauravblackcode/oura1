@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { useSelector } from 'react-redux';
-import { Button, carterColors, Typography } from '@/lib/dsl/dsl';
+import { Button, ouraColors, Typography } from '@/lib/dsl/dsl';
 import Link from 'next/link';
 import { ROUTE_REFS } from '@/common/constants';
 import environments from '@/common/environments';
@@ -47,16 +47,16 @@ const Login = () => {
                   <img src={client?.icon ?? ''} width={50} height={55} alt={`${client?.name} Logo`} />
                   <Typography variant="h1-bold">{client?.tag}</Typography>
                 </div>
-                <Typography variant="subtitle-regular" color={carterColors['text-600']}>
+                <Typography variant="subtitle-regular" color={ouraColors['text-600']}>
                   Log-in to track your performance
                 </Typography>
               </div>
             ) : (
               <div className={styles.welcomeTitle}>
-                <Typography variant="h1-bold" color={carterColors['brand-900']}>
+                <Typography variant="h1-bold" color={ouraColors['brand-900']}>
                   Welcome back!
                 </Typography>
-                <Typography variant="subtitle-regular" color={carterColors['text-600']}>
+                <Typography variant="subtitle-regular" color={ouraColors['text-600']}>
                   Log-in to track your performance
                 </Typography>
               </div>
@@ -84,14 +84,14 @@ const Login = () => {
           </div>
 
           <div className={styles.formFooter}>
-            <Link href={client?.website ?? ''} color={carterColors['links-blue']}>
-              <Typography color={carterColors['links-blue']}>Visit Website</Typography>
+            <Link href={client?.website ?? ''} color={ouraColors['links-blue']}>
+              <Typography color={ouraColors['links-blue']}>Visit Website</Typography>
             </Link>
-            <Link href={client?.termsAndCondition ?? ''} color={carterColors['links-blue']}>
-              <Typography color={carterColors['links-blue']}>Terms & Conditions</Typography>
+            <Link href={client?.termsAndCondition ?? ''} color={ouraColors['links-blue']}>
+              <Typography color={ouraColors['links-blue']}>Terms & Conditions</Typography>
             </Link>
-            <Link href={client?.privacyPolicy ?? ''} color={carterColors['links-blue']}>
-              <Typography color={carterColors['links-blue']}>Privacy Policy</Typography>
+            <Link href={client?.privacyPolicy ?? ''} color={ouraColors['links-blue']}>
+              <Typography color={ouraColors['links-blue']}>Privacy Policy</Typography>
             </Link>
           </div>
         </div>

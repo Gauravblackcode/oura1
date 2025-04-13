@@ -4,7 +4,7 @@
   .leftContainer {
     flex: 1;
     height: 100vh;
-    background-color: $carter-brand-100;
+    background-color: $oura1-brand-100;
     display: flex;
     flex-direction: column;
 
@@ -72,7 +72,7 @@
         }
       }
       .inviteLink {
-        color: $carter-links-blue;
+        color: $oura1-links-blue;
       }
 
       .formField {
@@ -89,7 +89,7 @@
         justify-content: center;
         gap: 24px;
         text-decoration: underline;
-        color: $carter-links-blue;
+        color: $oura1-links-blue;
         @include mobile {
           span {
             text-align: center;

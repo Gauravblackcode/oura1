@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import { CarterCheckbox, carterColors, CarterInput, Typography } from '@/lib/dsl/dsl';
+import { CarterCheckbox, ouraColors, CarterInput, Typography } from '@/lib/dsl/dsl';
 import Link from 'next/link';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { loginSchema } from '@/common/schemas.yup';
@@ -77,8 +77,8 @@ const LoginForm = () => {
             variant="DEFAULT"
             onChange={() => setFieldValue('rememberMe', !values.rememberMe)}
           />
-          <Link href={ROUTES.AUTH.FORGOT_PASSWORD} color={carterColors['links-blue']}>
-            <Typography color={carterColors['links-blue']} variant="subtitle-medium">
+          <Link href={ROUTES.AUTH.FORGOT_PASSWORD} color={ouraColors['links-blue']}>
+            <Typography color={ouraColors['links-blue']} variant="subtitle-medium">
               Forgot Password?
             </Typography>
           </Link>
