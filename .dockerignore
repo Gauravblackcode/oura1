@@ -1,0 +1,9 @@
+build
+node_modules
+/.vscode
+/.next
+out
+.env
+.env.ref
+.vscode
+.husky

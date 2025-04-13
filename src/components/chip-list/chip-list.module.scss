@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  max-height: 70px;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+  }
+
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    border-radius: 13px;
+    background-color: $blue-300;
+    p {
+      @include typography('xs', 'medium');
+      color: $blue-800;
+    }
+    svg {
+      color: $blue-800;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  &[data-align='true'] {
+    min-height: 56px;
+    align-items: center;
+  }
+}

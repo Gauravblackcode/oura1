@@ -1,0 +1,73 @@
+mutation CreateTemplate($template: TemplateInput!) {
+  createTemplate(template: $template) {
+    id
+    accountId
+    name
+    # type
+    htmlContent
+    createdAt
+    updatedAt
+  }
+}
+
+mutation UpdateTemplate($template: TemplateInput!, $id: ID!) {
+  updateTemplate(template: $template, id: $id) {
+    id
+    accountId
+    name
+    # type
+    htmlContent
+    createdAt
+    updatedAt
+  }
+}
+
+mutation UpdateTemplateStatus($id: ID!, $status: String!) {
+  updateTemplateStatus(id: $id, status: $status) {
+    id
+    accountId
+    platformId
+    name
+    size
+    htmlContent
+    createdAt
+    updatedAt
+    platformName
+    status
+  }
+}
+
+mutation DeleteTemplateById($id: ID!) {
+  deleteTemplateById(id: $id)
+}
+
+query TemplateById($id: ID!) {
+  templateById(id: $id) {
+    id
+    accountId
+    platformId
+    name
+    size
+    status
+    platformName
+    htmlContent
+    createdAt
+    updatedAt
+  }
+}
+
+query Templates($page: Int, $pageSize: Int, $sort: String, $filters: TemplateFilters!) {
+  templates(page: $page, pageSize: $pageSize, sort: $sort, filters: $filters) {
+    totalCount
+    content {
+      id
+      platformId
+      name
+      size
+      status
+      platformName
+      htmlContent
+      updatedAt
+    }
+  }
+}

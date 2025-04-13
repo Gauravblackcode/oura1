@@ -1,0 +1,312 @@
+stages:
+  #- dev-test
+  - dev-build
+  - dev-deploy
+  - versioning
+  - prepare-for-hotfix
+  #- stage-test
+  - prepare-for-qa-stage-release
+  - staging-build
+  - staging-deploy
+  - qa-build
+  - qa-deploy
+  - petco-staging-build
+  - petco-staging-deploy
+
+#dev-test:
+#stage: dev-test
+#image: node:18.16-alpine3.17
+#rules:
+#- if: $CI_COMMIT_BRANCH == "dev"
+#script:
+#- apk add --no-cache git
+#- yarn
+#- yarn run husky
+#- export CI=false
+#- yarn run build
+#when: manual
+
+bump-release:
+  stage: versioning
+  image: node:18-alpine
+  only:
+    - dev
+  variables:
+    GIT_STRATEGY: clone
+  before_script:
+    - apk add --no-cache git
+    - apk add openssh curl
+    - chmod +x ./.gitlab/git/init.sh
+    - chmod +x ./.gitlab/common/set-env-vars.sh
+    - chmod +x ./.gitlab/version/bump-version.sh
+    - chmod +x ./.gitlab/version/create-release.sh
+    - chmod +x ./.gitlab/version/create-backmerge.sh
+    - . .gitlab/git/init.sh
+  script:
+    - npm install --silent -g semver
+    - . .gitlab/common/set-env-vars.sh
+    - . .gitlab/version/bump-version.sh
+    - . .gitlab/version/create-release.sh
+    - . .gitlab/version/create-backmerge.sh
+    - echo "$NEXT_TAG"
+  needs:
+    - dev-build
+    - dev-deploy
+
+create-hotfix-to-nonprod:
+  stage: prepare-for-hotfix
+  image: node:18-alpine
+  only:
+    - dev
+  when: manual
+  variables:
+    GIT_STRATEGY: clone
+  before_script:
+    - apk add --no-cache git
+    - apk add openssh curl
+    - chmod +x ./.gitlab/git/init.sh
+    - chmod +x ./.gitlab/common/set-env-vars.sh
+    - chmod +x ./.gitlab/version/create-hotfix-mr.sh
+    - . .gitlab/git/init.sh
+  script:
+    - npm install --silent -g semver
+    - . .gitlab/common/set-env-vars.sh
+    - TARGET_BRANCH="stage"
+    - . .gitlab/version/create-hotfix-mr.sh
+    - echo "$NEXT_TAG"
+  needs:
+    - bump-release
+
+create-release-to-qa:
+  stage: prepare-for-qa-stage-release
+  image: node:18-alpine
+  only:
+    - dev
+  when: manual
+  variables:
+    GIT_STRATEGY: clone
+  before_script:
+    - apk add --no-cache git
+    - apk add openssh curl
+    - chmod +x ./.gitlab/git/init.sh
+    - chmod +x ./.gitlab/common/set-env-vars.sh
+    - chmod +x ./.gitlab/version/create-release-qa-stage.sh
+    - . .gitlab/git/init.sh
+  script:
+    - npm install --silent -g semver
+    - . .gitlab/common/set-env-vars.sh
+    - TARGET_BRANCH="stage"
+    - . .gitlab/version/create-release-qa-stage.sh
+    - echo "$NEXT_TAG"
+  needs:
+    - bump-release
+
+create-hotfix-to-prod:
+  stage: prepare-for-hotfix
+  image: node:18-alpine
+  only:
+    - main
+  when: manual
+  variables:
+    GIT_STRATEGY: clone
+  before_script:
+    - apk add --no-cache git
+    - apk add openssh curl
+    - chmod +x ./.gitlab/git/init.sh
+    - chmod +x ./.gitlab/common/set-env-vars.sh
+    - chmod +x ./.gitlab/version/create-hotfix-mr.sh
+    - . .gitlab/git/init.sh
+  script:
+    - npm install --silent -g semver
+    - . .gitlab/common/set-env-vars.sh
+    - TARGET_BRANCH="main"
+    - . .gitlab/version/create-hotfix-mr.sh
+    - echo "$NEXT_TAG"
+
+dev-build:
+  stage: dev-build
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_COMMIT_BRANCH == "releases"
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.0-debug
+    entrypoint: ['']
+  script:
+    - /busybox/mkdir -p /root/.aws
+    - /busybox/echo $CREDENTIALS_DEV | base64 -d > /root/.aws/credentials
+    - /busybox/echo "{\"credHelpers\":{\"$CONTAINER_REGISTRY_DEV\":\"ecr-login\"}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context . --use-new-run --snapshotMode redo --dockerfile dockerfile --build-arg NEXT_PUBLIC_SNOWPLOW_APP_ID=$NEXT_PUBLIC_SNOWPLOW_APP_ID --build-arg NEXT_PUBLIC_SNOWPLOW_NAME_TRACKER=$NEXT_PUBLIC_SNOWPLOW_NAME_TRACKER --build-arg NEXT_PUBLIC_APP_ENV=$NEXT_PUBLIC_APP_ENV --build-arg BUILD_TAG=$CI_PIPELINE_IID --build-arg NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL --build-arg NEXT_PUBLIC_IS_MANUAL_LOGIN=$NEXT_PUBLIC_IS_MANUAL_LOGIN --build-arg NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL --build-arg NEXT_PUBLIC_TRACKINGS_ENABLED=$NEXT_PUBLIC_TRACKINGS_ENABLED --build-arg NEXT_PUBLIC_SNOWPLOW_BASE_URL=$NEXT_PUBLIC_SNOWPLOW_BASE_URL --build-arg NEXT_PUBLIC_SNOWPLOW_COLLECTOR_URL=$NEXT_PUBLIC_SNOWPLOW_COLLECTOR_URL --build-arg NEXT_PUBLIC_TRACKINGS_ENABLED=$NEXT_PUBLIC_TRACKINGS_ENABLED --build-arg IS_SENTRY_ENABLED=$IS_SENTRY_ENABLED --destination $CONTAINER_REGISTRY_DEV/$CONTAINER_IMAGE_NAME_DEV:$CI_PIPELINE_IID
+  environment:
+    name: dev
+  when: manual
+
+dev-deploy:
+  stage: dev-deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_COMMIT_BRANCH == "releases"
+  image: jshimko/kube-tools-aws
+  services:
+    - docker:dind
+  script:
+    - kubectl config set-cluster k8s --server="${SERVER_DEV}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY_DATA}
+    - kubectl config set-credentials gitlab --token="${USER_TOKEN}"
+    - kubectl config set-context dev --cluster=k8s --user=gitlab
+    - kubectl config use-context dev
+    - cd deployment/dev/
+    - kubectl apply -f secrets/dashboard-secretstore.yml
+    - kubectl apply -f secrets/dashboard-external-secret.yml
+    #- helm install app --set image=$CONTAINER_REGISTRY_DEV/$CONTAINER_IMAGE_NAME_DEV:$CI_PIPELINE_IID -f app/values.yaml app -n dev
+    - helm upgrade --install dashboard --set image=$CONTAINER_REGISTRY_DEV/$CONTAINER_IMAGE_NAME_DEV:$CI_PIPELINE_IID  -f dashboard/values.yaml dashboard -n dev
+  needs:
+    - dev-build
+  environment:
+    name: dev
+
+#stage-test:
+#stage: stage-test
+#image: node:18.16-alpine3.17
+#rules:
+#- if: $CI_COMMIT_BRANCH == "staging"
+#script:
+#- apk add --no-cache git
+#- yarn
+#- yarn run husky
+#- export CI=false
+#- yarn run build
+#when: manual
+
+staging-build:
+  stage: staging-build
+  rules:
+    - if: $CI_COMMIT_BRANCH == "staging"
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.0-debug
+    entrypoint: ['']
+  script:
+    - /busybox/mkdir -p /root/.aws
+    - /busybox/echo $CREDENTIALS | base64 -d > /root/.aws/credentials
+    - /busybox/echo "{\"credHelpers\":{\"$CONTAINER_REGISTRY\":\"ecr-login\"}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context . --use-new-run --snapshotMode redo --dockerfile dockerfile --build-arg NEXT_PUBLIC_SNOWPLOW_APP_ID=$NEXT_PUBLIC_SNOWPLOW_APP_ID --build-arg NEXT_PUBLIC_SNOWPLOW_NAME_TRACKER=$NEXT_PUBLIC_SNOWPLOW_NAME_TRACKER --build-arg NEXT_PUBLIC_APP_ENV=$NEXT_PUBLIC_APP_ENV --build-arg BUILD_TAG=$CI_PIPELINE_IID --build-arg NEXT_PUBLIC_IS_MANUAL_LOGIN=$NEXT_PUBLIC_IS_MANUAL_LOGIN --build-arg NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL --build-arg NEXT_PUBLIC_APP_BASE_URL=$NEXT_PUBLIC_APP_BASE_URL --build-arg NEXT_PUBLIC_TRACKINGS_ENABLED=$NEXT_PUBLIC_TRACKINGS_ENABLED --build-arg NEXT_PUBLIC_SNOWPLOW_BASE_URL=$NEXT_PUBLIC_SNOWPLOW_BASE_URL --build-arg NEXT_PUBLIC_SNOWPLOW_COLLECTOR_URL=$NEXT_PUBLIC_SNOWPLOW_COLLECTOR_URL --build-arg NEXT_PUBLIC_TRACKINGS_ENABLED=$NEXT_PUBLIC_TRACKINGS_ENABLED --build-arg IS_SENTRY_ENABLED=$IS_SENTRY_ENABLED --destination $CONTAINER_REGISTRY/$CONTAINER_IMAGE_NAME:$CI_PIPELINE_IID
+  environment:
+    name: staging
+  when: manual
+
+staging-deploy:
+  stage: staging-deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "staging"
+  image: jshimko/kube-tools-aws
+  services:
+    - docker:dind
+  before_script:
+    - apk add gettext
+    - cd deployment/staging/dashboard/templates/
+    - envsubst < secret.tmpl > secret.yaml
+  script:
+    - kubectl config set-cluster k8s --server="${SERVER}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY_DATA}
+    - kubectl config set-credentials gitlab --token="${USER_TOKEN}"
+    - kubectl config set-context stage --cluster=k8s --user=gitlab
+    - kubectl config use-context stage
+    - cd ../../
+    #- helm install dashboard --set image=$CONTAINER_REGISTRY/$CONTAINER_IMAGE_NAME:$CI_PIPELINE_IID -f dashboard/values.yaml dashboard -n stage
+    - helm upgrade --install dashboard --set image=$CONTAINER_REGISTRY/$CONTAINER_IMAGE_NAME:$CI_PIPELINE_IID -f dashboard/values.yaml dashboard -n stage
+  needs:
+    - staging-build
+  environment:
+    name: staging
+
+#qa-test:
+#stage: qa-test
+#image: node:18.16-alpine3.17
+#rules:
+#- if: $CI_COMMIT_BRANCH == "qa"
+#script:
+#- apk add --no-cache git
+#- yarn
+#- yarn run husky
+#- export CI=false
+#- yarn run build
+#when: manual
+
+qa-build:
+  stage: qa-build
+  rules:
+    - if: $CI_COMMIT_BRANCH == "qa"
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.0-debug
+    entrypoint: ['']
+  script:
+    - /busybox/mkdir -p /root/.aws
+    - /busybox/echo $CREDENTIALS_DEV | base64 -d > /root/.aws/credentials
+    - /busybox/echo "{\"credHelpers\":{\"$CONTAINER_REGISTRY_DEV\":\"ecr-login\"}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context . --use-new-run --snapshotMode redo --dockerfile dockerfile --build-arg NEXT_PUBLIC_SNOWPLOW_APP_ID=$NEXT_PUBLIC_SNOWPLOW_APP_ID --build-arg NEXT_PUBLIC_SNOWPLOW_NAME_TRACKER=$NEXT_PUBLIC_SNOWPLOW_NAME_TRACKER --build-arg NEXT_PUBLIC_APP_ENV=$NEXT_PUBLIC_APP_ENV --build-arg BUILD_TAG=$CI_PIPELINE_IID --build-arg NEXT_PUBLIC_IS_MANUAL_LOGIN=$NEXT_PUBLIC_IS_MANUAL_LOGIN --build-arg NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL_QA --build-arg NEXT_PUBLIC_TRACKINGS_ENABLED=$NEXT_PUBLIC_TRACKINGS_ENABLED --build-arg NEXT_PUBLIC_SNOWPLOW_BASE_URL=$NEXT_PUBLIC_SNOWPLOW_BASE_URL --build-arg NEXT_PUBLIC_SNOWPLOW_COLLECTOR_URL=$NEXT_PUBLIC_SNOWPLOW_COLLECTOR_URL --build-arg NEXT_PUBLIC_TRACKINGS_ENABLED=$NEXT_PUBLIC_TRACKINGS_ENABLED --build-arg IS_SENTRY_ENABLED=$IS_SENTRY_ENABLED --destination $CONTAINER_REGISTRY_DEV/$CONTAINER_IMAGE_NAME_DEV:$CI_PIPELINE_IID
+  environment:
+    name: dev
+  when: manual
+
+qa-deploy:
+  stage: qa-deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "qa"
+  image: jshimko/kube-tools-aws
+  services:
+    - docker:dind
+  script:
+    - kubectl config set-cluster k8s --server="${SERVER_DEV}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY_DATA}
+    - kubectl config set-credentials gitlab --token="${USER_TOKEN}"
+    - kubectl config set-context qa --cluster=k8s --user=gitlab
+    - kubectl config use-context qa
+    - cd deployment/qa/
+    - kubectl apply -f secrets/dashboard-secretstore.yml
+    - kubectl apply -f secrets/dashboard-external-secret.yml
+    #- helm install app --set image=$CONTAINER_REGISTRY_DEV/$CONTAINER_IMAGE_NAME_DEV:$CI_PIPELINE_IID -f app/values.yaml app -n qa
+    - helm upgrade --install dashboard --set image=$CONTAINER_REGISTRY_DEV/$CONTAINER_IMAGE_NAME_DEV:$CI_PIPELINE_IID -f dashboard/values.yaml dashboard -n qa
+  needs:
+    - qa-build
+  environment:
+    name: dev
+
+petco-staging-build:
+  stage: petco-staging-build
+  rules:
+    - if: $CI_COMMIT_BRANCH == "petco-staging"
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.0-debug
+    entrypoint: ['']
+  script:
+    - /busybox/mkdir -p /root/.aws
+    - /busybox/echo $CREDENTIALS | base64 -d > /root/.aws/credentials
+    - /busybox/echo "{\"credHelpers\":{\"$CONTAINER_REGISTRY\":\"ecr-login\"}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context . --use-new-run --snapshotMode redo --dockerfile dockerfile --build-arg NEXT_PUBLIC_SNOWPLOW_APP_ID=$NEXT_PUBLIC_SNOWPLOW_APP_ID --build-arg NEXT_PUBLIC_SNOWPLOW_NAME_TRACKER=$NEXT_PUBLIC_SNOWPLOW_NAME_TRACKER --build-arg NEXT_PUBLIC_APP_ENV=$NEXT_PUBLIC_APP_ENV --build-arg BUILD_TAG=$CI_PIPELINE_IID --build-arg NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL --build-arg NEXT_PUBLIC_APP_BASE_URL=$NEXT_PUBLIC_APP_BASE_URL --build-arg NEXT_PUBLIC_TRACKINGS_ENABLED=$NEXT_PUBLIC_TRACKINGS_ENABLED --build-arg NEXT_PUBLIC_SNOWPLOW_BASE_URL=$NEXT_PUBLIC_SNOWPLOW_BASE_URL --build-arg NEXT_PUBLIC_SNOWPLOW_COLLECTOR_URL=$NEXT_PUBLIC_SNOWPLOW_COLLECTOR_URL --build-arg NEXT_PUBLIC_TRACKINGS_ENABLED=$NEXT_PUBLIC_TRACKINGS_ENABLED --build-arg IS_SENTRY_ENABLED=$IS_SENTRY_ENABLED --destination $CONTAINER_REGISTRY/$CONTAINER_IMAGE_NAME:$CI_PIPELINE_IID
+  environment:
+    name: stage
+  when: manual
+
+petco-staging-deploy:
+  stage: petco-staging-deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "petco-staging"
+  image: jshimko/kube-tools-aws
+  services:
+    - docker:dind
+  before_script:
+    - apk add gettext
+    - cd deployment/petco-staging/dashboard/templates/
+    - envsubst < secret.tmpl > secret.yaml
+  script:
+    - kubectl config set-cluster k8s --server="${SERVER}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY_DATA}
+    - kubectl config set-credentials gitlab --token="${USER_TOKEN}"
+    - kubectl config set-context stage --cluster=k8s --user=gitlab
+    - kubectl config use-context stage
+    - cd ../../
+    #- helm install dashboard --set image=$CONTAINER_REGISTRY/$CONTAINER_IMAGE_NAME:$CI_PIPELINE_IID -f dashboard/values.yaml dashboard -n stage
+    - helm upgrade --install dashboard --set image=$CONTAINER_REGISTRY/$CONTAINER_IMAGE_NAME:$CI_PIPELINE_IID -f dashboard/values.yaml dashboard -n stage
+  needs:
+    - petco-staging-build
+  environment:
+    name: stage

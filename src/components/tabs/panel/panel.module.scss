@@ -1,0 +1,7 @@
+.tabPanelContent {
+  padding: 16px;
+
+  &[data-nowrap='true'] {
+    padding: 0px;
+  }
+}

@@ -1,0 +1,44 @@
+query ParentCompanies($page: Int, $pageSize: Int, $filters: ParentCompanyFilters, $sort: String) {
+  parentCompanies(page: $page, pageSize: $pageSize, filters: $filters, sort: $sort) {
+    totalCount
+    content {
+      id
+      name
+      advertiserMappings
+      createdAt
+    }
+  }
+}
+query GetParentCompanyById($id: ID!) {
+  parentCompanyById(id: $id) {
+    id
+    name
+    customId
+    accountId
+    createdAt
+    updatedAt
+  }
+}
+mutation CreateParentCompany($parentCompany: ParentCompanyInput!) {
+  createParentCompany(parentCompany: $parentCompany) {
+    id
+    name
+    customId
+    accountId
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateParentCompany($id: ID!, $parentCompany: ParentCompanyInput!) {
+  updateParentCompany(id: $id, parentCompany: $parentCompany) {
+    id
+    name
+    customId
+    accountId
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteParentCompanyById($id: ID!) {
+  deleteParentCompanyById(id: $id)
+}

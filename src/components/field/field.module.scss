@@ -1,0 +1,31 @@
+.container {
+  .header_container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    justify-content: space-between;
+  }
+
+  .title_container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    svg {
+      cursor: pointer;
+    }
+  }
+
+  .title {
+    color: $text-color-secondary;
+    @include typography('xs', 'regular');
+  }
+
+  .error_message {
+    margin-top: 6px;
+  }
+
+  &[data-fullWidth='true'] {
+    flex: 1;
+  }
+}

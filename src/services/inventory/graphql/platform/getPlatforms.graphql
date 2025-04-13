@@ -1,0 +1,25 @@
+query getPlatforms {
+  platforms {
+    content {
+      id
+      name
+      type
+    }
+    totalCount
+  }
+}
+query PlatformById($id: ID!) {
+  platformById(id: $id) {
+    id
+    name
+    type
+  }
+}
+
+query PlatformsByIds($ids: [ID!]!) {
+  platformsByIds(ids: $ids) {
+    id
+    name
+    type
+  }
+}

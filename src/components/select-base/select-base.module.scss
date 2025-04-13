@@ -1,0 +1,28 @@
+.select {
+  background: $white-100;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-height: 56px;
+
+  .input {
+    margin-right: 12px;
+    margin-top: 4px;
+  }
+}
+
+.chipsContainer {
+  max-height: 35px;
+  div:first-child {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+}
+
+.loading_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1 !important;
+}

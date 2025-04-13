@@ -1,0 +1,16 @@
+query PageCategories($page: Int, $pageSize: Int, $filters: PageCategoryFilters) {
+  pageCategories(page: $page, pageSize: $pageSize, filters: $filters) {
+    totalCount
+    content {
+      id
+      accountId
+      sourceId
+      sourceName
+      parentId
+      name
+      level
+      hierarchy
+      createdAt
+    }
+  }
+}

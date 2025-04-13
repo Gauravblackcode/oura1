@@ -1,0 +1,442 @@
+query Wallets($pageSize: Int!, $page: Int!, $filters: WalletFilters, $sort: String) {
+  wallets(pageSize: $pageSize, page: $page, filters: $filters, sort: $sort) {
+    content {
+      id
+      name
+      type
+      advertiserName
+      parentLevelAdvertisersMapping
+      totalAmount
+      currentBalance
+      userGroupMapping
+      allowAllUserGroups
+      isEditAllowed
+      userGroupIdList
+      ownerName
+      archivedAt
+      updatedAt
+    }
+    totalCount
+  }
+}
+
+input UserGroupFilters {
+  name: String
+  size: Int
+  walletId: ID
+  search: string
+}
+
+query UserGroups($page: Int, $pageSize: Int, $filters: UserGroupFilters) {
+  userGroups(page: $page, pageSize: $pageSize, filters: $filters) {
+    totalCount
+    content {
+      id
+      name
+      userIdList
+      ownerName
+      size
+    }
+  }
+}
+
+mutation CreateWallet($input: WalletInput!) {
+  createWallet(wallet: $input) {
+    id
+    name
+    accountId
+    ownerId
+    ownerName
+    type
+    advertiserId
+    advertiserName
+    parentCompanyId
+    parentLevelAdvertisersMapping
+    currency
+    totalAmount
+    currentBalance
+    adSpent
+    userGroupIdList
+    userGroupMapping
+    status
+    allowAllAdvertisers
+    allowAllUserGroups
+    createdAt
+    updatedAt
+    channel
+  }
+}
+
+query WalletById($id: ID!) {
+  walletById(id: $id) {
+    id
+    name
+    accountId
+    ownerId
+    ownerName
+    type
+    advertiserId
+    advertiserName
+    parentCompanyId
+    parentLevelAdvertisersMapping
+    currency
+    totalAmount
+    currentBalance
+    adSpent
+    userGroupIdList
+    userGroupMapping
+    status
+    allowAllAdvertisers
+    allowAllUserGroups
+    createdAt
+    updatedAt
+    channel
+    paymentMethod
+    isEditAllowed
+  }
+}
+
+query WalletsByIds($ids: [ID!]!) {
+  walletsByIds(ids: $ids) {
+    id
+    name
+    accountId
+    ownerId
+    ownerName
+    type
+    advertiserId
+    advertiserName
+    currency
+    totalAmount
+    currentBalance
+    adSpent
+    userGroupIdList
+    userGroupMapping
+    status
+    allowAllAdvertisers
+    allowAllUserGroups
+    createdAt
+    updatedAt
+    channel
+  }
+}
+
+mutation UpdateWallet($id: ID!, $input: WalletInput!) {
+  updateWallet(id: $id, wallet: $input) {
+    name
+    accountId
+    type
+    advertiserId
+    currency
+    totalAmount
+    currentBalance
+    userGroupIdList
+    status
+    createdAt
+    updatedAt
+    id
+  }
+}
+
+mutation UpdateWalletStatus($id: ID!, $status: String!) {
+  updateWalletStatus(id: $id, status: $status) {
+    id
+    name
+    accountId
+    type
+    advertiserId
+    currency
+    totalAmount
+    currentBalance
+    userGroupIdList
+    status
+    allowAllAdvertisers
+    allowAllUserGroups
+    createdAt
+    updatedAt
+  }
+}
+
+input WalletHistoryFilters {
+  userId: ID
+  search: String
+  walletId: ID
+}
+
+query WalletHistory($page: Int, $pageSize: Int, $filters: WalletHistoryFilters) {
+  walletHistory(page: $page, pageSize: $pageSize, filters: $filters) {
+    totalCount
+    content {
+      id
+      walletId
+      userId
+      userName
+      creditStatus
+      activityType
+      amount
+      currentBalance
+      metadata
+      createdAt
+      updatedAt
+      paymentMethod
+      ioContractNumber
+      fileUrl
+      pendingBalance
+    }
+  }
+}
+
+input WalletBalanceInput {
+  amount: Float!
+  actionType: String!
+  walletId: ID
+}
+
+mutation UpdateWalletBalance($id: ID!, $walletBalanceInput: WalletBalanceInput!) {
+  updateWalletBalance(id: $id, wallet: $walletBalanceInput) {
+    id
+    name
+    accountId
+    type
+    advertiserId
+    currency
+    totalAmount
+    currentBalance
+    userGroupIdList
+    status
+    allowAllAdvertisers
+    allowAllUserGroups
+    createdAt
+    updatedAt
+  }
+}
+
+query ApplicableWalletsForCampaign($page: Int!, $pageSize: Int!, $filters: CampaignWalletFilters!) {
+  applicableWalletsForCampaign(page: $page, pageSize: $pageSize, filters: $filters) {
+    content {
+      id
+      name
+      accountId
+      ownerId
+      ownerName
+      type
+      advertiserId
+      advertiserName
+      currency
+      totalAmount
+      adSpent
+      currentBalance
+      userGroupIdList
+      userGroupMapping
+      status
+      allowAllAdvertisers
+      allowAllUserGroups
+      createdAt
+      updatedAt
+    }
+    totalCount
+  }
+}
+
+query WalletRequests($page: Int, $pageSize: Int, $filters: WalletRequestFilters) {
+  walletRequests(page: $page, pageSize: $pageSize, filters: $filters) {
+    totalCount
+    content {
+      id
+      walletId
+      walletName
+      advertiserId
+      currentBalance
+      paymentMethod
+      ioContractNumber
+      pendingBalance
+      approvalStatus
+      approved
+      createdAt
+      updatedAt
+      archived
+      accountId
+      fileUrl
+      comment
+      requesterId
+      requesterName
+      approverId
+      approverName
+      approvalTimestamp
+      walletType
+      advertiserNames
+    }
+  }
+}
+
+mutation ApproveWalletRequest($id: ID!, $status: String!, $comment: String) {
+  approveWalletRequest(id: $id, status: $status, comment: $comment) {
+    id
+    walletId
+    walletName
+    advertiserId
+    currentBalance
+    paymentMethod
+    ioContractNumber
+    pendingBalance
+    approvalStatus
+    approved
+    createdAt
+    updatedAt
+    archived
+    accountId
+  }
+}
+
+query SharedWallets($page: Int, $pageSize: Int, $filters: SharedWalletFilters, $sort: String) {
+  sharedWallets(page: $page, pageSize: $pageSize, filters: $filters, sort: $sort) {
+    totalCount
+    content {
+      id
+      name
+      ownerId
+      ownerName
+      adItemIds
+      adItemsMapping
+      status
+      createdAt
+      updatedAt
+      adSpent
+    }
+  }
+}
+
+query SharedWalletById($id: ID!) {
+  sharedWalletById(id: $id) {
+    id
+    name
+    accountId
+    walletId
+    ownerId
+    ownerName
+    adItemIds
+    adItemsMapping
+    status
+    createdAt
+    updatedAt
+    totalBudget
+    adSpent
+    availableBudget
+  }
+}
+
+mutation CreateSharedWallet($sharedWallet: SharedWalletInput!) {
+  createSharedWallet(sharedWallet: $sharedWallet) {
+    id
+  }
+}
+
+mutation UpdateSharedWallet($id: ID!, $sharedWallet: SharedWalletInput!) {
+  updateSharedWallet(id: $id, sharedWallet: $sharedWallet) {
+    id
+  }
+}
+
+mutation UpdateSharedWalletStatus($id: ID!, $status: String!) {
+  updateSharedWalletStatus(id: $id, status: $status) {
+    id
+  }
+}
+
+query SharedWalletHistory($page: Int, $pageSize: Int, $filters: SharedWalletHistoryFilters, $sort: String) {
+  sharedWalletHistory(page: $page, pageSize: $pageSize, filters: $filters, sort: $sort) {
+    totalCount
+    content {
+      id
+      walletId
+      sharedWalletId
+      sourceAdItemId
+      sourceAdItemName
+      destAdItemId
+      destAdItemName
+      amountTransferred
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+query WalletSummary($filters: WalletSummaryFilters!) {
+  walletSummary(filters: $filters) {
+    totalBudgetLoaded {
+      currentTotalValue
+      currentPeriodValues {
+        value
+        timestamp
+      }
+    }
+    totalBudgetAvailable {
+      currentTotalValue
+      currentPeriodValues {
+        value
+        timestamp
+      }
+    }
+    totalBudgetAllocated {
+      currentTotalValue
+      currentPeriodValues {
+        value
+        timestamp
+      }
+    }
+    overallAdSpent {
+      currentTotalValue
+      currentPeriodValues {
+        value
+        timestamp
+      }
+    }
+    totalBudgetLoadedCreditCard {
+      currentTotalValue
+      currentPeriodValues {
+        value
+        timestamp
+      }
+    }
+    totalBudgetAvailableCreditCard {
+      currentTotalValue
+      currentPeriodValues {
+        value
+        timestamp
+      }
+    }
+    totalBudgetLoadedIOContract {
+      currentTotalValue
+      currentPeriodValues {
+        value
+        timestamp
+      }
+    }
+    totalBudgetAvailableIOContract {
+      currentTotalValue
+      currentPeriodValues {
+        value
+        timestamp
+      }
+    }
+  }
+}
+
+mutation DeleteUploadedContract($fileId: String!) {
+  deleteUploadedContract(fileId: $fileId)
+}
+
+mutation GenerateContractPreSignedUrl($fileId: String!) {
+  generateContractPreSignedUrl(fileId: $fileId)
+}
+
+query GetContractMetadata($fileId: String!) {
+  getContractMetadata(fileId: $fileId) {
+    fileName
+    fileSize
+    contentType
+    rowCount
+    downloadUrl
+    signedUrl
+  }
+}

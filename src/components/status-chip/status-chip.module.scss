@@ -1,0 +1,152 @@
+.active,
+.inactive,
+.paused,
+.draft,
+.completed,
+.pending,
+.todo,
+.in_progress,
+.denied,
+.failed,
+.success,
+.cancelled {
+  border-radius: 12px;
+  padding: 4px 20px;
+  width: fit-content;
+  p {
+    text-transform: capitalize;
+    @include typography('xs');
+  }
+}
+
+.active,
+.success {
+  background-color: $green-100;
+  color: $green-500;
+}
+
+.inactive,
+.cancelled {
+  background-color: $grey-400;
+  color: $text-color-secondary;
+}
+
+.paused {
+  background-color: $yellow-100;
+  color: $yellow-600;
+}
+
+.draft,
+.todo {
+  background-color: $yellow-200;
+  color: $orange-700;
+}
+
+.pending,
+.in_progress {
+  background-color: $blue-100;
+  color: $blue-500;
+}
+
+.completed {
+  background-color: $blue-200;
+  color: $blue-1100;
+}
+
+.denied,
+.failed {
+  background-color: $orange-200;
+  color: $red-400;
+}
+
+.debit,
+.credit {
+  display: flex;
+  align-items: center;
+  .clock_svg {
+    margin-left: 6px;
+    margin-top: 6px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &[data-denied='true'] {
+    color: $red-200;
+  }
+  &[data-pending='true'] {
+    color: $text-color-secondary;
+  }
+}
+.credit_failed {
+  display: flex;
+  align-items: center;
+  .clock_svg {
+    margin-left: 6px;
+    margin-top: 6px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+.debit,
+.credit_failed {
+  color: $red-500;
+}
+.credit {
+  color: $green-500;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 128px;
+  &[data-center='true'] {
+    justify-content: center;
+  }
+}
+
+.tooltip_wrapper {
+  border-radius: 5px;
+  border: 1px solid $yellow-400;
+  background: $orange-100;
+  padding: 16px;
+
+  span {
+    color: $text-color-primary;
+    @include typography('xs');
+    line-height: 20px;
+  }
+  &[data-live='true'] {
+    border-radius: 5px;
+    border: 1px solid $grey-700;
+    background: $white-100;
+  }
+}
+
+.customTooltip {
+  background-color: transparent;
+  max-width: none;
+}
+
+.activity_dot {
+  width: 8px;
+  height: 8px;
+  background-color: $grey-700;
+  border-radius: 50%;
+  &:hover {
+    cursor: pointer;
+  }
+  &[data-live='true'] {
+    background-color: $green-300;
+  }
+}
+
+.warning_triangle {
+  color: $white-100;
+  fill: $yellow-300;
+  &:hover {
+    cursor: pointer;
+  }
+}

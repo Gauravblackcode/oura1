@@ -1,0 +1,47 @@
+.tabs_container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  .tab_indicator {
+    display: flex;
+    justify-content: center;
+    background-color: transparent;
+  }
+  .custom_tab_indicator {
+    background-color: $primary-default;
+    width: 100%;
+    max-width: auto;
+  }
+  .tab {
+    text-transform: capitalize;
+    @include typography('sm');
+    padding: 12px 0px;
+    min-width: fit-content;
+    width: content;
+    margin-right: 24px;
+    color: $text-color-secondary;
+  }
+  .selected_tab {
+    @include typography('sm', 'medium');
+    color: $primary-default;
+  }
+}
+
+.tab_panel {
+  opacity: 0;
+  width: 100%;
+  animation: slide-in-from-bottom 1s forwards;
+}
+
+@keyframes slide-in-from-bottom {
+  0% {
+    opacity: 0;
+    transform: translateY(10%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

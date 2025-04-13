@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: space-between;
+  border-radius: 5px;
+  border: 1px solid $carter-yellow-700;
+  background-color: $carter-yellow-200;
+  padding: 16px 20px;
+
+  span {
+    color: $text-color-primary;
+    @include typography('xs');
+  }
+
+  svg {
+    cursor: pointer;
+  }
+}

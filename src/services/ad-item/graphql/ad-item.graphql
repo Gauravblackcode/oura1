@@ -1,0 +1,301 @@
+type AdItem {
+  id: ID
+  campaignId: ID
+  name: String
+  type: AdItemType
+  status: StatusType
+  comments: String
+  priority: Int
+  startDate: String
+  endDate: String
+  goalType: GoalType
+  description: String
+  metadata: JSON
+  totalBudget: Float
+  perDayBudget: Float
+  floorPrice: Float
+  bidType: BidType
+  maxBidAmount: Float
+  currentBidAmount: Float
+  goalTarget: Float
+  isFreqCapEnabled: Boolean
+  freqCapPerUser: Int
+  labels: String
+  pacingWeight: PacingWeight
+  targetingGender: JSON
+  targetingPlatform: JSON
+  targetingGeo: JSON
+  targetingAge: JSON
+  customTargeting: JSON
+  targetingAdUnit: JSON
+  createdAt: String
+  updatedAt: String
+  targetingTimezone: Int
+  keywordType: AudienceTargetKeywordType
+  keywords: [String]
+  excludedKeywords: [String]
+  pageCategories: [Int]
+  demographics: [AdItemDemographic]
+  keyValues: [AdItemKeyValues]
+  adSize: [String]
+  cohortList: [Int]
+  publisherTargetList: [Int]
+  campaignName: String
+  campaignStatus: StatusType
+  advertiserId: ID
+  advertiserName: String
+  adSpent: Float
+  adRevenue: Float
+  roas: Float
+  cpm: Float
+  ctr: Float
+  impressions: Int
+  clicks: Int
+  platformIds: [ID!]
+  pageType: [PageType]
+  budgetType: BudgetType
+  walletId: ID
+  walletName: String
+  adSlotIds: [ID!]
+  placementIds: [ID!]
+  ownerId: ID
+  ownerName: String
+  isCreativeAvailable: Boolean
+  isLive: Boolean
+  adSlotsMapping: [JSON]
+  placementsMapping: [JSON]
+  warnings: [WarningType]
+  isConquest: Boolean
+  platformsMapping: [JSON]
+  customId: String
+}
+
+fragment AdItemResult on AdItem {
+  id
+  campaignId
+  name
+  type
+  status
+  comments
+  priority
+  startDate
+  endDate
+  goalType
+  description
+  metadata
+  totalBudget
+  perDayBudget
+  floorPrice
+  bidType
+  maxBidAmount
+  currentBidAmount
+  goalTarget
+  isFreqCapEnabled
+  freqCapPerUser
+  labels
+  pacingWeight
+  targetingGender
+  targetingPlatform
+  targetingGeo
+  targetingAge
+  customTargeting
+  targetingAdUnit
+  createdAt
+  updatedAt
+  targetingTimezone
+  keywordType
+  keywords
+  excludedKeywords
+  excludeKeywordType
+  pageCategories
+  demographics {
+    country
+    state
+    city
+  }
+  keyValues {
+    name
+    targetingKey
+    type
+    values
+  }
+  adSize
+  cohortList
+  publisherTargetList
+  campaignName
+  advertiserId
+  advertiserName
+  adSpent
+  adRevenue
+  roas
+  cpm
+  ctr
+  impressions
+  clicks
+  platformIds
+  pageType
+  budgetType
+  walletId
+  walletName
+  adSlotIds
+  placementIds
+  ownerId
+  ownerName
+  isCreativeAvailable
+  isLive
+  adSlotsMapping
+  placementsMapping
+  warnings
+  isConquest
+  cohortMapping
+  pageCategoryMapping
+  pageCategoriesExact
+  platformsMapping
+  dailyUpperLimitFlag
+  dailyUpperLimitAmount
+  ownerRoleType
+  customId
+  campaignStatus
+  isCampaignLive
+}
+
+mutation CreateAdItem($adItemInput: AdItemInput!) {
+  createAdItem(adItemInput: $adItemInput) {
+    ...AdItemResult
+  }
+}
+
+mutation UpdateAdItem($id: ID!, $adItemInput: AdItemInput!) {
+  updateAdItem(id: $id, adItemInput: $adItemInput) {
+    ...AdItemResult
+  }
+}
+
+mutation DeleteAdItemById($id: ID!) {
+  deleteAdItemById(id: $id)
+}
+
+mutation UpdateAdItemStatus($id: ID!, $status: String!) {
+  updateAdItemStatus(id: $id, status: $status) {
+    ...AdItemResult
+  }
+}
+
+query AdItemById($id: ID!) {
+  adItemById(id: $id) {
+    ...AdItemResult
+  }
+}
+query AdItemsByIds($ids: [ID!]!) {
+  adItemsByIds(ids: $ids) {
+    ...AdItemResult
+  }
+}
+
+query AdItems($page: Int, $pageSize: Int, $sort: String, $filters: AdItemFilters!) {
+  adItems(page: $page, pageSize: $pageSize, sort: $sort, filters: $filters) {
+    totalCount
+    content {
+      name
+      id
+      campaignName
+      campaignId
+      campaignStatus
+      advertiserName
+      advertiserId
+      status
+      isLive
+      isCreativeAvailable
+      startDate
+      endDate
+      adSpent
+      totalBudget
+      ownerName
+      ownerRoleType
+      type
+      adSize
+      pageType
+      priority
+      totalBudget
+      adRevenue
+      impressions
+      clicks
+      ctr
+      cpm
+      roas
+      currentBidAmount
+      platformsMapping
+    }
+  }
+}
+
+mutation CopyAdItem($id: ID!, $creativeIds: [ID!], $copyAllCreatives: Boolean) {
+  copyAdItem(id: $id, creativeIds: $creativeIds, copyAllCreatives: $copyAllCreatives) {
+    ...AdItemResult
+  }
+}
+
+query AdItemPageCategoryTargetingPerformanceById($id: ID!, $page: Int, $pageSize: Int, $sort: String) {
+  adItemPageCategoryTargetingPerformanceById(id: $id, page: $page, pageSize: $pageSize, sort: $sort) {
+    totalCount
+    content {
+      id
+      name
+      totalImpressions
+      totalClicks
+      totalAdSpent
+      ctr
+      sharePercentageTotalImpressions
+      avgBid
+      avgPosition
+    }
+  }
+}
+
+query AdItemKeywordTargetingPerformanceById($id: ID!, $page: Int, $pageSize: Int, $sort: String) {
+  adItemKeywordTargetingPerformanceById(id: $id, page: $page, pageSize: $pageSize, sort: $sort) {
+    totalCount
+    content {
+      name
+      totalImpressions
+      totalClicks
+      totalAdSpent
+      ctr
+      sharePercentageTotalImpressions
+      avgBid
+      avgPosition
+    }
+  }
+}
+
+query AdItemAdTagTargetingPerformanceById($id: ID!, $page: Int, $pageSize: Int, $sort: String) {
+  adItemAdTagTargetingPerformanceById(id: $id, page: $page, pageSize: $pageSize, sort: $sort) {
+    totalCount
+    content {
+      name
+      totalImpressions
+      totalClicks
+      totalAdSpent
+      ctr
+      sharePercentageTotalImpressions
+      avgBid
+      avgPosition
+    }
+  }
+}
+
+query GetAdItemInsightById($id: ID!) {
+  getAdItemInsightById(id: $id) {
+    adItemId
+    suggestedBid
+    suggestedBidUpdatedAt
+    adSpendForecast
+    adSpendForecastUpdatedAt
+  }
+}
+
+mutation ApplyAdItemBidSuggestion($adItemInsightsInput: AdItemInsightsInput!) {
+  applyAdItemBidSuggestion(adItemInsightsInput: $adItemInsightsInput) {
+    ...AdItemResult
+  }
+}

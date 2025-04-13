@@ -1,0 +1,332 @@
+{
+  "totalRequest": {
+    "currentTotalValue": "294392",
+    "currentPeriodValues": [
+      {
+        "value": "4886",
+        "timestamp": "2025-02-12",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "9924",
+        "timestamp": "2025-02-13",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "3195",
+        "timestamp": "2025-02-14",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "4682",
+        "timestamp": "2025-02-15",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "3084",
+        "timestamp": "2025-02-16",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "7763",
+        "timestamp": "2025-02-17",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "4160",
+        "timestamp": "2025-02-18",
+        "__typename": "WalletSummaryDailyMetric"
+      }
+    ],
+    "__typename": "WalletSummaryMetrics"
+  },
+
+  "totalResponse": {
+    "currentTotalValue": "34260",
+    "currentPeriodValues": [
+      {
+        "value": "2714",
+        "timestamp": "2025-02-12",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "4556",
+        "timestamp": "2025-02-13",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "2181",
+        "timestamp": "2025-02-14",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "2755",
+        "timestamp": "2025-02-15",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "2198",
+        "timestamp": "2025-02-16",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "3824",
+        "timestamp": "2025-02-17",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "2592",
+        "timestamp": "2025-02-18",
+        "__typename": "WalletSummaryDailyMetric"
+      }
+    ],
+    "__typename": "WalletSummaryMetrics"
+  },
+  "fillRate": {
+    "currentTotalValue": "85.9",
+    "currentPeriodValues": [
+      {
+        "value": "73",
+        "timestamp": "2025-02-12",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "116.52",
+        "timestamp": "2025-02-13",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "79.42",
+        "timestamp": "2025-02-14",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "113.39",
+        "timestamp": "2025-02-15",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "94.28",
+        "timestamp": "2025-02-16",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "52.58",
+        "timestamp": "2025-02-17",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "72.10",
+        "timestamp": "2025-02-18",
+        "__typename": "WalletSummaryDailyMetric"
+      }
+    ],
+    "__typename": "WalletSummaryMetrics"
+  },
+  "ctr": {
+    "currentTotalValue": "2.2",
+    "currentPeriodValues": [
+      {
+        "value": "1.49",
+        "timestamp": "2025-02-12",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "1.73",
+        "timestamp": "2025-02-13",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "2.73",
+        "timestamp": "2025-02-14",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "2.89",
+        "timestamp": "2025-02-15",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "2.28",
+        "timestamp": "2025-02-16",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "2.35",
+        "timestamp": "2025-02-17",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "1.94",
+        "timestamp": "2025-02-18",
+        "__typename": "WalletSummaryDailyMetric"
+      }
+    ],
+    "__typename": "WalletSummaryMetrics"
+  },
+  "impressions": {
+    "currentTotalValue": "25432",
+    "currentPeriodValues": [
+      {
+        "value": "6239",
+        "timestamp": "2025-02-12",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "2955",
+        "timestamp": "2025-02-13",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "4959",
+        "timestamp": "2025-02-14",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "3895",
+        "timestamp": "2025-02-15",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "8814",
+        "timestamp": "2025-02-16",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "2120",
+        "timestamp": "2025-02-17",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "3042",
+        "timestamp": "2025-02-18",
+        "__typename": "WalletSummaryDailyMetric"
+      }
+    ],
+    "__typename": "WalletSummaryMetrics"
+  },
+  "adSpent": {
+    "currentTotalValue": "3810",
+    "currentPeriodValues": [
+      {
+        "value": "5171",
+        "timestamp": "2025-02-12",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "5105",
+        "timestamp": "2025-02-13",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "5080",
+        "timestamp": "2025-02-14",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "2312",
+        "timestamp": "2025-02-15",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "2829",
+        "timestamp": "2025-02-16",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "2961",
+        "timestamp": "2025-02-17",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "3212",
+        "timestamp": "2025-02-18",
+        "__typename": "WalletSummaryDailyMetric"
+      }
+    ],
+    "__typename": "WalletSummaryMetrics"
+  },
+  "clicks": {
+    "currentTotalValue": "5588",
+    "currentPeriodValues": [
+      {
+        "value": "4694",
+        "timestamp": "2025-02-12",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "5272",
+        "timestamp": "2025-02-13",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "4469",
+        "timestamp": "2025-02-14",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "7321",
+        "timestamp": "2025-02-15",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "7759",
+        "timestamp": "2025-02-16",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "5666",
+        "timestamp": "2025-02-17",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "3935",
+        "timestamp": "2025-02-18",
+        "__typename": "WalletSummaryDailyMetric"
+      }
+    ],
+    "__typename": "WalletSummaryMetrics"
+  },
+  "eCPM": {
+    "currentTotalValue": "15",
+    "currentPeriodValues": [
+      {
+        "value": "18",
+        "timestamp": "2025-02-12",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "13",
+        "timestamp": "2025-02-13",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "19",
+        "timestamp": "2025-02-14",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "16",
+        "timestamp": "2025-02-15",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "13",
+        "timestamp": "2025-02-16",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "14",
+        "timestamp": "2025-02-17",
+        "__typename": "WalletSummaryDailyMetric"
+      },
+      {
+        "value": "12",
+        "timestamp": "2025-02-18",
+        "__typename": "WalletSummaryDailyMetric"
+      }
+    ],
+    "__typename": "WalletSummaryMetrics"
+  },
+  "__typename": "WalletSummaryResponse"
+}

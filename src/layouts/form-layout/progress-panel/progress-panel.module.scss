@@ -1,0 +1,39 @@
+.container {
+  border-radius: 6px;
+  background-color: $white-100;
+  padding: 24px;
+  width: 330px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-height: fit-content;
+  position: sticky;
+  top: 80px; // Header Height 56px  + 24px gap at top
+
+  .header_title {
+    padding-bottom: 16px;
+    border-bottom: 1px solid $carter-grey-200;
+  }
+
+  .content_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+
+    .data_item {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .text_wrapper {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+
+  &[data-steps='true'] {
+    top: 135px; // Extra steps because it has steps at the top
+  }
+}

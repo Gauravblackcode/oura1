@@ -1,0 +1,22 @@
+query PermissionsByUserId($userId: ID!) {
+  permissionsByUserId(userId: $userId) {
+    id
+    accessLevel
+    permissionType
+  }
+}
+
+mutation UpdatePermission($id: ID!, $accountId: ID!, $userId: ID!, $accessLevel: String!, $permissionType: String!) {
+  updatePermission(
+    id: $id
+    permission: { accountId: $accountId, userId: $userId, accessLevel: $accessLevel, permissionType: $permissionType }
+  ) {
+    id
+    accountId
+    userId
+    accessLevel
+    permissionType
+    createdAt
+    updatedAt
+  }
+}

@@ -1,0 +1,18 @@
+.paper {
+  background-color: $white-100;
+  border: 1px solid $grey-1100;
+  border-radius: 0 0 5px 5px;
+  padding-bottom: 12px;
+
+  ul {
+    @include themeScrollbar();
+  }
+
+  .spinner_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 12px;
+    margin-right: 12px;
+  }
+}

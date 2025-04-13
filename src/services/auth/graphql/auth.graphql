@@ -1,0 +1,17 @@
+mutation Login($authRequest: AuthenticationRequest!) {
+  login(authRequest: $authRequest) {
+    token
+  }
+}
+
+query Logout {
+  logout
+}
+
+mutation ForgotPassword($authRequest: AuthenticationRequest) {
+  forgotPassword(authRequest: $authRequest)
+}
+
+mutation ResetPassword($authRequest: AuthenticationRequest) {
+  resetPassword(authRequest: $authRequest)
+}

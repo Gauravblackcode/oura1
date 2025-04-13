@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 4px;
+
+  .more_icon {
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: $carter-brand-100;
+    @include typography('xxs');
+    color: $carter-text-800;
+    font-weight: 500;
+  }
+}
+
+.custom_tooltip {
+  background-color: transparent !important;
+  max-width: none;
+  padding: 0;
+
+  .tooltip_container {
+    border-radius: 5px;
+    border: 1px solid $grey-700;
+    background: $white-100;
+    box-shadow: 2px 4px 5px 0px rgba(0, 0, 0, 0.08);
+    max-height: 340px;
+    overflow-y: auto;
+    @include themeScrollbar();
+    p {
+      @include typography('xs');
+      color: $black-400;
+      padding: 12px 14px;
+      min-width: 128px;
+    }
+  }
+}

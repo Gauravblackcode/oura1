@@ -1,0 +1,54 @@
+query getAllPlacements($pageSize: Int!, $page: Int!, $filters: PlacementFilters) {
+  placements(pageSize: $pageSize, page: $page, filters: $filters) {
+    content {
+      id
+      name
+      adSlotIds
+    }
+    totalCount
+  }
+}
+query getPlacementById($id: ID!) {
+  placementById(id: $id) {
+    id
+    name
+    platformId
+    slotType
+    createdAt
+    updatedAt
+    adSlotIds
+  }
+}
+
+query getPlacementsByIds($ids: [ID!]) {
+  placementsByIds(ids: $ids) {
+    id
+    name
+    platformId
+    slotType
+    createdAt
+    updatedAt
+    adSlotIds
+  }
+}
+
+mutation CreatePlacement($placement: PlacementInput!) {
+  createPlacement(placement: $placement) {
+    id
+    name
+    platformId
+    createdAt
+    updatedAt
+    adSlotIds
+  }
+}
+mutation UpdatePlacement($id: ID!, $placement: PlacementInput!) {
+  updatePlacement(id: $id, placement: $placement) {
+    id
+    name
+    platformId
+    createdAt
+    updatedAt
+    adSlotIds
+  }
+}

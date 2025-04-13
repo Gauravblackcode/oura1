@@ -1,0 +1,198 @@
+mutation CreateSupplySidePlatform($input: SupplySidePlatformInput!) {
+  createSupplySidePlatform(supplySidePlatformInput: $input) {
+    id
+  }
+}
+
+mutation UpdateSupplySidePlatform($id: Long!, $input: SupplySidePlatformInput!) {
+  updateSupplySidePlatform(id: $id, supplySidePlatformInput: $input) {
+    id
+  }
+}
+
+query SupplySidePlatforms($sort: String, $pageSize: Int, $page: Int) {
+  supplySidePlatforms(sort: $sort, pageSize: $pageSize, page: $page) {
+    totalCount
+    content {
+      id
+      type
+      accountId
+      logoUrl
+      status
+      sspApi
+      publisherId
+      createdAt
+      updatedAt
+      deletedAt
+    }
+  }
+}
+
+query SupplySidePlatformById($id: Long!) {
+  supplySidePlatformById(id: $id) {
+    id
+    type
+    status
+    sspApi
+    dealType
+    publisherId
+    siteId {
+      siteAddress
+      platform
+      assignedSiteIds
+    }
+    createdAt
+    updatedAt
+    deletedAt
+  }
+}
+
+query SspBidRequestSettings {
+  sspBidRequestSettings {
+    auctionType
+    biddingType
+    timeoutSec
+    allowedAdvertisers
+    blockedAdvertisers
+    currency
+    allowedLanguage
+    blockedCategories
+    blockedApps
+    createdAt
+    updatedAt
+  }
+}
+
+mutation createSSPBidRequestSettings($input: SSPBidRequestSettingsInput!) {
+  createSSPBidRequestSettings(sspBidRequestSettingsInput: $input) {
+    auctionType
+    biddingType
+    timeoutSec
+    allowedAdvertisers
+    blockedAdvertisers
+    currency
+    allowedLanguage
+    blockedCategories
+    blockedApps
+    createdAt
+    updatedAt
+  }
+}
+
+mutation updateSSPBidRequestSettings($input: SSPBidRequestSettingsInput!) {
+  updateSSPBidRequestSettings(sspBidRequestSettingsInput: $input) {
+    auctionType
+    biddingType
+    timeoutSec
+    allowedAdvertisers
+    blockedAdvertisers
+    currency
+    allowedLanguage
+    blockedCategories
+    blockedApps
+    createdAt
+    updatedAt
+  }
+}
+
+mutation CreateYieldGroup($input: YieldGroupInput!) {
+  createYieldGroup(yieldGroupInput: $input) {
+    id
+  }
+}
+
+mutation UpdateYieldGroup($id: Long!, $input: YieldGroupInput!) {
+  updateYieldGroup(id: $id, yieldGroupInput: $input) {
+    id
+  }
+}
+
+query YieldGroupById($id: Long) {
+  yieldGroupById(id: $id) {
+    id
+    name
+    status
+    dealType
+    adType
+    linkedAdSlots
+    bidType
+    priority
+    linkedSSPs
+    floorPrice
+    iframeBusterLinks
+    pmpDealId
+    pdDealId
+    pageCategories
+    keywordType
+    excludedKeywordType
+    keywords
+    excludedKeywords
+    keyValues {
+      name
+      targetingKey
+      type
+      values
+    }
+    cohortList
+    totalAdSpend
+    numImpressions
+    numClicks
+    cpm
+    ctr
+    numAdsRequested
+    numAdsReturned
+    createdAt
+    updatedAt
+    deletedAt
+    floorPriceCurrency
+  }
+}
+
+query YieldGroups($sort: String, $pageSize: Int, $page: Int, $filters: YieldGroupFilters) {
+  yieldGroups(sort: $sort, pageSize: $pageSize, page: $page, filters: $filters) {
+    totalCount
+    content {
+      id
+      name
+      status
+      accountId
+      dealType
+      adType
+      linkedAdSlots
+      bidType
+      priority
+      linkedSSPs
+      floorPrice
+      iframeBusterLinks
+      pmpDealId
+      pdDealId
+      pageCategories
+      keywordType
+      excludedKeywordType
+      keywords
+      excludedKeywords
+      cohortList
+      totalAdSpend
+      numImpressions
+      numClicks
+      cpm
+      ctr
+      numAdsRequested
+      numAdsReturned
+      createdAt
+      updatedAt
+      deletedAt
+    }
+  }
+}
+
+mutation UpdateYieldGroupStatus($id: Long!, $status: String!) {
+  updateYieldGroupStatus(id: $id, status: $status) {
+    id
+  }
+}
+mutation UpdateSupplySidePlatformStatus($id: Long!, $status: String!) {
+  updateSupplySidePlatformStatus(id: $id, status: $status) {
+    id
+  }
+}

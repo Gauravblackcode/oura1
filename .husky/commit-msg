@@ -1,0 +1,13 @@
+# Regex for JIRA ticket: match "RMN-###" or "AIP-###"
+JIRA_REGEX="^(RMN|AIP)-[0-9]+"
+
+# Read the commit message
+commit_message=$(cat "$1")
+
+# Check if the commit message matches the regex
+if ! echo "$commit_message" | grep -qE "$JIRA_REGEX"; then
+  echo "❌ Commit message must contain a JIRA ticket (e.g., RMN-123, RMN-000, AIP-123)"
+  exit 1
+else
+  echo "✅ Commit message is valid!"
+fi

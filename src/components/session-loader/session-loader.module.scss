@@ -1,0 +1,18 @@
+.container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  @include externalLayoutBg();
+  .logo {
+    margin-top: var(--lg) !important;
+    width: calc(0.5rem * 20) !important;
+  }
+  .appTitle {
+    text-transform: uppercase;
+    @include typography(md, bold);
+    color: $primary-contrast-text;
+  }
+}

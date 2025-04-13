@@ -1,0 +1,122 @@
+type ChangeRequest {
+  id: ID
+  requesterId: ID
+  requesterName: String
+  approverId: ID
+  approverName: String
+  accountId: ID
+  advertiserId: ID
+  advertiserName: String
+  createdAt: String
+  updatedAt: String
+  campaignStatus: StatusType
+  campaignId: ID
+  campaignName: String
+  campaignStartDate: String
+  adItemMapping: [JSON]
+  approved: Boolean
+}
+
+fragment ChangeRequestResult on ChangeRequest {
+  id
+  requesterId
+  requesterName
+  approverId
+  approverName
+  accountId
+  advertiserId
+  advertiserName
+  createdAt
+  updatedAt
+  campaignStatus
+  campaignId
+  campaignName
+  campaignStartDate
+  adItemMapping
+  approved
+  comment
+}
+
+query ChangeRequests($page: Int, $pageSize: Int, $filters: ChangeRequestFilters, $sort: String) {
+  changeRequests(page: $page, pageSize: $pageSize, filters: $filters, sort: $sort) {
+    totalCount
+    content {
+      id
+      requesterId
+      requesterName
+      approverId
+      approverName
+      accountId
+      advertiserId
+      advertiserName
+      createdAt
+      updatedAt
+      campaignStatus
+      campaignId
+      campaignName
+      campaignStartDate
+      adItemMapping
+      approved
+      comment
+    }
+  }
+}
+
+query ChangeRequestById($id: ID!) {
+  changeRequestById(id: $id) {
+    id
+    requesterId
+    requesterName
+    approverId
+    approverName
+    accountId
+    advertiserId
+    advertiserName
+    createdAt
+    updatedAt
+    campaignStatus
+    campaignId
+    campaignName
+    campaignStartDate
+    adItemMapping
+    approved
+    archived
+    comment
+  }
+}
+
+query ChangeRequestCount($filters: ChangeRequestFilters) {
+  changeRequests(filters: $filters) {
+    totalCount
+  }
+}
+
+mutation ApproveChangeRequest($id: String!, $changeRequest: ChangeRequestInput!) {
+  approveChangeRequest(id: $id, changeRequest: $changeRequest) {
+    id
+    requesterId
+    requesterName
+    approverId
+    approverName
+    accountId
+    advertiserId
+    advertiserName
+    createdAt
+    updatedAt
+    campaignStatus
+    campaignId
+    campaignName
+    campaignStartDate
+    adItemMapping
+    approved
+    archived
+    adItemMapping
+    comment
+  }
+}
+
+mutation CreateChangeRequest($changeRequest: ChangeRequestInput!) {
+  createChangeRequest(changeRequest: $changeRequest) {
+    ...ChangeRequestResult
+  }
+}

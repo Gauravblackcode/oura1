@@ -1,0 +1,208 @@
+type Campaign {
+  id: ID
+  advertiserId: ID
+  advertiserName: String
+  name: String
+  type: CampaignType
+  status: StatusType
+  comments: String
+  owner: String
+  startDate: String
+  endDate: String
+  totalCurrentImpressions: Int
+  totalCurrentClicks: Int
+  totalBudget: Int
+  description: String
+  code: String
+  roadblockTag: String
+  isPublishable: Boolean
+  createdAt: String
+  updatedAt: String
+  budgetSpent: Float
+  revenue: Float
+  roas: Float
+  cpm: Float
+  ctr: Float
+  isImmediate: Boolean
+  ownerId: ID
+  isSubmittedForApproval: Boolean
+  allowSubmitForApproval: Boolean
+  isLive: Boolean
+  adItemMapping: [JSON]
+}
+
+fragment CampaignResult on Campaign {
+  id
+  advertiserId
+  advertiserName
+  name
+  type
+  status
+  comments
+  owner
+  startDate
+  endDate
+  totalCurrentImpressions
+  totalCurrentClicks
+  totalBudget
+  description
+  code
+  roadblockTag
+  isPublishable
+  createdAt
+  updatedAt
+  budgetSpent
+  revenue
+  roas
+  cpm
+  ctr
+  isImmediate
+  ownerId
+  isSubmittedForApproval
+  allowSubmitForApproval
+  isLive
+  adItemMapping
+  ownerRoleType
+}
+
+mutation CreateCampaign($campaign: CampaignInput!) {
+  createCampaign(campaign: $campaign) {
+    ...CampaignResult
+  }
+}
+
+mutation UpdateCampaign($id: ID!, $campaign: CampaignInput!) {
+  updateCampaign(id: $id, campaign: $campaign) {
+    ...CampaignResult
+  }
+}
+
+mutation DeleteCampaignById($id: ID!) {
+  deleteCampaignById(id: $id)
+}
+
+mutation UpdateCampaignStatus($id: ID!, $status: String!) {
+  updateCampaignStatus(id: $id, status: $status) {
+    ...CampaignResult
+  }
+}
+
+mutation CopyCampaign($campaign: CopyCampaignInput!) {
+  copyCampaign(campaign: $campaign) {
+    id
+  }
+}
+
+query CampaignById($id: ID!) {
+  campaignById(id: $id) {
+    ...CampaignResult
+  }
+}
+
+query CampaignsByIds($ids: [ID!]!) {
+  campaignsByIds(ids: $ids) {
+    ...CampaignResult
+  }
+}
+
+query Campaigns($page: Int, $pageSize: Int, $sort: String, $filters: CampaignFilters!) {
+  campaigns(page: $page, pageSize: $pageSize, sort: $sort, filters: $filters) {
+    totalCount
+    content {
+      name
+      id
+      advertiserName
+      advertiserId
+      status
+      isLive
+      startDate
+      endDate
+      budgetSpent
+      totalBudget
+      owner
+      ownerRoleType
+      totalCurrentImpressions
+      totalCurrentClicks
+      ctr
+      cpm
+      revenue
+      roas
+    }
+  }
+}
+
+query CampaignsPerformance($filters: CampaignFilters) {
+  campaignsPerformance(filters: $filters) {
+    adRevenue {
+      currentTotalValue
+      previousTotalValue
+      trend
+      currentPeriodValues {
+        value
+        timestamp
+      }
+      previousPeriodValues {
+        value
+        timestamp
+      }
+    }
+    overallAdSpend {
+      currentTotalValue
+      previousTotalValue
+      trend
+      currentPeriodValues {
+        value
+        timestamp
+      }
+      previousPeriodValues {
+        value
+        timestamp
+      }
+    }
+    totalImpressions {
+      currentTotalValue
+      previousTotalValue
+      trend
+      currentPeriodValues {
+        value
+        timestamp
+      }
+      previousPeriodValues {
+        value
+        timestamp
+      }
+    }
+    totalClicks {
+      currentTotalValue
+      previousTotalValue
+      trend
+      currentPeriodValues {
+        value
+        timestamp
+      }
+      previousPeriodValues {
+        value
+        timestamp
+      }
+    }
+    ctr {
+      currentTotalValue
+      previousTotalValue
+      trend
+      currentPeriodValues {
+        value
+        timestamp
+      }
+      previousPeriodValues {
+        value
+        timestamp
+      }
+    }
+  }
+}
+
+mutation ArchiveCampaign($id: ID!) {
+  archiveCampaign(id: $id) {
+    id
+  }
+}

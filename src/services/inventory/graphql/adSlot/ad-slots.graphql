@@ -1,0 +1,139 @@
+query getAdSlots($pageSize: Int, $page: Int, $filters: AdSlotFilters, $sort: String) {
+  adSlots(page: $page, pageSize: $pageSize, filters: $filters, sort: $sort) {
+    content {
+      id
+      name
+      slotType
+      pageType
+      adSize
+      status
+      platformName
+      requests
+      impressions
+      clicks
+      placementNames
+    }
+    totalCount
+  }
+}
+
+query getAdSlotById($id: ID!) {
+  adSlotById(id: $id) {
+    id
+    platformId
+    name
+    slotType
+    adServeType
+    targetWindow
+    roadblockEligible
+    floorPrice
+    adSize
+    adTag
+    auctionEligible
+    status
+    advertiserEligible
+    advertiserIds
+    createdAt
+    updatedAt
+    placementIds
+    pageType
+    platformName
+    preview
+    requests
+    impressions
+    clicks
+    placementNames
+    preview
+    tileNumber
+    adItemAdSlotMapping
+  }
+}
+
+query getAdSlotsByIds($ids: [ID!]!) {
+  adSlotsByIds(ids: $ids) {
+    id
+    name
+    slotType
+    adSize
+    pageType
+    platformName
+  }
+}
+
+query AdSlotsWithDistinctAdSizes($page: Int, $pageSize: Int, $filters: AdSizeFilters) {
+  adSlotsWithDistinctAdSizes(page: $page, pageSize: $pageSize, filters: $filters)
+}
+
+mutation CreateAdSlot($adSlot: AdSlotInput!) {
+  createAdSlot(adSlot: $adSlot) {
+    id
+    platformId
+    name
+    slotType
+    pageType
+    adServeType
+    targetWindow
+    roadblockEligible
+    floorPrice
+    adSize
+    adTag
+    auctionEligible
+    status
+    advertiserEligible
+    advertiserIds
+    createdAt
+    updatedAt
+    placementIds
+    preview
+    tileNumber
+  }
+}
+mutation updateAdSlotById($id: ID!, $adSlot: AdSlotInput!) {
+  updateAdSlot(id: $id, adSlot: $adSlot) {
+    id
+    platformId
+    name
+    slotType
+    adServeType
+    pageType
+    targetWindow
+    roadblockEligible
+    floorPrice
+    adSize
+    adTag
+    auctionEligible
+    status
+    advertiserEligible
+    advertiserIds
+    createdAt
+    updatedAt
+    placementIds
+    preview
+    tileNumber
+  }
+}
+
+mutation updateAdSlotStatus($id: ID!, $status: Boolean!) {
+  updateAdSlotStatus(id: $id, status: $status) {
+    id
+    accountId
+    platformId
+    name
+    slotType
+    adServeType
+    pageType
+    targetWindow
+    roadblockEligible
+    floorPrice
+    adSize
+    adTag
+    auctionEligible
+    status
+    advertiserEligible
+    createdAt
+    updatedAt
+    placementIds
+    advertiserIds
+    tileNumber
+  }
+}

@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 14px;
+  margin: 18px 0;
+  min-height: 45px;
+
+  .table_close_icon {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .title {
+    color: $black-400;
+    @include typography('xs');
+  }
+}

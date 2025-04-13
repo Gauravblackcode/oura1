@@ -1,0 +1,56 @@
+.onboarding_header_icon {
+  align-self: center;
+  img {
+    height: 50px;
+    width: 47px;
+  }
+  padding-bottom: 0% !important;
+}
+
+.onboarding_dialog_title {
+  text-align: center;
+  padding-top: 0%;
+  span {
+    width: 100%;
+  }
+}
+
+.onboarding_action_container {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.onboarding_dialog_confirm {
+  width: 90%;
+}
+
+.dialog_message {
+  font-size: 14px;
+  color: $black-600;
+  a {
+    color: $secondary-default;
+  }
+}
+
+.dialog_link {
+  color: $secondary-default;
+}
+
+.dot_wrapper {
+  text-align: center;
+  display: flex;
+  gap: 5px;
+  span {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #c3c8cd;
+    &:hover {
+      cursor: pointer;
+    }
+    &[data-active='true'] {
+      background-color: $primary-default;
+    }
+  }
+}

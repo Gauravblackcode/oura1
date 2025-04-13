@@ -1,0 +1,116 @@
+#petco-aci-payment * button,
+#petco-aci-payment label,
+#petco-aci-payment span,
+#petco-aci-payment b {
+  font-family: 'PetcoCircularTT';
+}
+
+.billing-same-as-shipping-container-label {
+  font-family: 'PetcoCircularTT' !important;
+}
+
+.wpwl-hint {
+  font-family: 'PetcoCircularTT';
+  margin-top: 5px;
+}
+
+.wpwl-popover-content {
+  font-family: 'PetcoCircularTT';
+}
+
+.wpwl-group-submit {
+  justify-content: space-between;
+}
+.wpwl-wrapper-submit {
+  width: 90%;
+}
+.wpwl-control,
+input.wpwl-control {
+  border-radius: 5px;
+  border: 1px solid #e9e5e5;
+}
+.petco-aci-cancel-button,
+.wpwl-button-pay {
+  border: 1px solid #e9e5e5;
+  color: #386de5;
+}
+.wpwl-button-pay {
+  background-color: var(--primary-default) !important;
+  border-color: var(--primary-default) !important;
+  color: #fff;
+  font-size: 20px;
+}
+.petco-aci-cancel-button-container {
+  max-width: 10.814rem !important;
+}
+
+.petco-aci-cancel-button {
+  padding-top: 4px;
+}
+
+.wpwl-button.wpwl-button-pay {
+  display: block;
+  padding: 0px;
+  visibility: hidden;
+}
+.wpwl-button-pay:before {
+  content: 'Confirm Payment';
+  visibility: visible;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #001952;
+  color: #fff;
+  border-radius: 0.3125rem;
+  width: 100%;
+  height: 38px;
+  border: 0.0625rem solid #001952;
+  font-size: 16px;
+  text-align: center;
+  transition: background-color 0.2s ease-in-out 0s;
+  cursor: pointer;
+}
+
+.aci-spinner-wrapper {
+  width: 100%;
+  height: 16rem;
+  margin: auto;
+  display: block;
+  position: relative;
+}
+
+.aci-spinner {
+  width: 4.125rem;
+  height: 4.125rem;
+  display: block;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.aci-spinner svg path {
+  stroke: #00aae7;
+}
+
+.aci-spinner svg {
+  transition-property: transform;
+  animation-name: loading;
+  animation-duration: 0.45s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  transition-timing-function: ease-in-out;
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(300deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

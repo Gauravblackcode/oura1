@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 0;
+  min-width: 170px;
+
+  .label_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    svg {
+      cursor: pointer;
+    }
+  }
+}

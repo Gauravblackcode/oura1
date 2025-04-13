@@ -1,0 +1,52 @@
+[
+  {
+    "advertiserName": "Advertiser_1",
+    "impressions": 125678,
+    "shareOfTotalImpressions": 18.5,
+    "totalSpend": 3450,
+    "shareOfTotalSpend": 22.3,
+    "clicks": 2345,
+    "ctr": 1.87,
+    "eCPM": 27
+  },
+  {
+    "advertiserName": "Advertiser_2",
+    "impressions": 156789,
+    "shareOfTotalImpressions": 23.1,
+    "totalSpend": 4120,
+    "shareOfTotalSpend": 26.7,
+    "clicks": 3123,
+    "ctr": 1.99,
+    "eCPM": 26
+  },
+  {
+    "advertiserName": "Advertiser_3",
+    "impressions": 98765,
+    "shareOfTotalImpressions": 14.6,
+    "totalSpend": 2780,
+    "shareOfTotalSpend": 18.0,
+    "clicks": 1987,
+    "ctr": 2.01,
+    "eCPM": 28
+  },
+  {
+    "advertiserName": "Advertiser_4",
+    "impressions": 134567,
+    "shareOfTotalImpressions": 19.8,
+    "totalSpend": 3650,
+    "shareOfTotalSpend": 23.5,
+    "clicks": 2567,
+    "ctr": 1.91,
+    "eCPM": 27
+  },
+  {
+    "advertiserName": "Advertiser_5",
+    "impressions": 112345,
+    "shareOfTotalImpressions": 16.4,
+    "totalSpend": 3290,
+    "shareOfTotalSpend": 21.5,
+    "clicks": 2211,
+    "ctr": 1.97,
+    "eCPM": 25
+  }
+]

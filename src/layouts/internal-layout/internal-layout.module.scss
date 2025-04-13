@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+
+  .sidebar {
+    @include mobile {
+      display: none;
+    }
+  }
+
+  .sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .content {
+    width: 100%;
+    overflow-y: scroll;
+    height: calc(100vh - 48px);
+    background-color: $carter-layout-background;
+  }
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    z-index: 101; /* Ensure the overlay is above other content */
+  }
+
+  .searchComponent {
+    max-width: 600px;
+    margin: 8% 240px;
+  }
+}

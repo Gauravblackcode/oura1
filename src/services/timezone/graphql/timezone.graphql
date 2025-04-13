@@ -1,0 +1,9 @@
+query Timezones($page: Int, $pageSize: Int) {
+  timezones(page: $page, pageSize: $pageSize) {
+    totalCount
+    content {
+      id
+      timeZoneName
+    }
+  }
+}

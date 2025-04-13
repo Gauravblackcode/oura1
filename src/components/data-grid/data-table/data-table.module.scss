@@ -1,0 +1,80 @@
+.table {
+  position: relative;
+
+  .tr {
+    &:hover {
+      background: $white-200;
+    }
+    .checkbox {
+      padding: 0 !important;
+    }
+    .MuiCheckbox-root {
+      padding: 0 !important;
+    }
+  }
+
+  .th {
+    .cellContainer {
+      word-break: unset;
+      color: $text-color-dark;
+      @include typography(xs);
+    }
+  }
+
+  .column {
+    height: 44px;
+    min-height: 44px;
+    max-height: 44px;
+    box-sizing: border-box;
+    display: table-cell;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 6px;
+    color: $text-color-primary;
+    font-weight: 400;
+  }
+
+  .cellContainer {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    &[data-center='true'] {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .sortLabel {
+    &:hover {
+      .sortAsc {
+        opacity: 1;
+      }
+    }
+  }
+
+  .sortActive {
+    .sortAsc {
+      g > :last-child {
+        opacity: 1;
+      }
+    }
+
+    .sortDesc {
+      g > :first-child {
+        opacity: 1;
+      }
+    }
+  }
+
+  .td {
+    font-size: 14px;
+  }
+  .noBorder {
+    border-bottom: 0;
+  }
+  .td p {
+    font-size: 14px;
+  }
+}

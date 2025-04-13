@@ -1,0 +1,64 @@
+.container {
+  background-color: $carter-layout-background;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  @include themeScrollbar();
+  max-height: 100dvh;
+  overflow-y: auto;
+
+  .header_container {
+    position: sticky;
+    top: 0;
+    z-index: 1101;
+    .title_container {
+      background-color: $white-100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      border-bottom: 1px solid $carter-grey-200;
+      .back_actions {
+        all: unset;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        .back_button {
+          width: 24px;
+          height: 24px;
+          border-radius: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: $carter-brand-100;
+        }
+        &:hover {
+          cursor: pointer;
+        }
+      }
+      .actions_container {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+    }
+
+    .steps_container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      background-color: $white-100;
+      border-bottom: 1px solid $carter-grey-300;
+    }
+  }
+
+  .body_container {
+    display: flex;
+    gap: 24px;
+    margin: 24px auto;
+    width: 100%;
+    padding: 0 24px;
+    max-width: 1800px;
+  }
+}

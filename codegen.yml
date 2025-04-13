@@ -1,0 +1,8 @@
+schema: https://dev.shyftcommerce.com/api/graphql
+documents: '**/*.graphql'
+generates:
+  types.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typed-document-node

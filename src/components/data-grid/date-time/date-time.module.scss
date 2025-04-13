@@ -1,0 +1,11 @@
+.container {
+  .date {
+    color: $black-600;
+    @include typography('xs');
+  }
+  .time {
+    margin-top: 4px;
+    color: $text-color-secondary;
+    @include typography('xxs');
+  }
+}

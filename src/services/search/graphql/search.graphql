@@ -1,0 +1,10 @@
+query PlatformSearchResultByText($page: Int, $pageSize: Int, $text: String!, $filters: PlatformSearchFilters) {
+  platformSearchResultByText(page: $page, pageSize: $pageSize, text: $text, filters: $filters) {
+    content {
+      fieldId
+      entityName
+      name
+    }
+    totalCount
+  }
+}

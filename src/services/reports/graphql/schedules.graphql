@@ -1,0 +1,68 @@
+query ScheduleById($id: ID!) {
+  scheduleById(id: $id) {
+    id
+    accountId
+    name
+    scheduleFrequency
+    scheduleTime
+    hasScheduleEndDate
+    scheduleEndDate
+    type
+    metrics
+    coverAllCampaign
+    coverageCampaignIds
+    coverAllAdItem
+    coverageAdItemIds
+    coverAllCreative
+    coverageCreativeIds
+    coverAllAdvertiser
+    coverageAdvertiserIds
+    coverAllInventory
+    coverageAdSlotIds
+    coverAllPlatform
+    coveragePlatformIds
+    coverageAdTypes
+    coveragePageTypes
+    coverAllWallet
+    coverageWalletIds
+    groupedFinancial
+    recipientIds
+    recipientEmails
+    ownerId
+    ownerName
+    createdAt
+    updatedAt
+  }
+}
+
+query Schedules($page: Int, $pageSize: Int, $sort: String, $filters: ScheduleFilters) {
+  schedules(page: $page, pageSize: $pageSize, sort: $sort, filters: $filters) {
+    totalCount
+    content {
+      id
+      accountId
+      name
+      scheduleFrequency
+      scheduleTime
+      hasScheduleEndDate
+      scheduleEndDate
+      type
+      metrics
+      recipientEmails
+      ownerName
+      createdAt
+    }
+  }
+}
+
+mutation CreateSchedule($input: ScheduleInput!) {
+  createSchedule(schedule: $input) {
+    id
+  }
+}
+
+mutation UpdateSchedule($id: ID!, $schedule: ScheduleInput!) {
+  updateSchedule(id: $id, schedule: $schedule) {
+    id
+  }
+}

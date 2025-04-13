@@ -1,0 +1,263 @@
+query AudienceTargetKeywords($page: Int, $pageSize: Int, $filters: AudienceTargetKeywordFilters) {
+  audienceTargetKeywords(page: $page, pageSize: $pageSize, filters: $filters) {
+    totalCount
+    content {
+      id
+      accountId
+      keyword
+      createdAt
+    }
+  }
+}
+
+query AudienceTargetKeyValues($page: Int, $pageSize: Int, $sort: String, $filters: AudienceTargetKeyValuesFilters) {
+  audienceTargetKeyValues(page: $page, pageSize: $pageSize, sort: $sort, filters: $filters) {
+    totalCount
+    content {
+      id
+      accountId
+      name
+      targetingKey
+      type
+      status
+      values
+      createdAt
+    }
+  }
+}
+
+query AudienceTargetKeyValuesById($id: ID!) {
+  audienceTargetKeyValuesById(id: $id) {
+    id
+    accountId
+    name
+    targetingKey
+    type
+    status
+    values
+    createdAt
+    updatedAt
+  }
+}
+
+#Cohort tab
+mutation CreateCohort($cohort: CohortInput!) {
+  createCohort(cohort: $cohort) {
+    id
+    name
+    accountId
+    description
+    isOpenToAll
+    advertiserList {
+      id
+      advertiserName
+    }
+    uploadedFileUrl
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+
+mutation CreateCohortCustomer($cohortCustomer: CohortCustomerInput!) {
+  createCohortCustomer(cohortCustomer: $cohortCustomer) {
+    id
+    cohortId
+    customerId
+  }
+}
+
+query CohortById($id: ID!) {
+  cohortById(id: $id) {
+    id
+    name
+    accountId
+    description
+    isOpenToAll
+    advertiserList {
+      id
+      advertiserName
+    }
+    uploadedFileUrl
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+
+query Cohorts($page: Int, $pageSize: Int, $filters: CohortFilters!, $sort: String) {
+  cohorts(page: $page, pageSize: $pageSize, filters: $filters, sort: $sort) {
+    totalCount
+    content {
+      id
+      name
+      isOpenToAll
+      advertiserList {
+        advertiserName
+      }
+      isActive
+      createdAt
+      backgroundJob {
+        status
+        message
+      }
+    }
+  }
+}
+
+query CohortCustomerById($id: ID!) {
+  cohortCustomerById(id: $id) {
+    id
+    cohortId
+    customerId
+    createdAt
+  }
+}
+
+query CohortCustomers($page: Int, $pageSize: Int, $filters: CohortCustomerFilters!) {
+  cohortCustomers(page: $page, pageSize: $pageSize, filters: $filters) {
+    totalCount
+    content {
+      id
+      cohortId
+      customerId
+      createdAt
+    }
+  }
+}
+
+mutation UpdateCohort($id: ID!, $cohort: CohortInput!) {
+  updateCohort(id: $id, cohort: $cohort) {
+    id
+    name
+    accountId
+    description
+    isOpenToAll
+    advertiserList {
+      id
+      advertiserName
+    }
+    uploadedFileUrl
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+
+mutation DeleteCohortById($id: ID!) {
+  deleteCohortById(id: $id)
+}
+
+mutation UpdateCohortCustomer($id: ID!, $cohortCustomer: CohortCustomerInput!) {
+  updateCohortCustomer(id: $id, cohortCustomer: $cohortCustomer) {
+    id
+    cohortId
+    customerId
+    createdAt
+  }
+}
+
+mutation DeleteCohortCustomerById($id: ID!) {
+  deleteCohortCustomerById(id: $id)
+}
+
+mutation UpdateCohortStatus($id: ID!, $isActive: Boolean!) {
+  updateCohortStatus(id: $id, isActive: $isActive) {
+    id
+    name
+    accountId
+    description
+    isOpenToAll
+    advertiserList {
+      id
+      advertiserName
+    }
+    uploadedFileUrl
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+
+query CohortsByAdvertiser($accountId: ID!, $advertiserId: ID!) {
+  cohortsByAdvertiser(accountId: $accountId, advertiserId: $advertiserId) {
+    id
+    name
+    accountId
+    description
+    isOpenToAll
+    advertiserList {
+      id
+      advertiserName
+    }
+    uploadedFileUrl
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+
+mutation CreateAudienceTargetKeyValues($audienceTargetKeyValuesInput: AudienceTargetKeyValuesInput!) {
+  createAudienceTargetKeyValues(audienceTargetKeyValues: $audienceTargetKeyValuesInput) {
+    id
+    accountId
+    name
+    targetingKey
+    type
+    status
+    values
+    createdAt
+    updatedAt
+  }
+}
+
+mutation UpdateAudienceTargetKeyValues($id: ID!, $audienceTargetKeyValuesInput: AudienceTargetKeyValuesInput!) {
+  updateAudienceTargetKeyValues(id: $id, audienceTargetKeyValues: $audienceTargetKeyValuesInput) {
+    id
+    accountId
+    name
+    targetingKey
+    type
+    status
+    values
+    createdAt
+    updatedAt
+  }
+}
+
+mutation UpdateAudienceTargetKeyValuesStatus($id: ID!, $status: String!) {
+  updateAudienceTargetKeyValuesStatus(id: $id, status: $status) {
+    id
+    accountId
+    name
+    targetingKey
+    type
+    status
+    values
+    createdAt
+    updatedAt
+  }
+}
+
+mutation DeleteAudienceTargetKeyValuesById($id: ID!) {
+  deleteAudienceTargetKeyValuesById(id: $id)
+}
+
+mutation DeleteUploadedCohortFile($fileId: String!) {
+  deleteUploadedCohortFile(fileId: $fileId)
+}
+
+mutation GenerateCohortFilePreSignedUrl($fileId: String!) {
+  generateCohortFilePreSignedUrl(fileId: $fileId)
+}
+
+query GetCohortFileMetadata($fileId: String!) {
+  getCohortFileMetadata(fileId: $fileId) {
+    fileName
+    fileSize
+    contentType
+    rowCount
+    downloadUrl
+    signedUrl
+  }
+}

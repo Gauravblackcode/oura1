@@ -1,0 +1,17 @@
+.fallback_container {
+  min-height: 310px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scrollbar {
+  @include themeScrollbar();
+}
+
+.progress_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+}

@@ -1,0 +1,28 @@
+query ProductAutoFillByIds($ids: [ID!]!) {
+  productAutoFillByIds(ids: $ids) {
+    keywords
+    categories {
+      warnings
+      exactMatches {
+        id
+        name
+        sourceId
+        parentId
+        level
+        hierarchy
+      }
+      broadMatches {
+        id
+        name
+        sourceId
+        parentId
+        level
+        hierarchy
+      }
+    }
+  }
+}
+
+mutation AutoFillFeedback($autoFillFeedbackInput: AutoFillFeedbackInput!) {
+  autoFillFeedback(autoFillFeedbackInput: $autoFillFeedbackInput)
+}

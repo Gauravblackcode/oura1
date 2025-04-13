@@ -1,0 +1,42 @@
+.dialog_container_class {
+  width: 100%;
+  min-width: 560px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .icon {
+    transform: rotateY(180deg);
+    color: $secondary-default;
+  }
+}
+
+.policy_action_class {
+  padding: 0px 22px 15px 22px;
+
+  .accept_button,
+  .decline_button {
+    padding: 8px 14px;
+    p {
+      @include typography('xs', 'medium');
+    }
+  }
+
+  .accept_button {
+    background-color: $secondary-default;
+    p {
+      color: $white-100;
+    }
+  }
+
+  .decline_button {
+    border: 1px solid $orange-600;
+    p {
+      color: $orange-600;
+    }
+  }
+}
+
+.backdrop_container {
+  backdrop-filter: blur(3px);
+}
