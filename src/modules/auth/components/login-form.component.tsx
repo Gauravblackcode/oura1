@@ -88,11 +88,11 @@ const LoginForm = () => {
             onChange={() => setFieldValue('rememberMe', !values.rememberMe)}
           /> */}
           <div className={styles.loginLinks}>
-            <Link href={""} color={ouraColors['links-blue']}>
+            {/* <Link href={""} color={ouraColors['links-blue']}>
               <Typography color={ouraColors['links-blue']} variant="subtitle-medium">
                 Forgot Password?
               </Typography>
-            </Link>
+            </Link> */}
             <Link href="/auth/signup" color={ouraColors['links-blue']}>
               <Typography color={ouraColors['links-blue']} variant="subtitle-medium">
                 New user? Sign up

@@ -50,7 +50,7 @@ const Login = () => {
                   <Typography variant="h1-bold">Oura1</Typography>
                 </div>
                 <Typography variant="subtitle-regular" color={ouraColors['text-600']}>
-                  Log-in to track your performance
+                  Log-in to your account
                 </Typography>
               </div>
             ) : (
@@ -59,7 +59,7 @@ const Login = () => {
                   Welcome back!
                 </Typography>
                 <Typography variant="subtitle-regular" color={ouraColors['text-600']}>
-                  Log-in to track your performance
+                  Log-in to your account
                 </Typography>
               </div>
             )}
