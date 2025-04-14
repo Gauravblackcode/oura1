@@ -21,7 +21,6 @@ import createEmotionCache from '@/common/emotion-cache';
 import { useStore } from '@/redux/store';
 import ToastMessage from '@/components/toast-store-message/toast-store-message.component';
 import DialogProvider from '@/contexts/dialog/dialog.provider';
-import SnowAnalyticsService from '@/services/analytics/snow-analytics.service';
 import { trackPageView } from '@/lib/snowplow/index';
 import ErrorBoundary from '@/components/error-boundary/error-boundary.component';
 import environments from '@/common/environments';
@@ -60,15 +59,7 @@ const App = (props: Props) => {
     getConfig();
   }, []);
 
-  useEffect(() => {
-    if (environments.TRACKINGS_ENABLED) {
-      new SnowAnalyticsService().initializeTrackers();
-    }
-    /* Enforcing http protocol for snowplow events */
-    if (environments.SNOWPLOW_URL) {
-      setCollectorUrl(environments.SNOWPLOW_URL, ['cdp_front_end']);
-    }
-  }, []);
+
 
   const router = useRouter();
 
@@ -103,7 +94,7 @@ const App = (props: Props) => {
                         <ToastMessage />
                       </MainLayout>
                       <Oura1Dialog />
-                      <Oura1Alert />
+                      {/* <Oura1Alert /> */}
                     </ErrorBoundary>
                   </SWRConfig>
                 </DialogProvider>

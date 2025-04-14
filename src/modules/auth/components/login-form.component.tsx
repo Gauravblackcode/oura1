@@ -13,7 +13,6 @@ import styles from '../styles/login-form.module.scss';
 interface LoginFormValues {
   username: string;
   password: string;
-  rememberMe: boolean;
 }
 
 const LoginForm = () => {
@@ -24,12 +23,23 @@ const LoginForm = () => {
     initialValues: {
       username: '',
       password: '',
-      rememberMe: false,
     },
     validationSchema: loginSchema,
     onSubmit: async (authRequest: LoginFormValues) => {
       try {
-        await authService.manualLogin({ authRequest });
+        await authService.manualLogin({
+          payload: {
+            username: authRequest.username,
+            password: authRequest.password,
+            device: {
+              locale: navigator.language,
+              userAgent: navigator.userAgent,
+              platform: (navigator as any)?.userAgentData?.platform || navigator.platform || 'unknown',
+              screenResolution: `${window.screen.width}x${window.screen.height}`,
+              model: navigator.appName,
+              osVersion: navigator.appVersion,
+            },
+        }});
         replace(ROUTES.DASHBOARD);
       } catch (error) {
         //
@@ -71,17 +81,24 @@ const LoginForm = () => {
           type={isVisible ? 'text' : 'password'}
         />
         <div className={styles.passwordLabel}>
-          <CarterCheckbox
+          {/* <CarterCheckbox
             label="Remember Me"
             id="remember-me"
             variant="DEFAULT"
             onChange={() => setFieldValue('rememberMe', !values.rememberMe)}
-          />
-          <Link href={ROUTES.AUTH.FORGOT_PASSWORD} color={ouraColors['links-blue']}>
-            <Typography color={ouraColors['links-blue']} variant="subtitle-medium">
-              Forgot Password?
-            </Typography>
-          </Link>
+          /> */}
+          <div className={styles.loginLinks}>
+            <Link href={""} color={ouraColors['links-blue']}>
+              <Typography color={ouraColors['links-blue']} variant="subtitle-medium">
+                Forgot Password?
+              </Typography>
+            </Link>
+            <Link href="/auth/signup" color={ouraColors['links-blue']}>
+              <Typography color={ouraColors['links-blue']} variant="subtitle-medium">
+                New user? Sign up
+              </Typography>
+            </Link>
+          </div>
         </div>
       </div>
       <div className={styles.formField}></div>

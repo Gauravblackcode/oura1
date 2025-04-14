@@ -1,17 +1,43 @@
-mutation Login($authRequest: AuthenticationRequest!) {
-  login(authRequest: $authRequest) {
-    token
+mutation Signup($payload: SignupDto!) {
+  signup(payload: $payload) {
+    accessToken
+    idToken
+    user {
+      _id
+      dateOfBirth
+      deactivationReasonCode
+      email
+      emailVerified
+      invalidEmailVerificationAttempts
+      invalidLoginAttempts
+      lastLoginAt
+      name
+      occupation
+      personalityReportUrl
+      phone
+      profilePicture
+    }
   }
 }
 
-query Logout {
-  logout
-}
-
-mutation ForgotPassword($authRequest: AuthenticationRequest) {
-  forgotPassword(authRequest: $authRequest)
-}
-
-mutation ResetPassword($authRequest: AuthenticationRequest) {
-  resetPassword(authRequest: $authRequest)
+mutation Login($payload: LoginDto!) {
+  login(payload: $payload) {
+    accessToken
+    idToken
+    user {
+      _id
+      dateOfBirth
+      deactivationReasonCode
+      email
+      emailVerified
+      invalidEmailVerificationAttempts
+      invalidLoginAttempts
+      lastLoginAt
+      name
+      occupation
+      personalityReportUrl
+      phone
+      profilePicture
+    }
+  }
 }

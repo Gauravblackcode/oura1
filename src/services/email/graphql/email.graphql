@@ -1,3 +1,0 @@
-query GeneratePreSignedUrlFromEmailLink($id: String!, $emailSign: String!, $resourceType: String!) {
-  generatePreSignedUrlFromEmailLink(id: $id, emailSign: $emailSign, resourceType: $resourceType)
-}

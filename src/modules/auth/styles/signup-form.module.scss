@@ -1,0 +1,170 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+
+  .formField {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+
+    .passwordLabel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .passwordInput {
+      position: relative;
+      width: 100%;
+
+      .eyeIcon {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: $oura1-brand-600;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          color: $oura1-brand-700;
+        }
+      }
+    }
+
+    .dateInput {
+      position: relative;
+      width: 100%;
+
+      .calendarIcon {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: $oura1-brand-600;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          color: $oura1-brand-700;
+        }
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding-right: 40px;
+      }
+
+      .datePicker {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 10;
+        background: $white-100;
+        border: 1px solid $grey-200;
+        border-radius: 4px;
+        padding: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-top: 4px;
+      }
+    }
+
+    .phoneInput {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+
+      .countryCode {
+        position: relative;
+        min-width: 100px;
+
+        .countryCodeButton {
+          width: 100%;
+          height: 100%;
+          padding: 8px 12px;
+          background: $white-100;
+          border: 1px solid $grey-200;
+          border-radius: 4px;
+          cursor: pointer;
+          text-align: left;
+          color: $oura1-text-600;
+          font-size: 14px;
+
+          &:hover {
+            border-color: $oura1-brand-600;
+          }
+        }
+
+        .countryCodeDropdown {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          max-height: 200px;
+          overflow-y: auto;
+          background: $white-100;
+          border: 1px solid $grey-200;
+          border-radius: 4px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          z-index: 10;
+          margin-top: 4px;
+
+          .countryCodeOption {
+            width: 100%;
+            padding: 8px 12px;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: $oura1-text-600;
+            font-size: 14px;
+
+            &:hover {
+              background: $grey-100;
+            }
+          }
+        }
+      }
+    }
+
+    &:nth-of-type(1) {
+      // margin-top: 32px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .buttonContainer {
+    margin-top: 28px;
+  }
+
+  .loginLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+
+  .formField {
+    flex: 1;
+  }
+} 

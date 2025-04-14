@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -14,9 +16,9 @@ import LoginForm from '../components/login-form.component';
 
 const Login = () => {
   const router = useRouter();
-  const { client } = useConfigs();
+  // const { client } = useConfigs();
   const { loader } = useSelector((state: IRootState) => state.common);
-  const isManualLogin = environments.IS_MANUAL_LOGIN;
+
   const loginRef = useRef<HTMLDivElement | null>(null);
 
   const handleLogin = async (e: any) => {
@@ -27,14 +29,14 @@ const Login = () => {
   return (
     <div className={styles.pageContainer}>
       <Head>
-        <title>{`${!loader ? client?.name : ''} Advertising Login`}</title>
+        <title>Oura1 login</title>
       </Head>
       <div className={styles.leftContainer}>
         <div className={styles.header}>
-          {client?.logo && <img src={client?.logo || ''} height={40} width={100} alt="logo" />}
+          {/* {client?.logo && <img src={client?.logo || ''} height={40} width={100} alt="logo" />} */}
         </div>
         <div className={styles.imageContainer}>
-          <img src={client?.appSnapshotImage} alt="Dashboard Image" />
+          {/* <img src={client?.appSnapshotImage} alt="Dashboard Image" /> */}
         </div>
       </div>
 
@@ -44,8 +46,8 @@ const Login = () => {
             {!loader ? (
               <div className={styles.welcomeTitle}>
                 <div className={styles.brandIconTitle}>
-                  <img src={client?.icon ?? ''} width={50} height={55} alt={`${client?.name} Logo`} />
-                  <Typography variant="h1-bold">{client?.tag}</Typography>
+                  {/* <img src={client?.icon ?? ''} width={50} height={55} alt={`${client?.name} Logo`} /> */}
+                  <Typography variant="h1-bold">Oura1</Typography>
                 </div>
                 <Typography variant="subtitle-regular" color={ouraColors['text-600']}>
                   Log-in to track your performance
@@ -63,27 +65,18 @@ const Login = () => {
             )}
           </div>
           <div className={styles.formField}>
-            {isManualLogin ? (
               <LoginForm />
-            ) : (
-              <Button
-                label="Sign in with Auth0"
-                icon={<img src={authLogo.src} width={18} height={21} alt="Auth0 Logo" />}
-                iconPosition="left"
-                className={styles.auth0}
-                onClick={handleLogin}
-              />
-            )}
+       
             <Typography variant="body-medium">
-              Optimize your retail media campaign today!{' '}
-              <Link className={styles.inviteLink} href={client?.website ?? ''}>
+              {/* Optimize your retail media campaign today!{' '} */}
+              <Link className={styles.inviteLink} href={ ''}>
                 Get in touch
               </Link>
               .
             </Typography>
           </div>
 
-          <div className={styles.formFooter}>
+          {/* <div className={styles.formFooter}>
             <Link href={client?.website ?? ''} color={ouraColors['links-blue']}>
               <Typography color={ouraColors['links-blue']}>Visit Website</Typography>
             </Link>
@@ -93,7 +86,7 @@ const Login = () => {
             <Link href={client?.privacyPolicy ?? ''} color={ouraColors['links-blue']}>
               <Typography color={ouraColors['links-blue']}>Privacy Policy</Typography>
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

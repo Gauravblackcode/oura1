@@ -84,10 +84,10 @@
   --white-400: #d4e5f9;
   --white-500: #f2f5f7;
   --brand-600: #12297d;
-  --primary-default: #0a2c45;
-  --primary-hover: #134765;
-  --secondary-default: #216af7;
-  --secondary-hover: #258dff;
+  --primary-default: #D24d21;
+  --primary-hover: #F9AD3C;
+  --secondary-default: #32373A;
+  --secondary-hover: #003B3D;
   --text-color-primary: var(--black-300);
   --text-color-secondary: #919191;
   --text-color-description: #486570;

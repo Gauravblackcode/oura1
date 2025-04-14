@@ -1,0 +1,86 @@
+.dashboardContent {
+  display: flex;
+  height: 100%;
+  gap: 24px;
+}
+
+.conversationsList {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  border-right: 1px solid var(--border-color);
+  background-color: var(--sidebar-background);
+
+  .newChatButton {
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--background-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: var(--hover-background);
+    }
+  }
+
+  .conversationItem {
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: var(--hover-background);
+    }
+
+    &.selected {
+      background-color: var(--selected-background);
+    }
+  }
+}
+
+.chatSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+
+  .emptyState {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+}
+
+.toolsSection {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px;
+  border-left: 1px solid var(--border-color);
+  background-color: var(--sidebar-background);
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .toolItem,
+    .promptItem {
+      padding: 12px;
+      border-radius: 8px;
+      background-color: var(--background-color);
+      cursor: pointer;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: var(--hover-background);
+      }
+    }
+  }
+} 

@@ -13,7 +13,6 @@ interface IAuthLayout {
 
 const AuthLayout: React.FC<PropsWithChildren<IAuthLayout>> = props => {
   const { children, head } = props;
-  const { client } = useConfigs();
   return (
     <div>
       <Head>
@@ -23,7 +22,7 @@ const AuthLayout: React.FC<PropsWithChildren<IAuthLayout>> = props => {
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.authHeader}>
-            {client?.logo && <img src={client?.logo || ''} height={40} width={100} alt="carter-logo" />}
+            {/* {client?.logo && <img src={client?.logo || ''} height={40} width={100} alt="carter-logo" />} */}
           </div>
           <div className={styles.authBody}>{children}</div>
         </div>

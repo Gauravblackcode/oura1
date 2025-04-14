@@ -1,9 +1,10 @@
-
-const ROUTES = {
-  UNAUTHORIZED: '/401',
-  FORBIDDEN: '/403',
+export default {
+  UNAUTHORIZED: '/unauthorized',
+  FORBIDDEN: '/forbidden',
   DASHBOARD: '/dashboard',
-
+  AUTH: {
+    LOGIN: '/login',
+    SIGNUP: '/auth/signup',
+    LOGOUT: '/auth/logout',
+  },
 };
-
-export default ROUTES;
