@@ -112,10 +112,10 @@ const Navigation = () => {
         padding: "32px 16px"
       }}>
         <Image
-          src="/images/oura1-logo.png"
+          src="/images/OURA.1 - Primary Logo large canvas.png"
           alt="OURA.1 Logo"
-          width={33}
-          height={32}
+          width={50}
+          height={50}
           style={{ marginRight: "8px" }}
         />
         <span style={{
