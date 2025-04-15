@@ -1,19 +1,13 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import Navigation from '../components/navigation/Navigation';
-
-
-const Home: NextPage = () => {
+import Navigation from '@/components/navigation/Navigation';
+const GoalsPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Oura 1</title>
-        <meta name="description" content="Welcome to our Next.js application" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <title>Goals | Oura 1</title>
+        <meta name="description" content="Goals management for Oura 1" />
       </Head>
       <main>
         <div style={{
@@ -505,5 +499,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
-
+export default GoalsPage; 

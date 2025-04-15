@@ -14,10 +14,10 @@ const SignupPage = () => {
       </Head>
       <div className={styles.leftContainer}>
         <div className={styles.header}>
-          <Image src="/assets/images/oura1-logo.png" alt="Oura1 Logo" width={120} height={40} />
+          <Image src="/images/OURA.1 - Aime Icon [.png].png" alt="Oura1 Logo" width={120} height={40} />
         </div>
         <div className={styles.imageContainer}>
-          <Image src="/assets/images/auth-image.png" alt="Auth Image" width={500} height={500} />
+          <Image src="/images/OURA.1 - Aime Icon [.png].png" alt="Auth Image" width={500} height={500} />
         </div>
       </div>
 

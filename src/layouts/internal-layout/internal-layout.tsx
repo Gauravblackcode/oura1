@@ -51,7 +51,7 @@ const InternalLayout: NextPage<PropsWithChildren<Props>> = props => {
         <meta name="description" content={head?.description || 'RMN Dashboard'} />
       </Head>
       <UserDataProvider>
-        <TutorialBoundary>
+        {/* <TutorialBoundary> */}
           <AuthPrerequisiteBoundary>
             <AccountDataProvider>
               <NotificationCountProvider>
@@ -72,7 +72,7 @@ const InternalLayout: NextPage<PropsWithChildren<Props>> = props => {
               </NotificationCountProvider>
             </AccountDataProvider>
           </AuthPrerequisiteBoundary>
-        </TutorialBoundary>
+        {/* </TutorialBoundary> */}
       </UserDataProvider>
     </>
   );

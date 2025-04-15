@@ -31,7 +31,6 @@ export const Dashboard: React.FC = () => {
   const handleCreateNewChat = async () => {
     try {
       const newConversation = await chatService.createConversation('New Chat');
-      console.log('newConversation', newConversation);
       setConversations([...conversations, newConversation]);
       setSelectedConversation(newConversation.id);
     } catch (error) {

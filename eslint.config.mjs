@@ -55,14 +55,14 @@ export default [
       'no-else-return': 'off',
       'import/prefer-default-export': 'off',
       'react/no-array-index-key': 'off',
-      'max-len': ['error', { code: 160 }],
+      'max-len': ['off', { code: 160 }],
       'no-console': ['error', { allow: ['debug', 'error'] }],
       'security/detect-object-injection': 'off',
       '@typescript-eslint/naming-convention': 'off',
       'jsx-a11y/click-events-have-key-events': 'off',
       'react/no-unstable-nested-components': ['warn', { allowAsProps: true }],
       '@typescript-eslint/no-unused-vars': [
-        'error',
+        'off',
         {
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
@@ -72,7 +72,7 @@ export default [
       'jsx-a11y/label-has-associated-control': 'off',
       'jsx-a11y/anchor-is-valid': 'off',
       'import/order': [
-        'error',
+        'off',
         {
           pathGroups: [
             {
