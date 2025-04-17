@@ -145,10 +145,10 @@ const Navigation = () => {
       {/* User Profile */}
       <div style={{
         position: "absolute",
-        bottom: "0",
+        bottom: "50px",
         width: "100%",
         padding: "16px",
-        borderTop: "1px #E5E7EB solid"
+        // borderTop: "1px #E5E7EB solid"
       }}>
         <div style={{
           display: "flex",

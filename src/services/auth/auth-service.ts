@@ -30,6 +30,7 @@ export default class AuthService {
       });
       const accessToken = response.data?.login?.accessToken;
       if (accessToken) {
+        localStorage.setItem(ACCESS_TOKEN_COOKIE, accessToken);
         setCookie(ACCESS_TOKEN_COOKIE, accessToken, cookiesOptions);
       }
       return response.data;

@@ -40,7 +40,7 @@ const LoginForm = () => {
               osVersion: navigator.appVersion,
             },
         }});
-        replace(ROUTES.DASHBOARD);
+        replace('/');
       } catch (error) {
         //
       }

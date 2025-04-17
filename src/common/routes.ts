@@ -7,4 +7,6 @@ export default {
     SIGNUP: '/auth/signup',
     LOGOUT: '/auth/logout',
   },
+  GOALS: '/goals',
+  CALENDAR: '/calendar',
 };

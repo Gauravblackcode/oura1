@@ -1,0 +1,165 @@
+query Goals(
+  $filters: FiltersDto
+  $sort: SortDto
+  $pagination: PaginationDto
+) {
+  goals(
+    filters: $filters
+    sort: $sort 
+    pagination: $pagination
+  ) {
+    pageNo
+    pageSize
+    totalRecords
+    data {
+      _id
+      completedTaskCount
+      createdAt
+      deletedAt
+      description
+      endDate
+      inProgressTaskCount
+      isDeleted
+      isGeneratedByAime
+      startDate
+      tagIds
+      taskIds
+      title
+      totalTaskCount
+      updatedAt
+      userId
+      activityLogs {
+        _id
+        actionType
+        goalId
+        module
+        newValue
+        prevValue
+        taskId
+      }
+      checkList {
+        _id
+        closedAt
+        content
+        deletedAt
+        eventId
+        goalId
+        isClosed
+        isDeleted
+        taskId
+        userId
+        event {
+          _id
+          createdAt
+          deletedAt
+          description
+          endedAt
+          goalId
+          isDeleted
+          isGeneratedByAime
+          noteIds
+          scheduledEndsAt
+          scheduledStartsAt
+          startedAt
+          tagIds
+          taskIds
+          title
+          userId
+          recurrenceDetails {
+            daysOfWeek
+            endDate
+            frequency
+            hour
+            interval
+            minute
+          }
+        }
+      }
+    }
+  }
+}
+
+query Goal($id: String!) {
+  goal(id: $id) {
+    _id
+    completedTaskCount
+    createdAt
+    deletedAt
+    description
+    endDate
+    inProgressTaskCount
+    isDeleted
+    isGeneratedByAime
+    startDate
+    tagIds
+    taskIds
+    title
+    totalTaskCount
+    updatedAt
+    userId
+    activityLogs {
+      _id
+      actionType
+      goalId
+      module
+      newValue
+      prevValue
+      taskId
+    }
+    checkList {
+      _id
+      closedAt
+      content
+      deletedAt
+      eventId
+      goalId
+      isClosed
+      isDeleted
+      taskId
+      userId
+      event {
+        _id
+        createdAt
+        deletedAt
+        description
+        endedAt
+        goalId
+        isDeleted
+        isGeneratedByAime
+        noteIds
+        scheduledEndsAt
+        scheduledStartsAt
+        startedAt
+        tagIds
+        taskIds
+        title
+        userId
+        recurrenceDetails {
+          daysOfWeek
+          endDate
+          frequency
+          hour
+          interval
+          minute
+        }
+      }
+    }
+  }
+}
+
+mutation CreateGoal($createGoalDto: CreateGoalDto!) {
+  createGoal(createGoalDto: $createGoalDto) {
+    _id
+  }
+}
+
+mutation DeleteGoal($id: String!) {
+  deleteGoal(id: $id)
+}
+
+mutation UpdateGoal($id: String!, $updateGoalDto: UpdateGoalDto!) {
+  updateGoal(id: $id, updateGoalDto: $updateGoalDto) {
+    _id
+  }
+}
+

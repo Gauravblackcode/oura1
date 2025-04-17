@@ -2,7 +2,25 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Navigation from '@/components/navigation/Navigation';
+import GoalsService from '@/services/goals/goals.service';
+import useSWR from 'swr';
+import { DefaultSort } from '@/common/helpers';
+import { DefaultPagination } from '@/common/helpers';
+import { GoalsQueryVariables } from 'types';
+import { useState } from 'react';
+
 const GoalsPage: NextPage = () => {
+
+  const [filters, setFilters] = useState<GoalsQueryVariables>({
+    pagination: DefaultPagination,
+    sort: DefaultSort,
+  });
+
+  const goalsService = new GoalsService();
+  const { data: goalsData } = useSWR('goals', () => goalsService.getGoals(filters));
+
+  console.log(goalsData);
+
   return (
     <>
       <Head>

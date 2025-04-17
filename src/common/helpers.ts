@@ -4,6 +4,7 @@ import { OptionsType } from 'cookies-next';
 import { Moment } from 'moment';
 import DateTimeParser, { DateTimeType } from '@/lib/date-time-parser';
 import environments from './environments';
+import { PaginationDto, SortDto, SortOrder   } from 'types';
 
 /**
  * Default cookie options for the application
@@ -472,5 +473,16 @@ export const formatCurrency = (amount?: number) => {
     style: 'currency',
     currency: 'USD',
   }).format(amount);
+};
+
+
+export const DefaultPagination: PaginationDto = {
+  pageNo: 1,
+  pageSize: 10,
+};
+
+export const DefaultSort: SortDto = {
+  field: 'createdAt',
+  order: SortOrder.Desc,
 };
 
