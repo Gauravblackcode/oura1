@@ -1,25 +1,113 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
-import Navigation from '@/components/navigation/Navigation';
-import GoalsService from '@/services/goals/goals.service';
+import { useState, useCallback, useMemo } from 'react';
+import { useRouter } from 'next/router';
+import moment from 'moment';
+import * as Yup from 'yup';
+import { Form, Formik } from 'formik';
+import { Popover } from '@mui/material';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import useSWR from 'swr';
-import { DefaultSort } from '@/common/helpers';
-import { DefaultPagination } from '@/common/helpers';
-import { GoalsQueryVariables } from 'types';
-import { useState } from 'react';
+
+import Navigation from '@/components/navigation/Navigation';
+import Header from '@/components/header/Header';
+import StatusIndicator from '@/components/status/StatusIndicator';
+import { CalendarIcon } from '@/lib/icons';
+import { TabContent } from './components/TabContent';
+import { ActivityLog } from './components/ActivityLog';
+
+import GoalsService from '@/services/goals/goals.service';
+import { DefaultSort, DefaultPagination, isDateRangeAllowed } from '@/common/helpers';
+import { GoalsQueryVariables, GoalStatus, Frequency } from 'types';
+
+import styles from './goals.module.scss';
 
 const GoalsPage: NextPage = () => {
-
+  const router = useRouter();
   const [filters, setFilters] = useState<GoalsQueryVariables>({
     pagination: DefaultPagination,
     sort: DefaultSort,
   });
+  const [activeTab, setActiveTab] = useState("notes");
+  const [noteContent, setNoteContent] = useState("Tentative dates in the month of October\nPlaces that we want to visit: Milan, Greece, Prague\nBudget: $10k");
+  const [taskContent, setTaskContent] = useState("");
+  const [eventContent, setEventContent] = useState("");
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [calendarAnchorEl, setCalendarAnchorEl] = useState<HTMLElement | null>(null);
+  const [selectedDate, setSelectedDate] = useState<moment.Moment | null>(moment());
 
-  const goalsService = new GoalsService();
-  const { data: goalsData } = useSWR('goals', () => goalsService.getGoals(filters));
+  const goalsService = useMemo(() => new GoalsService(), []);
 
-  console.log(goalsData);
+  const handleCalendarOpen = useCallback((event: React.MouseEvent<HTMLElement>) => {
+    setCalendarAnchorEl(event.currentTarget);
+  }, []);
+
+  const handleCalendarClose = useCallback(() => {
+    setCalendarAnchorEl(null);
+  }, []);
+
+  const handleDateChange = useCallback((date: moment.Moment | null) => {
+    setSelectedDate(date);
+    setCalendarAnchorEl(null);
+  }, []);
+
+  const applyFormatting = useCallback((type: string, contentType: string) => {
+    const textArea = document.getElementById(`${contentType}-textarea`) as HTMLTextAreaElement;
+    if (!textArea) return;
+
+    const start = textArea.selectionStart;
+    const end = textArea.selectionEnd;
+    const selectedText = textArea.value.substring(start, end);
+    let formattedText = '';
+
+    switch (type) {
+      case 'bold':
+        formattedText = `**${selectedText}**`;
+        break;
+      case 'italic':
+        formattedText = `*${selectedText}*`;
+        break;
+      case 'underline':
+        formattedText = `<u>${selectedText}</u>`;
+        break;
+      case 'align':
+        formattedText = `\n::: align-center\n${selectedText}\n:::\n`;
+        break;
+      case 'list':
+        formattedText = selectedText.split('\n').map(line => `- ${line}`).join('\n');
+        break;
+      case 'numbered':
+        formattedText = selectedText.split('\n').map((line, i) => `${i + 1}. ${line}`).join('\n');
+        break;
+      default:
+        formattedText = selectedText;
+    }
+
+    const newText =
+      textArea.value.substring(0, start) +
+      formattedText +
+      textArea.value.substring(end);
+
+    if (contentType === 'note') {
+      setNoteContent(newText);
+    } else if (contentType === 'task') {
+      setTaskContent(newText);
+    } else if (contentType === 'event') {
+      setEventContent(newText);
+    }
+
+    setTimeout(() => {
+      textArea.focus();
+      textArea.setSelectionRange(
+        start + formattedText.length,
+        start + formattedText.length
+      );
+    }, 0);
+  }, []);
+
+  const isCalendarOpen = Boolean(calendarAnchorEl);
 
   return (
     <>
@@ -27,484 +115,301 @@ const GoalsPage: NextPage = () => {
         <title>Goals | Oura 1</title>
         <meta name="description" content="Goals management for Oura 1" />
       </Head>
-      <main>
-        <div style={{
-          height: "1024px",
-          background: "white",
-          overflow: "hidden",
-          borderRadius: "8px",
-          outline: "2px #CED4DA solid",
-          outlineOffset: "-2px",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          display: "inline-flex",
-          width: "100%"
-        }}>
-          <div style={{
-            width: "100%",
-            height: "1024px",
-            position: "relative",
-            background: "rgba(0, 0, 0, 0)"
-          }}>
-            <div style={{
-              width: "100%",
-              height: "1024px",
-              left: "0px",
-              top: "0px",
-              display: "flex",
-              position: "relative",
-              background: "#F9FAFB"
-            }}>
-              {/* Sidebar */}
+      <main style={{ height: "100vh", overflow: "hidden" }}>
+        <div className={styles.container}>
+          <div className={styles.innerContainer}>
+            <div className={styles.contentWrapper}>
               <Navigation />
 
-              {/* Main Content */}
-              <div style={{
-                // marginLeft: "256px",
-                padding: "30px",
-                width: "100%"
-              }}>
-                {/* Search Bar */}
-                <div style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "24px",
-                  marginBottom: "30px"
-                }}>
-                  <div style={{
-                    flex: 1,
-                    position: "relative"
-                  }}>
-                    <div style={{
-                      width: "100%",
-                      height: "50px",
-                      background: "white",
-                      borderRadius: "12px",
-                      border: "1px #E5E7EB solid",
-                      display: "flex",
-                      alignItems: "center",
-                      padding: "0 16px"
-                    }}>
-                      <span style={{ marginRight: "12px" }}>🔍</span>
-                      <input
-                        type="text"
-                        placeholder="Search across conversations and content..."
-                        style={{
-                          border: "none",
-                          outline: "none",
-                          width: "100%",
-                          fontSize: "16px",
-                          fontFamily: "var(--font-primary)",
-                          color: "#ADAEBC"
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div style={{
-                    width: "52px",
-                    height: "52px",
-                    borderRadius: "50%",
-                    border: "1px #E5E7EB solid",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "pointer"
-                  }}>
-                    <span>🔔</span>
-                  </div>
-                </div>
+              <div className={styles.mainContent}>
+                <Header
+                  title="Plan Europe trip"
+                  breadcrumbs={[
+                    { label: "Home", path: "/home" },
+                    { label: "Goals", path: "/goals" },
+                    { label: "Goal Detail" }
+                  ]}
+                />
 
-                {/* Content Grid */}
-                <div style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(2, 1fr)",
-                  gap: "24px"
-                }}>
-                  {/* Smart Scheduling Card */}
-                  <div style={{
-                    background: "white",
-                    borderRadius: "10px",
-                    padding: "16px",
-                    height: "160px"
-                  }}>
-                    <div style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      marginBottom: "16px"
-                    }}>
-                      <h2 style={{
-                        color: "black",
-                        fontSize: "18px",
-                        fontFamily: "var(--font-primary)",
-                        fontWeight: 600,
-                        lineHeight: "27px"
-                      }}>
-                        Smart Scheduling
-                      </h2>
-                      <button style={{
-                        background: "#D24D21",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "100px",
-                        padding: "10px 24px",
-                        fontSize: "14px",
-                        fontFamily: "var(--font-primary)",
-                        fontWeight: 500,
-                        cursor: "pointer"
-                      }}>
-                        + Add New
+                <StatusIndicator
+                  message="Update the task status"
+                  type="warning"
+                  onClose={() => { }}
+                />
+
+                <div className={styles.twoColumnLayout}>
+                  <div className={styles.leftColumn}>
+                    <div className={styles.completionPercentage}>
+                      <span className={styles.completionPercentageText}>0% Completed</span>
+                    </div>
+
+                    <div className={styles.progressBarContainer}>
+                      <div className={styles.progressBar}></div>
+                    </div>
+
+                    <div className={styles.goalDetailsForm}>
+                      <Formik
+                        initialValues={{
+                          title: "Plan Europe Trip",
+                          description: "Plan a well-structured Europe trip by finalising destinations, budgeting, booking flights, accommodations, and creating an itinerary for a smooth travel experience.",
+                          startDate: moment().format('YYYY-MM-DD'),
+                          endDate: moment().add(1, 'day').format('YYYY-MM-DD'),
+                          isGeneratedByAime: false,
+                          isRecurring: false,
+                          status: GoalStatus.Todo,
+                          tagIds: [],
+                          taskIds: [],
+                          recurrenceDetails: null
+                        }}
+                        onSubmit={(values, actions) => {
+                          const context = {
+                            headers: {
+                              'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
+                              'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+                              'Access-Control-Allow-Origin': '*',
+                              'Content-Type': 'application/json'
+                            },
+                            silent: false
+                          };
+
+                          const goalData = {
+                            ...values,
+                            recurrenceDetails: values.isRecurring ? values.recurrenceDetails : undefined
+                          };
+
+                          goalsService.createGoal(
+                            { createGoalDto: goalData },
+                            context
+                          ).then(response => {
+                            if (response?.createGoal?._id) {
+                              router.push(`/goals/${response.createGoal._id}`);
+                            }
+                          }).catch(error => {
+                            console.error('Failed to create goal:', error);
+                          }).finally(() => {
+                            actions.setSubmitting(false);
+                          });
+                        }}
+                        validationSchema={Yup.object().shape({
+                          title: Yup.string()
+                            .min(2, 'Title is too short')
+                            .max(256, 'Title cannot exceed 256 characters')
+                            .required('Title is required'),
+                          description: Yup.string()
+                            .max(1000, 'Description cannot exceed 1000 characters'),
+                          startDate: Yup.date()
+                            .required('Start date is required'),
+                          endDate: Yup.date()
+                            .required('End date is required')
+                            .test('date-range', 'Date range cannot exceed 365 days', function (value) {
+                              const { startDate } = this.parent;
+                              if (startDate && value) {
+                                return isDateRangeAllowed({
+                                  startDate: moment(startDate),
+                                  endDate: moment(value),
+                                  maxAllowedRange: 365
+                                });
+                              }
+                              return true;
+                            })
+                        })}
+                      >
+                        {({ values, handleChange, handleBlur, isSubmitting }) => (
+                          <Form>
+                            <div className={styles.formField}>
+                              <div className={styles.formLabel}>
+                                Title
+                              </div>
+                              <input
+                                type="text"
+                                name="title"
+                                value={values.title}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                placeholder="Enter title here..."
+                                className={styles.formInput}
+                              />
+                            </div>
+
+                            <div className={styles.formField}>
+                              <div className={styles.formLabel}>
+                                Description
+                              </div>
+                              <textarea
+                                name="description"
+                                value={values.description}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                placeholder="Enter description here..."
+                                className={styles.formTextarea}
+                              />
+                            </div>
+
+
+                          </Form>
+                        )}
+                      </Formik>
+                    </div>
+
+                    <div className={styles.formActions}>
+                      <button
+                        style={{
+                          marginTop: '20px',
+                          padding: '15px 20px',
+                          backgroundColor: '#D24D21',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '10px',
+                          cursor: 'pointer',
+                          fontSize: '16px',
+                          fontWeight: 'bold',
+                          width: '100%',
+                          position: 'relative',
+                          marginBottom: '20px',
+                        }}
+                        onClick={(event) => {
+                          const formValues = document.querySelector('form')?.elements;
+                          const titleElement = formValues?.namedItem('title') as HTMLInputElement;
+                          const descriptionElement = formValues?.namedItem('description') as HTMLTextAreaElement;
+
+                          const title = titleElement?.value || "Plan Europe Trip";
+                          const description = descriptionElement?.value ||
+                            "Plan a well-structured Europe trip by finalising destinations, budgeting, booking flights, accommodations, and creating an itinerary for a smooth travel experience.";
+
+                          const goalData = {
+                            title,
+                            description,
+                            startDate: moment().format('YYYY-MM-DD'),
+                            endDate: moment().add(1, 'day').format('YYYY-MM-DD'),
+                            isGeneratedByAime: false,
+                            isRecurring: false,
+                            status: GoalStatus.Todo,
+                            tagIds: [],
+                            taskIds: [],
+                            recurrenceDetails: null
+                          };
+
+                          const context = {
+                            headers: {
+                              'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
+                              'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+                              'Access-Control-Allow-Origin': '*',
+                              'Content-Type': 'application/json'
+                            },
+                            silent: false
+                          };
+
+                          const button = event.currentTarget as HTMLButtonElement;
+                          const originalText = button.textContent;
+                          button.disabled = true;
+                          button.textContent = 'Saving...';
+
+                          goalsService.createGoal(
+                            { createGoalDto: goalData },
+                            context
+                          )
+                            .then(response => {
+                              if (response?.createGoal?._id) {
+                                router.push(`/goals/${response.createGoal._id}`);
+                              }
+                            })
+                            .catch(error => {
+                              console.error('Failed to create goal:', error);
+                              alert("Error: " + error.message);
+                            })
+                            .finally(() => {
+                              button.disabled = false;
+                              button.textContent = originalText;
+                            });
+                        }}
+                      >
+                        Save
                       </button>
                     </div>
-                    <p style={{
-                      color: "black",
-                      fontSize: "16px",
-                      fontFamily: "var(--font-primary)",
-                      fontWeight: 400,
-                      lineHeight: "24px"
-                    }}>
-                      Suggests optimal times for tasks based on habits and patterns.
-                    </p>
-                  </div>
 
-                  {/* AI-Powered Goal Breakdown Card */}
-                  <div style={{
-                    background: "white",
-                    borderRadius: "10px",
-                    padding: "16px",
-                    height: "160px"
-                  }}>
-                    <h2 style={{
-                      color: "black",
-                      fontSize: "18px",
-                      fontFamily: "var(--font-primary)",
-                      fontWeight: 600,
-                      lineHeight: "27px",
-                      marginBottom: "16px"
-                    }}>
-                      AI-Powered Goal Breakdown
-                    </h2>
-                    <p style={{
-                      color: "black",
-                      fontSize: "16px",
-                      fontFamily: "var(--font-primary)",
-                      fontWeight: 400,
-                      lineHeight: "24px"
-                    }}>
-                      Generate concise summaries of meetings and notes.
-                    </p>
-                  </div>
-
-                  {/* Personalized Task Recommendations Card */}
-                  <div style={{
-                    background: "white",
-                    borderRadius: "10px",
-                    padding: "16px",
-                    height: "243px"
-                  }}>
-                    <h2 style={{
-                      color: "black",
-                      fontSize: "18px",
-                      fontFamily: "var(--font-primary)",
-                      fontWeight: 600,
-                      lineHeight: "27px",
-                      marginBottom: "16px"
-                    }}>
-                      Personalized Task Recommendations
-                    </h2>
-                    <p style={{
-                      color: "black",
-                      fontSize: "16px",
-                      fontFamily: "var(--font-primary)",
-                      fontWeight: 400,
-                      lineHeight: "24px",
-                      marginBottom: "16px"
-                    }}>
-                      Recommend tasks aligns with your personality.
-                    </p>
-                    <button style={{
-                      background: "#D24D21",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "100px",
-                      padding: "10px 24px",
-                      fontSize: "14px",
-                      fontFamily: "var(--font-primary)",
-                      fontWeight: 500,
-                      cursor: "pointer"
-                    }}>
-                      + Add New
-                    </button>
-                  </div>
-
-                  {/* Summarized Notes Card */}
-                  <div style={{
-                    background: "white",
-                    borderRadius: "10px",
-                    padding: "16px",
-                    height: "227px"
-                  }}>
-                    <h2 style={{
-                      color: "black",
-                      fontSize: "18px",
-                      fontFamily: "var(--font-primary)",
-                      fontWeight: 600,
-                      lineHeight: "27px",
-                      marginBottom: "16px"
-                    }}>
-                      Summarized Notes
-                    </h2>
-                    <div style={{
-                      background: "#F8FBFF",
-                      borderRadius: "4px",
-                      padding: "12px",
-                      marginBottom: "16px"
-                    }}>
-                      <h3 style={{
-                        color: "black",
-                        fontSize: "16px",
-                        fontFamily: "var(--font-primary)",
-                        fontWeight: 600,
-                        lineHeight: "24px",
-                        marginBottom: "8px"
-                      }}>
-                        Marketing Strategies
-                      </h3>
-                      <p style={{
-                        color: "black",
-                        fontSize: "14px",
-                        fontFamily: "var(--font-primary)",
-                        fontWeight: 400,
-                        lineHeight: "21px",
-                        marginBottom: "8px"
-                      }}>
-                        Focus on social media channels.
-                        Refine target audience segmentation.
-                      </p>
-                      <a href="#" style={{
-                        color: "#4C9AFF",
-                        fontSize: "12px",
-                        fontFamily: "var(--font-primary)",
-                        fontWeight: 400,
-                        lineHeight: "18px",
-                        textDecoration: "none",
-                        display: "flex",
-                        alignItems: "center"
-                      }}>
-                        <span style={{ marginRight: "8px" }}>→</span>
-                        Link to full note
-                      </a>
-                    </div>
-                    <a href="#" style={{
-                      color: "#D24D21",
-                      fontSize: "12px",
-                      fontFamily: "var(--font-primary)",
-                      fontWeight: 400,
-                      textDecoration: "underline"
-                    }}>
-                      More Notes
-                    </a>
-                  </div>
-
-                  {/* Analytics Card */}
-                  <div style={{
-                    background: "white",
-                    borderRadius: "10px",
-                    padding: "16px",
-                    height: "125px"
-                  }}>
-                    <h2 style={{
-                      color: "black",
-                      fontSize: "18px",
-                      fontFamily: "var(--font-primary)",
-                      fontWeight: 600,
-                      lineHeight: "27px",
-                      marginBottom: "16px"
-                    }}>
-                      Analytics
-                    </h2>
-                    <div style={{
-                      display: "flex",
-                      justifyContent: "space-between"
-                    }}>
-                      <div style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "12px"
-                      }}>
-                        <div style={{
-                          width: "44px",
-                          height: "44px",
-                          borderRadius: "50%",
-                          border: "8px #F3F6FF solid",
-                          borderTop: "14px #1FC16B solid",
-                          transform: "rotate(57deg)"
-                        }} />
-                        <div>
-                          <div style={{
-                            color: "#1FC16B",
-                            fontSize: "32px",
-                            fontFamily: "var(--font-primary)",
-                            fontWeight: 400
-                          }}>
-                            82%
-                          </div>
-                          <div style={{
-                            color: "#434A5E",
-                            fontSize: "12px",
-                            fontFamily: "var(--font-primary)",
-                            fontWeight: 400,
-                            lineHeight: "20px"
-                          }}>
-                            Tasks Completed
-                          </div>
+                    <div className={styles.tabsContainer}>
+                      <div className={styles.tabsHeader}>
+                        <div
+                          className={`${styles.tabItem} ${activeTab === "notes" ? styles.activeTab : ''}`}
+                          onClick={() => setActiveTab("notes")}
+                        >
+                          Notes (03)
+                        </div>
+                        <div
+                          className={`${styles.tabItem} ${activeTab === "tasks" ? styles.activeTab : ''}`}
+                          onClick={() => setActiveTab("tasks")}
+                        >
+                          Tasks (02)
+                        </div>
+                        <div
+                          className={`${styles.tabItem} ${activeTab === "events" ? styles.activeTab : ''}`}
+                          onClick={() => setActiveTab("events")}
+                        >
+                          Events (02)
                         </div>
                       </div>
-                      <div style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "12px"
-                      }}>
-                        <div style={{
-                          width: "44px",
-                          height: "44px",
-                          borderRadius: "50%",
-                          border: "8px #F3F6FF solid",
-                          borderTop: "14px #CA1414 solid",
-                          transform: "rotate(-80deg)"
-                        }} />
-                        <div>
-                          <div style={{
-                            color: "#CA1414",
-                            fontSize: "32px",
-                            fontFamily: "var(--font-primary)",
-                            fontWeight: 400
-                          }}>
-                            26%
-                          </div>
-                          <div style={{
-                            color: "#434A5E",
-                            fontSize: "12px",
-                            fontFamily: "var(--font-primary)",
-                            fontWeight: 400,
-                            lineHeight: "22px"
-                          }}>
-                            Pending Tasks
-                          </div>
-                        </div>
-                      </div>
-                      <div style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "12px"
-                      }}>
-                        <div style={{
-                          width: "44px",
-                          height: "44px",
-                          borderRadius: "50%",
-                          border: "8px #F3F6FF solid",
-                          borderTop: "14px #DFB400 solid",
-                          transform: "rotate(57deg)"
-                        }} />
-                        <div>
-                          <div style={{
-                            color: "#DFB400",
-                            fontSize: "32px",
-                            fontFamily: "var(--font-primary)",
-                            fontWeight: 400
-                          }}>
-                            3
-                          </div>
-                          <div style={{
-                            color: "#434A5E",
-                            fontSize: "12px",
-                            fontFamily: "var(--font-primary)",
-                            fontWeight: 400,
-                            lineHeight: "22px"
-                          }}>
-                            Goals Achieved
-                          </div>
-                        </div>
+
+                      <div className={styles.tabContent}>
+                        <TabContent
+                          activeTab={activeTab}
+                          noteContent={noteContent}
+                          taskContent={taskContent}
+                          eventContent={eventContent}
+                          setNoteContent={setNoteContent}
+                          setTaskContent={setTaskContent}
+                          setEventContent={setEventContent}
+                          applyFormatting={applyFormatting}
+                        />
                       </div>
                     </div>
+
+                    <ActivityLog />
                   </div>
 
-                  {/* Chat Interface */}
-                  <div style={{
-                    background: "white",
-                    borderRadius: "10px",
-                    padding: "24px",
-                    height: "196px"
-                  }}>
-                    <div style={{
-                      display: "flex",
-                      alignItems: "center",
-                      marginBottom: "16px"
-                    }}>
-                      <Image
-                        src="/images/OURA.1 - Aime Icon [.png].png"
-                        alt="AI Assistant"
-                        width={70}
-                        height={70}
-                        style={{ marginRight: "24px" }}
-                      />
-                      <div>
-                        <h2 style={{
-                          color: "black",
-                          fontSize: "20px",
-                          fontFamily: "var(--font-primary)",
-                          fontWeight: 700,
-                          lineHeight: "20px",
-                          marginBottom: "8px"
-                        }}>
-                          Hi Michael!
-                        </h2>
-                        <p style={{
-                          color: "black",
-                          fontSize: "16px",
-                          fontFamily: "var(--font-primary)",
-                          fontWeight: 400,
-                          lineHeight: "20px"
-                        }}>
-                          How can I assist you?
-                        </p>
+                  <div className={styles.rightColumn}>
+                    <div className={styles.dateStatusContainer}>
+                      <div className={styles.dueDateContainer}>
+                        <div
+                          onClick={handleCalendarOpen}
+                          className={styles.calendarIcon}
+                        >
+                          <CalendarIcon size={16} color="#000000" />
+                        </div>
+                        <span className={styles.dueDateText}>Due Date</span>
                       </div>
-                    </div>
-                    <div style={{
-                      position: "relative",
-                      marginTop: "24px"
-                    }}>
-                      <input
-                        type="text"
-                        placeholder="Type here..."
-                        style={{
-                          width: "100%",
-                          height: "56px",
-                          border: "1px #79747E solid",
-                          borderRadius: "4px",
-                          padding: "0 16px",
-                          fontSize: "16px",
-                          fontFamily: "var(--font-primary)",
-                          color: "#1D1B20"
-                        }}
-                      />
-                      <button style={{
-                        position: "absolute",
-                        right: "8px",
-                        top: "8px",
-                        width: "40px",
-                        height: "40px",
-                        borderRadius: "50%",
-                        border: "1px #79747E solid",
-                        background: "transparent",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}>
-                        <span>→</span>
+
+                      <button
+                        type="button"
+                        className={styles.todoButton}
+                      >
+                        Todo
                       </button>
+
+                      <Popover
+                        open={isCalendarOpen}
+                        anchorEl={calendarAnchorEl}
+                        onClose={handleCalendarClose}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'right',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                      >
+                        <LocalizationProvider dateAdapter={AdapterMoment}>
+                          <DateCalendar
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                            sx={{
+                              '& .MuiButtonBase-root.MuiPickersDay-root.Mui-selected': {
+                                backgroundColor: '#0D6EFD',
+                              }
+                            }}
+                          />
+                        </LocalizationProvider>
+                      </Popover>
                     </div>
                   </div>
                 </div>

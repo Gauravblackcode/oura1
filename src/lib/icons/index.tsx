@@ -81,4 +81,6 @@ export {
   PanelLeft as PanelLeft,
   Bot as BotIcon,
   EllipsisVertical as MoreVertical,
+  Tag as TagIcon,
+  StickyNote as StickyNoteIcon,
 } from 'lucide-react';

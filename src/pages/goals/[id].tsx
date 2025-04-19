@@ -15,13 +15,12 @@ const GoalDetails = () => {
   useEffect(() => {
     const fetchGoalDetails = async () => {
       if (!id) return;
-      
+
       try {
         setLoading(true);
-            const response = await goalsService.getGoalById({ id: id as string });
+        const response = await goalsService.getGoalById({ id: id as string });
         if (response?.goal) {
           setGoal(response.goal);
-          console.log(response.goal);
         } else {
           setError('Goal not found');
         }
@@ -70,8 +69,8 @@ const GoalDetails = () => {
       <div className="mb-6">
         <h1 className="text-2xl font-normal">{goal.title}</h1>
         <p className="text-gray-600 mt-2">{goal.description}</p>
-         <p>{JSON.stringify(goal, null, 2)}</p>
-      </div>    
+        <p>{JSON.stringify(goal, null, 2)}</p>
+      </div>
 
 
       <div className="grid grid-cols-2 gap-6">
@@ -80,7 +79,7 @@ const GoalDetails = () => {
           <div className="space-y-2">
             <div>
               <span className="text-gray-600">Status:</span>
-                <span className="ml-2">{goal}</span>
+              <span className="ml-2">{goal}</span>
             </div>
             <div>
               <span className="text-gray-600">Start Date:</span>
@@ -149,11 +148,10 @@ const GoalDetails = () => {
                 <div key={task._id} className="border-b pb-2">
                   <div className="flex justify-between items-center">
                     <span>{task.title}</span>
-                    <span className={`px-2 py-1 rounded text-sm ${
-                      task.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                    <span className={`px-2 py-1 rounded text-sm ${task.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
                       task.status === 'IN_PROGRESS' ? 'bg-blue-100 text-blue-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
+                        'bg-gray-100 text-gray-800'
+                      }`}>
                       {task.status}
                     </span>
                   </div>

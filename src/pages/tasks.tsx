@@ -1,191 +1,498 @@
-import { NextPage } from 'next';
+import React, { useState } from 'react';
 import Head from 'next/head';
-import Navigation from '../components/navigation/Navigation';
-import TaskCard from '../components/tasks/TaskCard';
+import { useRouter } from 'next/router';
+import { Popover } from '@mui/material';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import moment from 'moment';
+import Image from 'next/image';
+import { Form, Formik } from 'formik';
+import GoalsService from '@/services/goals/goals.service';
+import { GoalStatus } from 'types';
 
-const TasksPage: NextPage = () => {
-  const tasks = [
-    {
-      title: "Review designs with client",
-      dueDate: "06 January 2025",
-      duration: "30 mins",
-      icon: (
-        <svg width="23" height="24" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12.2047 24V21.0533L19.3153 13.9773C19.4469 13.8618 19.5825 13.7773 19.722 13.724C19.8616 13.6707 20.0016 13.6431 20.142 13.6413C20.2949 13.6413 20.4451 13.6698 20.5927 13.7267C20.7393 13.7844 20.8731 13.8707 20.994 13.9853L22.2273 15.244C22.3367 15.3756 22.4202 15.5124 22.478 15.6547C22.5349 15.796 22.5633 15.9378 22.5633 16.08C22.5633 16.2222 22.5362 16.3653 22.482 16.5093C22.4278 16.6533 22.3433 16.7911 22.2287 16.9227L15.15 24H12.2047ZM13.3847 22.8213H14.6513L19.274 18.1893L18.674 17.5307L18.0407 16.904L13.3833 21.5547L13.3847 22.8213ZM2.81935 24C2.20513 24 1.69268 23.7947 1.28202 23.384C0.871349 22.9733 0.666016 22.4609 0.666016 21.8467V2.15333C0.666016 1.54 0.871793 1.028 1.28335 0.617333C1.6949 0.206667 2.20735 0.000888889 2.82068 0H13.3327L19.3327 6V9.46133H17.9993V6.66667H12.666V1.33333H2.82068C2.61535 1.33333 2.4269 1.41867 2.25535 1.58933C2.08379 1.76 1.99846 1.948 1.99935 2.15333V21.8467C1.99935 22.0511 2.08468 22.2391 2.25535 22.4107C2.42602 22.5822 2.61402 22.6676 2.81935 22.6667H9.02468V24H2.81935ZM18.6727 17.5307L18.0407 16.904L19.274 18.1893L18.6727 17.5307Z" fill="#3F3F3F" />
-        </svg>
-      )
-    },
-    {
-      title: "Team standup meeting",
-      dueDate: "07 January 2025",
-      duration: "1 hour",
-      icon: (
-        <svg width="23" height="24" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12.2047 24V21.0533L19.3153 13.9773C19.4469 13.8618 19.5825 13.7773 19.722 13.724C19.8616 13.6707 20.0016 13.6431 20.142 13.6413C20.2949 13.6413 20.4451 13.6698 20.5927 13.7267C20.7393 13.7844 20.8731 13.8707 20.994 13.9853L22.2273 15.244C22.3367 15.3756 22.4202 15.5124 22.478 15.6547C22.5349 15.796 22.5633 15.9378 22.5633 16.08C22.5633 16.2222 22.5362 16.3653 22.482 16.5093C22.4278 16.6533 22.3433 16.7911 22.2287 16.9227L15.15 24H12.2047ZM13.3847 22.8213H14.6513L19.274 18.1893L18.674 17.5307L18.0407 16.904L13.3833 21.5547L13.3847 22.8213ZM2.81935 24C2.20513 24 1.69268 23.7947 1.28202 23.384C0.871349 22.9733 0.666016 22.4609 0.666016 21.8467V2.15333C0.666016 1.54 0.871793 1.028 1.28335 0.617333C1.6949 0.206667 2.20735 0.000888889 2.82068 0H13.3327L19.3327 6V9.46133H17.9993V6.66667H12.666V1.33333H2.82068C2.61535 1.33333 2.4269 1.41867 2.25535 1.58933C2.08379 1.76 1.99846 1.948 1.99935 2.15333V21.8467C1.99935 22.0511 2.08468 22.2391 2.25535 22.4107C2.42602 22.5822 2.61402 22.6676 2.81935 22.6667H9.02468V24H2.81935ZM18.6727 17.5307L18.0407 16.904L19.274 18.1893L18.6727 17.5307Z" fill="#3F3F3F" />
-        </svg>
-      )
-    },
-    {
-      title: "Code review session",
-      dueDate: "08 January 2025",
-      duration: "45 mins",
-      icon: (
-        <svg width="23" height="24" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12.2047 24V21.0533L19.3153 13.9773C19.4469 13.8618 19.5825 13.7773 19.722 13.724C19.8616 13.6707 20.0016 13.6431 20.142 13.6413C20.2949 13.6413 20.4451 13.6698 20.5927 13.7267C20.7393 13.7844 20.8731 13.8707 20.994 13.9853L22.2273 15.244C22.3367 15.3756 22.4202 15.5124 22.478 15.6547C22.5349 15.796 22.5633 15.9378 22.5633 16.08C22.5633 16.2222 22.5362 16.3653 22.482 16.5093C22.4278 16.6533 22.3433 16.7911 22.2287 16.9227L15.15 24H12.2047ZM13.3847 22.8213H14.6513L19.274 18.1893L18.674 17.5307L18.0407 16.904L13.3833 21.5547L13.3847 22.8213ZM2.81935 24C2.20513 24 1.69268 23.7947 1.28202 23.384C0.871349 22.9733 0.666016 22.4609 0.666016 21.8467V2.15333C0.666016 1.54 0.871793 1.028 1.28335 0.617333C1.6949 0.206667 2.20735 0.000888889 2.82068 0H13.3327L19.3327 6V9.46133H17.9993V6.66667H12.666V1.33333H2.82068C2.61535 1.33333 2.4269 1.41867 2.25535 1.58933C2.08379 1.76 1.99846 1.948 1.99935 2.15333V21.8467C1.99935 22.0511 2.08468 22.2391 2.25535 22.4107C2.42602 22.5822 2.61402 22.6676 2.81935 22.6667H9.02468V24H2.81935ZM18.6727 17.5307L18.0407 16.904L19.274 18.1893L18.6727 17.5307Z" fill="#3F3F3F" />
-        </svg>
-      )
-    },
-    {
-      title: "Project planning",
-      dueDate: "09 January 2025",
-      duration: "2 hours",
-      icon: (
-        <svg width="23" height="24" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12.2047 24V21.0533L19.3153 13.9773C19.4469 13.8618 19.5825 13.7773 19.722 13.724C19.8616 13.6707 20.0016 13.6431 20.142 13.6413C20.2949 13.6413 20.4451 13.6698 20.5927 13.7267C20.7393 13.7844 20.8731 13.8707 20.994 13.9853L22.2273 15.244C22.3367 15.3756 22.4202 15.5124 22.478 15.6547C22.5349 15.796 22.5633 15.9378 22.5633 16.08C22.5633 16.2222 22.5362 16.3653 22.482 16.5093C22.4278 16.6533 22.3433 16.7911 22.2287 16.9227L15.15 24H12.2047ZM13.3847 22.8213H14.6513L19.274 18.1893L18.674 17.5307L18.0407 16.904L13.3833 21.5547L13.3847 22.8213ZM2.81935 24C2.20513 24 1.69268 23.7947 1.28202 23.384C0.871349 22.9733 0.666016 22.4609 0.666016 21.8467V2.15333C0.666016 1.54 0.871793 1.028 1.28335 0.617333C1.6949 0.206667 2.20735 0.000888889 2.82068 0H13.3327L19.3327 6V9.46133H17.9993V6.66667H12.666V1.33333H2.82068C2.61535 1.33333 2.4269 1.41867 2.25535 1.58933C2.08379 1.76 1.99846 1.948 1.99935 2.15333V21.8467C1.99935 22.0511 2.08468 22.2391 2.25535 22.4107C2.42602 22.5822 2.61402 22.6676 2.81935 22.6667H9.02468V24H2.81935ZM18.6727 17.5307L18.0407 16.904L19.274 18.1893L18.6727 17.5307Z" fill="#3F3F3F" />
-        </svg>
-      )
-    },
-    {
-      title: "Client demo",
-      dueDate: "10 January 2025",
-      duration: "1.5 hours",
-      icon: (
-        <svg width="23" height="24" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12.2047 24V21.0533L19.3153 13.9773C19.4469 13.8618 19.5825 13.7773 19.722 13.724C19.8616 13.6707 20.0016 13.6431 20.142 13.6413C20.2949 13.6413 20.4451 13.6698 20.5927 13.7267C20.7393 13.7844 20.8731 13.8707 20.994 13.9853L22.2273 15.244C22.3367 15.3756 22.4202 15.5124 22.478 15.6547C22.5349 15.796 22.5633 15.9378 22.5633 16.08C22.5633 16.2222 22.5362 16.3653 22.482 16.5093C22.4278 16.6533 22.3433 16.7911 22.2287 16.9227L15.15 24H12.2047ZM13.3847 22.8213H14.6513L19.274 18.1893L18.674 17.5307L18.0407 16.904L13.3833 21.5547L13.3847 22.8213ZM2.81935 24C2.20513 24 1.69268 23.7947 1.28202 23.384C0.871349 22.9733 0.666016 22.4609 0.666016 21.8467V2.15333C0.666016 1.54 0.871793 1.028 1.28335 0.617333C1.6949 0.206667 2.20735 0.000888889 2.82068 0H13.3327L19.3327 6V9.46133H17.9993V6.66667H12.666V1.33333H2.82068C2.61535 1.33333 2.4269 1.41867 2.25535 1.58933C2.08379 1.76 1.99846 1.948 1.99935 2.15333V21.8467C1.99935 22.0511 2.08468 22.2391 2.25535 22.4107C2.42602 22.5822 2.61402 22.6676 2.81935 22.6667H9.02468V24H2.81935ZM18.6727 17.5307L18.0407 16.904L19.274 18.1893L18.6727 17.5307Z" fill="#3F3F3F" />
-        </svg>
-      )
-    },
-    {
-      title: "Sprint retrospective",
-      dueDate: "11 January 2025",
-      duration: "1 hour",
-      icon: (
-        <svg width="23" height="24" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12.2047 24V21.0533L19.3153 13.9773C19.4469 13.8618 19.5825 13.7773 19.722 13.724C19.8616 13.6707 20.0016 13.6431 20.142 13.6413C20.2949 13.6413 20.4451 13.6698 20.5927 13.7267C20.7393 13.7844 20.8731 13.8707 20.994 13.9853L22.2273 15.244C22.3367 15.3756 22.4202 15.5124 22.478 15.6547C22.5349 15.796 22.5633 15.9378 22.5633 16.08C22.5633 16.2222 22.5362 16.3653 22.482 16.5093C22.4278 16.6533 22.3433 16.7911 22.2287 16.9227L15.15 24H12.2047ZM13.3847 22.8213H14.6513L19.274 18.1893L18.674 17.5307L18.0407 16.904L13.3833 21.5547L13.3847 22.8213ZM2.81935 24C2.20513 24 1.69268 23.7947 1.28202 23.384C0.871349 22.9733 0.666016 22.4609 0.666016 21.8467V2.15333C0.666016 1.54 0.871793 1.028 1.28335 0.617333C1.6949 0.206667 2.20735 0.000888889 2.82068 0H13.3327L19.3327 6V9.46133H17.9993V6.66667H12.666V1.33333H2.82068C2.61535 1.33333 2.4269 1.41867 2.25535 1.58933C2.08379 1.76 1.99846 1.948 1.99935 2.15333V21.8467C1.99935 22.0511 2.08468 22.2391 2.25535 22.4107C2.42602 22.5822 2.61402 22.6676 2.81935 22.6667H9.02468V24H2.81935ZM18.6727 17.5307L18.0407 16.904L19.274 18.1893L18.6727 17.5307Z" fill="#3F3F3F" />
-        </svg>
-      )
-    }
-  ];
+import Navigation from '@/components/navigation/Navigation';
+import Header from '@/components/header/Header';
+import StatusIndicator from '@/components/status/StatusIndicator';
+import { CalendarIcon, TagIcon, StickyNoteIcon } from '@/lib/icons';
+import aime from '@/assets/images/anime.svg';
+import styles from '@/styles/tasks.module.scss';
+
+const Tasks = () => {
+  const router = useRouter();
+  const [showStatusMessage, setShowStatusMessage] = useState(true);
+  const [calendarAnchorEl, setCalendarAnchorEl] = useState<HTMLElement | null>(null);
+  const [selectedDate, setSelectedDate] = useState<moment.Moment | null>(moment());
+  const [notesExpanded, setNotesExpanded] = useState(true);
+  const [eventsExpanded, setEventsExpanded] = useState(true);
+
+  const handleCalendarOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setCalendarAnchorEl(event.currentTarget);
+  };
+
+  const handleCalendarClose = () => {
+    setCalendarAnchorEl(null);
+  };
+
+  const handleDateChange = (date: moment.Moment | null) => {
+    setSelectedDate(date);
+    setCalendarAnchorEl(null);
+  };
+
+  const isCalendarOpen = Boolean(calendarAnchorEl);
+
+  const toggleNotes = () => {
+    setNotesExpanded(!notesExpanded);
+  };
+
+  const toggleEvents = () => {
+    setEventsExpanded(!eventsExpanded);
+  };
+
+  const goalsService = React.useMemo(() => new GoalsService(), []);
 
   return (
     <>
       <Head>
         <title>Tasks | Oura 1</title>
-        <meta name="description" content="Manage your tasks" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content="Task management for Oura 1" />
       </Head>
-      <main>
-        <div style={{
-          height: "1024px",
-          background: "white",
-          overflow: "hidden",
-          borderRadius: "8px",
-          outline: "2px #CED4DA solid",
-          outlineOffset: "-2px",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          display: "inline-flex",
-          width: "100%"
-        }}>
-          <div style={{
-            width: "100%",
-            height: "1024px",
-            position: "relative",
-            background: "rgba(0, 0, 0, 0)"
-          }}>
-            <div style={{
-              width: "100%",
-              height: "1024px",
-              left: "0px",
-              top: "0px",
-              display: "flex",
-              position: "relative",
-              background: "#F9FAFB"
-            }}>
-              {/* Sidebar */}
+      <main style={{ height: "100vh", overflow: "hidden" }}>
+        <div className={styles.container}>
+          <div className={styles.innerContainer}>
+            <div className={styles.contentWrapper}>
               <Navigation />
 
-              {/* Main Content */}
-              <div style={{
-                padding: "30px",
-                width: "100%"
-              }}>
-                {/* Header */}
-                <div style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: "30px"
-                }}>
-                  <h1 style={{
-                    color: "#1F2937",
-                    fontSize: "24px",
-                    fontFamily: "var(--font-primary)",
-                    fontWeight: 700,
-                    lineHeight: "32px"
-                  }}>
-                    Tasks
-                  </h1>
-                  <button style={{
-                    background: "#D24D21",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "100px",
-                    padding: "10px 24px",
-                    fontSize: "14px",
-                    fontFamily: "var(--font-primary)",
-                    fontWeight: 500,
-                    cursor: "pointer"
-                  }}>
-                    + Add New Task
-                  </button>
-                </div>
+              <div className={styles.mainContent}>
+                <Header
+                  title="Tasks"
+                  breadcrumbs={[
+                    { label: 'Home', path: '/' },
+                    { label: 'Tasks' }
+                  ]}
+                />
 
-                {/* Top Navigation Filters */}
-                <div style={{ width: "100%", flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 12, display: 'inline-flex', marginBottom: "24px" }}>
-                  <h1 style={{ color: 'var(--Colors-Secondary-400-base, #3F3F3F)', fontSize: 16, fontFamily: 'var(--font-primary)', margin: "10px" }}>Today's Tasks</h1>
-                  
-                  <div style={{ justifyContent: 'flex-start', alignItems: 'flex-start', gap: 8, display: 'inline-flex' }}>
-                    <div data-selected="False" data-show-icon="False" data-state="Enabled" data-style="Outlined" style={{ background: 'var(--Colors-Primary-200, #E78565)', overflow: 'hidden', borderRadius: 8, outline: '1px var(--Colors-Primary-200, #E78565) solid', outlineOffset: '-1px', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
-                      <div style={{ paddingLeft: 16, paddingRight: 16, paddingBottom: 4, justifyContent: 'center', alignItems: 'center', gap: 8, display: 'flex' }}>
-                        <div style={{ textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'var(--Colors-Neutral-100-base, #F5F3EB)', fontSize: 14, fontFamily: 'var(--font-primary)', lineHeight: 1.8, }}>Work</div>
+                {showStatusMessage && (
+                  <StatusIndicator
+                    message="Update the task status"
+                    onClose={() => setShowStatusMessage(false)}
+                  />
+                )}
+
+                <div className={styles.twoColumnLayout}>
+                  <div className={styles.leftColumn}>
+                    <div style={{
+                      marginTop: '24px',
+                      borderBottom: '1px solid #E5E7EB',
+                      paddingBottom: '16px',
+                      width: '50%'
+                    }}>
+                      <h3 style={{
+                        fontSize: '14px',
+                        fontWeight: 500,
+                        margin: '0 0 12px 0',
+                        color: '#6B7280'
+                      }}>
+                        Due Date
+                      </h3>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }}>
+                        <span style={{
+                          fontSize: '14px',
+                          fontWeight: 500,
+                          color: '#111827'
+                        }}>
+                          {selectedDate ? selectedDate.format('DD/MM/YYYY') : '06/01/2025'}
+                        </span>
+                        <button
+                          onClick={handleCalendarOpen}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <CalendarIcon />
+                        </button>
                       </div>
                     </div>
-                    <div data-selected="False" data-show-icon="False" data-state="Enabled" data-style="Outlined" style={{ width: 86, height: 28, overflow: 'hidden', borderRadius: 8, outline: '1px var(--Colors-Primary-200, #E78565) solid', outlineOffset: '-1px', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
-                      <div style={{ height: 32, paddingLeft: 16, paddingRight: 16, paddingTop: 4, paddingBottom: 4, justifyContent: 'center', alignItems: 'center', gap: 8, display: 'flex' }}>
-                        <div style={{ textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'var(--Colors-Primary-200, #E78565)', fontSize: 14, fontFamily: 'var(--font-primary)', fontWeight: '500', lineHeight: 20, wordWrap: 'break-word' }}>Learning</div>
+
+                    <div style={{
+                      marginTop: '20px'
+                    }}>
+                      <h3 style={{
+                        fontSize: '14px',
+                        fontWeight: 500,
+                        margin: '0 0 12px 0',
+                        color: '#6B7280'
+                      }}>
+                        Tags
+                      </h3>
+                      <div style={{
+                        display: 'flex',
+                        gap: '8px'
+                      }}>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          padding: '4px 12px',
+                          borderRadius: '5px',
+                          backgroundColor: '#EBF5FF',
+                          color: '#4C9AFF',
+                          fontSize: '14px'
+                        }}>
+                          <TagIcon size={12} color="#4C9AFF" />
+                          Personal
+                        </div>
+                        <button style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          padding: '4px 12px',
+                          borderRadius: '5px',
+                          backgroundColor: '#F3F4F6',
+                          color: '#6B7280',
+                          fontSize: '14px',
+                          border: 'none',
+                          cursor: 'pointer'
+                        }}>
+                          <TagIcon size={12} color="#6B7280" />
+                          Add tag
+                        </button>
                       </div>
                     </div>
-                    <div data-selected="False" data-show-icon="False" data-state="Enabled" data-style="Outlined" style={{ width: 86, height: 28, overflow: 'hidden', borderRadius: 8, outline: '1px var(--Colors-Primary-200, #E78565) solid', outlineOffset: '-1px', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
-                      <div style={{ height: 32, paddingLeft: 16, paddingRight: 16, paddingTop: 4, paddingBottom: 4, justifyContent: 'center', alignItems: 'center', gap: 8, display: 'flex' }}>
-                        <div style={{ textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'var(--Colors-Primary-200, #E78565)', fontSize: 14, fontFamily: 'var(--font-primary)', fontWeight: '500', lineHeight: 20, wordWrap: 'break-word' }}>Personal</div>
-                      </div>
-                    </div>
-                    <div data-selected="False" data-show-icon="False" data-state="Enabled" data-style="Outlined" style={{ width: 86, height: 28, overflow: 'hidden', borderRadius: 8, outline: '1px var(--Colors-Primary-200, #E78565) solid', outlineOffset: '-1px', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
-                      <div style={{ height: 32, paddingLeft: 16, paddingRight: 16, paddingTop: 4, paddingBottom: 4, justifyContent: 'center', alignItems: 'center', gap: 8, display: 'flex' }}>
-                        <div style={{ textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'var(--Colors-Primary-200, #E78565)', fontSize: 14, fontFamily: 'var(--font-primary)', fontWeight: '500', lineHeight: 20, wordWrap: 'break-word' }}>Others</div>
-                      </div>
+
+                    <div className={styles.goalDetailsForm}>
+                      <Formik
+                        initialValues={{
+                          title: "Review designs with client",
+                          description: "Review the latest design mockups with the client and gather feedback for the next iteration."
+                        }}
+                        onSubmit={async (values, { setSubmitting }) => {
+                          try {
+
+                            const taskData = {
+                              title: values.title,
+                              description: values.description,
+                              startDate: moment().format('YYYY-MM-DD'),
+                              endDate: moment().add(1, 'day').format('YYYY-MM-DD'),
+                              isGeneratedByAime: false,
+                              isRecurring: false,
+                              status: GoalStatus.Todo,
+                              tagIds: [],
+                              taskIds: []
+                            };
+
+                            const context = {
+                              headers: {
+                                'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
+                                'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+                                'Access-Control-Allow-Origin': '*',
+                                'Content-Type': 'application/json'
+                              },
+                              silent: false
+                            };
+
+                            const response = await goalsService.createGoal(
+                              { createGoalDto: taskData },
+                              context
+                            );
+
+
+                            if (response?.createGoal?._id) {
+                              router.push(`/tasks/${response.createGoal._id}`);
+                            }
+                          } catch (error) {
+                            console.error('Failed to create task:', error);
+                          } finally {
+                            setSubmitting(false);
+                          }
+                        }}
+                      >
+                        {({ values, handleChange, handleBlur, isSubmitting, setSubmitting }) => (
+                          <>
+                            <Form>
+                              <div className={styles.formField}>
+                                <label className={styles.formLabel}>
+                                  Title
+                                </label>
+                                <input
+                                  type="text"
+                                  name="title"
+                                  value={values.title}
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  placeholder="Enter title here..."
+                                  className={styles.formInput}
+                                />
+                              </div>
+
+                              <div className={styles.formField}>
+                                <label className={styles.formLabel}>
+                                  Description
+                                </label>
+                                <textarea
+                                  name="description"
+                                  value={values.description}
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  placeholder="Enter description here..."
+                                  className={styles.formTextarea}
+                                />
+                              </div>
+                            </Form>
+
+                            <div className={styles.linkedSection}>
+                              <div className={styles.linkedHeader} onClick={toggleNotes}>
+                                <div className={styles.linkedTitle}>
+                                  <StickyNoteIcon />
+                                  <span>Linked Notes</span>
+                                </div>
+                                <svg className={`${styles.chevronIcon} ${notesExpanded ? styles.expanded : ''}`} width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M18 15L12 9L6 15" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                              </div>
+
+                              {notesExpanded && (
+                                <div className={styles.linkedContent}>
+                                  <div className={styles.noteCard}>
+                                    <div className={styles.noteHeader}>
+                                      <h4>Preparation list</h4>
+                                      <svg className={styles.moreIcon} width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                      </svg>
+                                    </div>
+                                    <div className={styles.noteContent}>
+                                      <p>Prepare meeting agenda</p>
+                                      <p>Make sure previous comments by client are addressed</p>
+                                    </div>
+                                    <div className={styles.noteTag}>
+                                      <TagIcon size={12} color="#4C9AFF" />
+                                      <span>Work</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                            <div className={styles.linkedSection}>
+                              <div className={styles.linkedHeader} onClick={toggleEvents}>
+                                <div className={styles.linkedTitle}>
+                                  <CalendarIcon />
+                                  <span> Linked Events</span>
+                                </div>
+                                <svg className={`${styles.chevronIcon} ${eventsExpanded ? styles.expanded : ''}`} width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M18 15L12 9L6 15" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                              </div>
+
+                              {eventsExpanded && (
+                                <div className={styles.linkedContent}>
+                                  <div className={styles.eventCard}>
+                                    <div className={styles.eventHeader}>
+                                      <h4>OURA.1 Weekly sync up</h4>
+                                      <svg className={styles.moreIcon} width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                      </svg>
+                                    </div>
+                                    <div className={styles.eventDate}>
+                                      Date: 06 January 2025 | 10:30 - 11:30am
+                                    </div>
+                                    <div className={styles.eventContent}>
+                                      <ul>
+                                        <li>Budget & Bookings – Flights, accommodations, and transport arrangements.</li>
+                                      </ul>
+                                    </div>
+                                    <div className={styles.eventTag}>
+                                      <TagIcon size={12} color="#4C9AFF" />
+                                      <span>Work</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                            <button
+                              style={{
+                                marginTop: '20px',
+                                padding: '15px 20px',
+                                backgroundColor: '#D24D21',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '10px',
+                                cursor: 'pointer',
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                width: '100%',
+                                position: 'relative',
+                              }}
+                              onClick={() => {
+
+                                // Proceed with the API call
+                                const taskData = {
+                                  title: values.title,
+                                  description: values.description,
+                                  startDate: moment().format('YYYY-MM-DD'),
+                                  endDate: moment().add(1, 'day').format('YYYY-MM-DD'),
+                                  isGeneratedByAime: false,
+                                  isRecurring: false,
+                                  status: GoalStatus.Todo,
+                                  tagIds: [],
+                                  taskIds: []
+                                };
+
+                                // Create a context object with the API key
+                                const context = {
+                                  headers: {
+                                    'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
+                                    'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+                                    'Access-Control-Allow-Origin': '*',
+                                    'Content-Type': 'application/json'
+                                  },
+                                  silent: false
+                                };
+
+                                setSubmitting(true);
+                                goalsService.createGoal(
+                                  { createGoalDto: taskData },
+                                  context
+                                )
+                                  .then(response => {
+                                    if (response?.createGoal?._id) {
+                                      router.push(`/tasks/${response.createGoal._id}`);
+                                    }
+                                  })
+                                  .catch(error => {
+                                    console.error('Failed to create task:', error);
+                                    alert("Error: " + error.message);
+                                  })
+                                  .finally(() => {
+                                    setSubmitting(false);
+                                  });
+                              }}
+                              disabled={isSubmitting}
+                            >
+                              {isSubmitting ? 'Saving...' : 'Save'}
+                            </button>
+                          </>
+                        )}
+                      </Formik>
                     </div>
                   </div>
-                </div>
 
-                {/* Tasks Grid */}
-                <div style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "24px"
-                }}>
-                  {tasks.map((task, index) => (
-                    <TaskCard
-                      key={index}
-                      title={task.title}
-                      dueDate={task.dueDate}
-                      duration={task.duration}
-                      icon={task.icon}
-                    />
-                  ))}
+                  <div className={styles.rightColumn}>
+                    <div className={styles.dateStatusContainer}>
+                      <div style={{
+                        marginTop: '24px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '20px',
+                      }}>
+                        <div style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          gap: '20px'
+                        }}>
+                          <div>
+                            <h3 style={{
+                              fontSize: '14px',
+                              fontWeight: 500,
+                              margin: '0 0 12px 0',
+                              color: '#6B7280'
+                            }}>
+                              Status
+                            </h3>
+                            <div style={{
+                              display: 'inline-block',
+                              padding: '8px 46px',
+                              borderRadius: '5px',
+                              border: '1px solid #4C9AFF',
+                              color: '#4C9AFF',
+                              fontSize: '14px',
+                              fontWeight: 500
+                            }}>
+                              To do
+                            </div>
+                          </div>
+
+                          <div>
+                            <h3 style={{
+                              fontSize: '14px',
+                              fontWeight: 500,
+                              margin: '0 0 12px 0',
+                              color: '#6B7280'
+                            }}>
+                              Priority
+                            </h3>
+                            <div style={{
+                              display: 'inline-block',
+                              padding: '8px 16px',
+                              borderRadius: '15px',
+                              backgroundColor: '#F5F3EB',
+                              color: '#DFB400',
+                              fontSize: '14px',
+                              fontWeight: 500
+                            }}>
+                              Medium
+                            </div>
+                          </div>
+                        </div>
+
+                        <div style={{
+                          marginTop: '10px',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          gap: '20px'
+                        }}>
+                          <div style={{
+                            fontSize: '14px',
+                            color: '#6B7280'
+                          }}>
+                            Created on: 23 Feb 2025
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <Image src={aime} alt="Check" width={16} height={16} />
+                            <span style={{ fontSize: '14px', color: '#1FC16B' }}>Generated by Aime</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <Popover
+                        open={isCalendarOpen}
+                        anchorEl={calendarAnchorEl}
+                        onClose={handleCalendarClose}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'right',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                      >
+                        <LocalizationProvider dateAdapter={AdapterMoment}>
+                          <DateCalendar
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                            sx={{
+                              '& .MuiButtonBase-root.MuiPickersDay-root.Mui-selected': {
+                                backgroundColor: '#D24D21',
+                              }
+                            }}
+                          />
+                        </LocalizationProvider>
+                      </Popover>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -196,5 +503,4 @@ const TasksPage: NextPage = () => {
   );
 };
 
-export default TasksPage;
-
+export default Tasks;
