@@ -41,7 +41,7 @@ const Login = () => {
           />
         </div>
         <div className={styles.imageContainer}>
-          <img src="/images/MVP AI Banner long [.png].png" alt="Dashboard Image" />
+          <img src="/images/OURA.1 - Primary Logo large canvas.png" alt="Dashboard Image" />
         </div>
       </div>
 
