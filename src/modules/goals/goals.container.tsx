@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import * as Yup from 'yup';
@@ -26,6 +26,7 @@ import styles from './goals.module.scss';
 
 const GoalsPage: NextPage = () => {
   const router = useRouter();
+  const { id } = router.query;
   const [filters, setFilters] = useState<GoalsQueryVariables>({
     pagination: DefaultPagination,
     sort: DefaultSort,
@@ -40,18 +41,45 @@ const GoalsPage: NextPage = () => {
 
   const goalsService = useMemo(() => new GoalsService(), []);
 
-  const handleCalendarOpen = useCallback((event: React.MouseEvent<HTMLElement>) => {
-    setCalendarAnchorEl(event.currentTarget);
-  }, []);
+  const { data: goalData, error: goalError } = useSWR(
+    id ? ['goal', id] : null,
+    () => goalsService.getGoalById({ id: id as string }),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false
+    }
+  );
 
-  const handleCalendarClose = useCallback(() => {
-    setCalendarAnchorEl(null);
-  }, []);
+  const isLoading = id && !goalData && !goalError;
+  const goal = goalData?.goal;
 
-  const handleDateChange = useCallback((date: moment.Moment | null) => {
-    setSelectedDate(date);
-    setCalendarAnchorEl(null);
-  }, []);
+  useEffect(() => {
+    if (goal) {
+      setNoteContent(goal.description || '');
+    }
+  }, [goal]);
+
+  if (goalError) {
+    console.error('Failed to fetch goal:', goalError);
+    return <div>Error loading goal</div>;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  // const handleCalendarOpen = useCallback((event: React.MouseEvent<HTMLElement>) => {
+  //   setCalendarAnchorEl(event.currentTarget);
+  // }, []);
+
+  // const handleCalendarClose = useCallback(() => {
+  //   setCalendarAnchorEl(null);
+  // }, []);
+
+  // const handleDateChange = useCallback((date: moment.Moment | null) => {
+  //   setSelectedDate(date);
+  //   setCalendarAnchorEl(null);
+  // }, []);
 
   const applyFormatting = useCallback((type: string, contentType: string) => {
     const textArea = document.getElementById(`${contentType}-textarea`) as HTMLTextAreaElement;
@@ -112,8 +140,8 @@ const GoalsPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Goals | Oura 1</title>
-        <meta name="description" content="Goals management for Oura 1" />
+        <title>{goal?.title || 'Goal'} | Oura 1</title>
+        <meta name="description" content={goal?.description || 'Goal management for Oura 1'} />
       </Head>
       <main style={{ height: "100vh", overflow: "hidden" }}>
         <div className={styles.container}>
@@ -123,11 +151,11 @@ const GoalsPage: NextPage = () => {
 
               <div className={styles.mainContent}>
                 <Header
-                  title="Plan Europe trip"
+                  title={goal?.title || 'Loading...'}
                   breadcrumbs={[
                     { label: "Home", path: "/home" },
                     { label: "Goals", path: "/goals" },
-                    { label: "Goal Detail" }
+                    { label: goal?.title || "Goal Detail" }
                   ]}
                 />
 
@@ -140,7 +168,11 @@ const GoalsPage: NextPage = () => {
                 <div className={styles.twoColumnLayout}>
                   <div className={styles.leftColumn}>
                     <div className={styles.completionPercentage}>
-                      <span className={styles.completionPercentageText}>0% Completed</span>
+                      <span className={styles.completionPercentageText}>
+                        {goal?.completedTaskCount && goal?.totalTaskCount 
+                          ? `${Math.round((goal.completedTaskCount / goal.totalTaskCount) * 100)}% Completed`
+                          : '0% Completed'}
+                      </span>
                     </div>
 
                     <div className={styles.progressBarContainer}>
@@ -150,17 +182,18 @@ const GoalsPage: NextPage = () => {
                     <div className={styles.goalDetailsForm}>
                       <Formik
                         initialValues={{
-                          title: "Plan Europe Trip",
-                          description: "Plan a well-structured Europe trip by finalising destinations, budgeting, booking flights, accommodations, and creating an itinerary for a smooth travel experience.",
-                          startDate: moment().format('YYYY-MM-DD'),
-                          endDate: moment().add(1, 'day').format('YYYY-MM-DD'),
-                          isGeneratedByAime: false,
-                          isRecurring: false,
-                          status: GoalStatus.Todo,
-                          tagIds: [],
-                          taskIds: [],
-                          recurrenceDetails: null
+                          title: goal?.title || "",
+                          description: goal?.description || "",
+                          startDate: goal?.startDate || moment().format('YYYY-MM-DD'),
+                          endDate: goal?.endDate || moment().add(1, 'day').format('YYYY-MM-DD'),
+                          isGeneratedByAime: goal?.isGeneratedByAime || false,
+                          isRecurring: Boolean(goal?.recurrenceDetails),
+                          status: goal?.status || GoalStatus.Todo,
+                          tagIds: goal?.tagIds || [],
+                          taskIds: goal?.taskIds || [],
+                          recurrenceDetails: goal?.recurrenceDetails || null
                         }}
+                        enableReinitialize={true}
                         onSubmit={(values, actions) => {
                           const context = {
                             headers: {
@@ -370,7 +403,7 @@ const GoalsPage: NextPage = () => {
                     <div className={styles.dateStatusContainer}>
                       <div className={styles.dueDateContainer}>
                         <div
-                          onClick={handleCalendarOpen}
+                          // onClick={handleCalendarOpen}
                           className={styles.calendarIcon}
                         >
                           <CalendarIcon size={16} color="#000000" />
@@ -388,7 +421,7 @@ const GoalsPage: NextPage = () => {
                       <Popover
                         open={isCalendarOpen}
                         anchorEl={calendarAnchorEl}
-                        onClose={handleCalendarClose}
+                        // onClose={handleCalendarClose}
                         anchorOrigin={{
                           vertical: 'bottom',
                           horizontal: 'right',
@@ -401,7 +434,7 @@ const GoalsPage: NextPage = () => {
                         <LocalizationProvider dateAdapter={AdapterMoment}>
                           <DateCalendar
                             value={selectedDate}
-                            onChange={handleDateChange}
+                            // onChange={handleDateChange}
                             sx={{
                               '& .MuiButtonBase-root.MuiPickersDay-root.Mui-selected': {
                                 backgroundColor: '#0D6EFD',

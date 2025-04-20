@@ -153,7 +153,7 @@ const Header: React.FC<HeaderProps> = ({ title, breadcrumbs, showBackButton = tr
                                 color: index === breadcrumbs.length - 1 ? "#D24D21" : "#6B7280",
                                 fontSize: "14px",
                                 fontWeight: index === breadcrumbs.length - 1 ? "700" : "400",
-                                fontFamily: "'Montserrat', sans-serif"
+
                             }}
                         >
                             {item.label}
@@ -162,7 +162,7 @@ const Header: React.FC<HeaderProps> = ({ title, breadcrumbs, showBackButton = tr
                             <span style={{
                                 color: "#6B7280",
                                 fontSize: "14px",
-                                fontFamily: "'Montserrat', sans-serif"
+
                             }}>/</span>
                         )}
                     </React.Fragment>

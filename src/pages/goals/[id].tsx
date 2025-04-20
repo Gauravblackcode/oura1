@@ -1,168 +1,172 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import GoalsService from '@/services/goals/goals.service';
-import { Goal } from 'types';
-import moment from 'moment';
+// import { useRouter } from 'next/router';
+// import { useEffect, useState } from 'react';
+// import GoalsService from '@/services/goals/goals.service';
+// import { Goal } from 'types';
+// import moment from 'moment';
 
-const GoalDetails = () => {
-  const router = useRouter();
-  const { id } = router.query;
-  const [goal, setGoal] = useState<Goal | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const goalsService = new GoalsService();
+// const GoalDetails = () => {
+//   const router = useRouter();
+//   const { id } = router.query;
+//   const [goal, setGoal] = useState<Goal | null>(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState<string | null>(null);
+//   const goalsService = new GoalsService();
 
-  useEffect(() => {
-    const fetchGoalDetails = async () => {
-      if (!id) return;
+//   useEffect(() => {
+//     const fetchGoalDetails = async () => {
+//       if (!id) return;
 
-      try {
-        setLoading(true);
-        const response = await goalsService.getGoalById({ id: id as string });
-        if (response?.goal) {
-          setGoal(response.goal);
-        } else {
-          setError('Goal not found');
-        }
-      } catch (err) {
-        setError('Failed to fetch goal details');
-        console.error('Error fetching goal:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+//       try {
+//         setLoading(true);
+//         const response = await goalsService.getGoalById({ id: id as string });
+//         if (response?.goal) {
+//           setGoal(response.goal);
+//         } else {
+//           setError('Goal not found');
+//         }
+//       } catch (err) {
+//         setError('Failed to fetch goal details');
+//         console.error('Error fetching goal:', err);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
 
-    fetchGoalDetails();
-  }, [id]);
+//     fetchGoalDetails();
+//   }, [id]);
 
-  if (loading) {
-    return (
-      <div className="p-6">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
-          <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-          <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
-          <div className="h-32 bg-gray-200 rounded mb-4"></div>
-        </div>
-      </div>
-    );
-  }
+//   if (loading) {
+//     return (
+//       <div className="p-6">
+//         <div className="animate-pulse">
+//           <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
+//           <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+//           <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+//           <div className="h-32 bg-gray-200 rounded mb-4"></div>
+//         </div>
+//       </div>
+//     );
+//   }
 
-  if (error) {
-    return (
-      <div className="p-6">
-        <div className="text-red-500">{error}</div>
-      </div>
-    );
-  }
+//   if (error) {
+//     return (
+//       <div className="p-6">
+//         <div className="text-red-500">{error}</div>
+//       </div>
+//     );
+//   }
 
-  if (!goal) {
-    return (
-      <div className="p-6">
-        <div>Goal not found</div>
-      </div>
-    );
-  }
+//   if (!goal) {
+//     return (
+//       <div className="p-6">
+//         <div>Goal not found</div>
+//       </div>
+//     );
+//   }
 
-  return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-normal">{goal.title}</h1>
-        <p className="text-gray-600 mt-2">{goal.description}</p>
-        <p>{JSON.stringify(goal, null, 2)}</p>
-      </div>
+//   return (
+//     <div className="p-6">
+//       <div className="mb-6">
+//         <h1 className="text-2xl font-normal">{goal.title}</h1>
+//         <p className="text-gray-600 mt-2">{goal.description}</p>
+//         <p>{JSON.stringify(goal, null, 2)}</p>
+//       </div>
 
 
-      <div className="grid grid-cols-2 gap-6">
-        <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="text-lg font-medium mb-4">Basic Information</h2>
-          <div className="space-y-2">
-            <div>
-              <span className="text-gray-600">Status:</span>
-              <span className="ml-2">{goal}</span>
-            </div>
-            <div>
-              <span className="text-gray-600">Start Date:</span>
-              <span className="ml-2">{moment(goal.startDate).format('MMM D, YYYY')}</span>
-            </div>
-            <div>
-              <span className="text-gray-600">End Date:</span>
-              <span className="ml-2">{moment(goal.endDate).format('MMM D, YYYY')}</span>
-            </div>
-            <div>
-              <span className="text-gray-600">Generated by AIME:</span>
-              <span className="ml-2">{goal.isGeneratedByAime ? 'Yes' : 'No'}</span>
-            </div>
-          </div>
-        </div>
+//       <div className="grid grid-cols-2 gap-6">
+//         <div className="bg-white p-4 rounded-lg shadow">
+//           <h2 className="text-lg font-medium mb-4">Basic Information</h2>
+//           <div className="space-y-2">
+//             <div>
+//               <span className="text-gray-600">Status:</span>
+//               <span className="ml-2">{goal}</span>
+//             </div>
+//             <div>
+//               <span className="text-gray-600">Start Date:</span>
+//               <span className="ml-2">{moment(goal.startDate).format('MMM D, YYYY')}</span>
+//             </div>
+//             <div>
+//               <span className="text-gray-600">End Date:</span>
+//               <span className="ml-2">{moment(goal.endDate).format('MMM D, YYYY')}</span>
+//             </div>
+//             <div>
+//               <span className="text-gray-600">Generated by AIME:</span>
+//               <span className="ml-2">{goal.isGeneratedByAime ? 'Yes' : 'No'}</span>
+//             </div>
+//           </div>
+//         </div>
 
-        <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="text-lg font-medium mb-4">Progress</h2>
-          <div className="space-y-2">
-            <div>
-              <span className="text-gray-600">Total Tasks:</span>
-              <span className="ml-2">{goal.totalTaskCount || 0}</span>
-            </div>
-            <div>
-              <span className="text-gray-600">Completed Tasks:</span>
-              <span className="ml-2">{goal.completedTaskCount || 0}</span>
-            </div>
-            <div>
-              <span className="text-gray-600">In Progress Tasks:</span>
-              <span className="ml-2">{goal.inProgressTaskCount || 0}</span>
-            </div>
-          </div>
-        </div>
+//         <div className="bg-white p-4 rounded-lg shadow">
+//           <h2 className="text-lg font-medium mb-4">Progress</h2>
+//           <div className="space-y-2">
+//             <div>
+//               <span className="text-gray-600">Total Tasks:</span>
+//               <span className="ml-2">{goal.totalTaskCount || 0}</span>
+//             </div>
+//             <div>
+//               <span className="text-gray-600">Completed Tasks:</span>
+//               <span className="ml-2">{goal.completedTaskCount || 0}</span>
+//             </div>
+//             <div>
+//               <span className="text-gray-600">In Progress Tasks:</span>
+//               <span className="ml-2">{goal.inProgressTaskCount || 0}</span>
+//             </div>
+//           </div>
+//         </div>
 
-        {goal.isRecurring && goal.recurrenceDetails && (
-          <div className="bg-white p-4 rounded-lg shadow col-span-2">
-            <h2 className="text-lg font-medium mb-4">Recurrence Details</h2>
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <span className="text-gray-600">Frequency:</span>
-                <span className="ml-2">{goal.recurrenceDetails.frequency}</span>
-              </div>
-              <div>
-                <span className="text-gray-600">Interval:</span>
-                <span className="ml-2">{goal.recurrenceDetails.interval}</span>
-              </div>
-              <div>
-                <span className="text-gray-600">End Date:</span>
-                <span className="ml-2">{moment(goal.recurrenceDetails.endDate).format('MMM D, YYYY')}</span>
-              </div>
-              <div>
-                <span className="text-gray-600">Time:</span>
-                <span className="ml-2">
-                  {goal.recurrenceDetails.hour}:{goal.recurrenceDetails.minute.toString().padStart(2, '0')}
-                </span>
-              </div>
-            </div>
-          </div>
-        )}
+//         {goal.isRecurring && goal.recurrenceDetails && (
+//           <div className="bg-white p-4 rounded-lg shadow col-span-2">
+//             <h2 className="text-lg font-medium mb-4">Recurrence Details</h2>
+//             <div className="grid grid-cols-3 gap-4">
+//               <div>
+//                 <span className="text-gray-600">Frequency:</span>
+//                 <span className="ml-2">{goal.recurrenceDetails.frequency}</span>
+//               </div>
+//               <div>
+//                 <span className="text-gray-600">Interval:</span>
+//                 <span className="ml-2">{goal.recurrenceDetails.interval}</span>
+//               </div>
+//               <div>
+//                 <span className="text-gray-600">End Date:</span>
+//                 <span className="ml-2">{moment(goal.recurrenceDetails.endDate).format('MMM D, YYYY')}</span>
+//               </div>
+//               <div>
+//                 <span className="text-gray-600">Time:</span>
+//                 <span className="ml-2">
+//                   {goal.recurrenceDetails.hour}:{goal.recurrenceDetails.minute.toString().padStart(2, '0')}
+//                 </span>
+//               </div>
+//             </div>
+//           </div>
+//         )}
 
-        {goal.tasks && goal.tasks.length > 0 && (
-          <div className="bg-white p-4 rounded-lg shadow col-span-2">
-            <h2 className="text-lg font-medium mb-4">Tasks</h2>
-            <div className="space-y-2">
-              {goal.tasks.map(task => (
-                <div key={task._id} className="border-b pb-2">
-                  <div className="flex justify-between items-center">
-                    <span>{task.title}</span>
-                    <span className={`px-2 py-1 rounded text-sm ${task.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                      task.status === 'IN_PROGRESS' ? 'bg-blue-100 text-blue-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
-                      {task.status}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+//         {goal.tasks && goal.tasks.length > 0 && (
+//           <div className="bg-white p-4 rounded-lg shadow col-span-2">
+//             <h2 className="text-lg font-medium mb-4">Tasks</h2>
+//             <div className="space-y-2">
+//               {goal.tasks.map(task => (
+//                 <div key={task._id} className="border-b pb-2">
+//                   <div className="flex justify-between items-center">
+//                     <span>{task.title}</span>
+//                     <span className={`px-2 py-1 rounded text-sm ${task.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+//                       task.status === 'IN_PROGRESS' ? 'bg-blue-100 text-blue-800' :
+//                         'bg-gray-100 text-gray-800'
+//                       }`}>
+//                       {task.status}
+//                     </span>
+//                   </div>
+//                 </div>
+//               ))}
+//             </div>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
 
-export default GoalDetails; 
+// export default GoalDetails; 
+
+import GoalsPage from "@/modules/goals/goals.container";
+
+export default GoalsPage;

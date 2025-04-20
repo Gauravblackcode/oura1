@@ -1,3 +1,4 @@
-import GoalsPage from "@/modules/goals/goals.container";
 
-export default GoalsPage;
+import GoalsListPage from "@/modules/goals/goals-list.container";
+
+export default GoalsListPage;
