@@ -1,0 +1,82 @@
+query Note($id: String!) {
+  note(id: $id) {
+    _id
+    content
+    createdAt
+    deletedAt
+    eventIds
+    goalId
+    isDeleted
+    isGeneratedByAime
+    tagIds
+    taskIds
+    title
+    userId
+  }
+}
+
+query NoteCount($filters: FiltersDto) {
+  noteCount(filters: $filters)
+}
+
+query Notes($filters: FiltersDto, $pagination: PaginationDto, $sort: SortDto) {
+  notes(filters: $filters, pagination: $pagination, sort: $sort) {
+    pageNo
+    pageSize
+    totalRecords
+    data {
+      _id
+      content
+      createdAt
+      deletedAt
+      eventIds
+      goalId
+      isDeleted
+      isGeneratedByAime
+      tagIds
+      taskIds
+      title
+      userId
+    }
+  }
+}
+
+mutation CreateNote($createNoteDto: CreateNoteDto!) {
+  createNote(createNoteDto: $createNoteDto) {
+    _id
+    content
+    createdAt
+    deletedAt
+    eventIds
+    goalId
+    isDeleted
+    isGeneratedByAime
+    tagIds
+    taskIds
+    title
+    userId
+  }
+}
+
+mutation DeleteNote($id: String!) {
+  deleteNote(id: $id) {
+    _id
+  }
+}
+
+mutation UpdateNote($id: String!, $updateNoteDto: UpdateNoteDto!) {
+  updateNote(id: $id, updateNoteDto: $updateNoteDto) {
+    _id
+    content
+    createdAt
+    deletedAt
+    eventIds
+    goalId
+    isDeleted
+    isGeneratedByAime
+    tagIds
+    taskIds
+    title
+    userId
+  }
+} 

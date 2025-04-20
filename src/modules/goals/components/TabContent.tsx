@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import moment from 'moment';
+import { KeyedMutator } from 'swr';
 import styles from '../goals.module.scss';
 import Image from 'next/image';
 import PenIcon from '../../../assets/images/anime.svg';
+import NotesService from '@/services/notes/notes.service';
+import TasksService from '@/services/tasks/tasks.service';
+import { EventService } from '@/services/event/event.service';
+import { TaskPriority, TaskStatus } from '@/types/task.types';
 
 // Dynamically import the editor to avoid SSR issues
 const MdEditor = dynamic(() => import('react-markdown-editor-lite'), {
@@ -19,6 +25,11 @@ interface TabContentProps {
     setTaskContent: (content: string) => void;
     setEventContent: (content: string) => void;
     applyFormatting: (type: string, contentType: string) => void;
+    goalId: string;  // Add goalId prop
+    onSave?: () => void;  // Optional callback after successful save
+    mutateNotes: KeyedMutator<any>;
+    mutateTasks: KeyedMutator<any>;
+    mutateEvents: KeyedMutator<any>;
 }
 
 export const TabContent: React.FC<TabContentProps> = ({
@@ -29,10 +40,32 @@ export const TabContent: React.FC<TabContentProps> = ({
     setNoteContent,
     setTaskContent,
     setEventContent,
-    applyFormatting
+    applyFormatting,
+    goalId,
+    onSave,
+    mutateNotes,
+    mutateTasks,
+    mutateEvents
 }) => {
     // Initialize markdown parser on client side only
     const [mdParser, setMdParser] = useState<any>(null);
+
+    // Initialize services
+    const notesService = new NotesService();
+    const tasksService = new TasksService();
+    const eventService = new EventService();
+
+    // State for date/time inputs in events tab
+    const [eventTitle, setEventTitle] = useState('');
+    const [eventDescription, setEventDescription] = useState('');
+    const [eventStartDate, setEventStartDate] = useState('');
+    const [eventStartTime, setEventStartTime] = useState('');
+    const [eventEndDate, setEventEndDate] = useState('');
+    const [eventEndTime, setEventEndTime] = useState('');
+
+    // State for task inputs
+    const [taskDueDate, setTaskDueDate] = useState('');
+    const [taskPriority, setTaskPriority] = useState<TaskPriority>(TaskPriority.Medium);
 
     useEffect(() => {
         // Initialize markdown-it parser on client side
@@ -81,6 +114,75 @@ export const TabContent: React.FC<TabContentProps> = ({
         return <div>Loading editor...</div>;
     }
 
+    const handleSave = async () => {
+        console.log('handleSave', activeTab, noteContent, taskContent, eventContent);
+        try {
+            let success = false;
+            if (activeTab === "notes" && noteContent.trim()) {
+                const response = await notesService.createNote({
+                    createNoteDto: {
+                        title: noteContent.split('\n')[0] || 'New Note',
+                        content: noteContent.trim(),
+                        goalId: goalId
+                    }   
+                });
+                if (response?._id) {
+                    setNoteContent('');
+                    success = true;
+                    await mutateNotes();
+                }
+            }
+            else if (activeTab === "tasks" && taskContent.trim()) {
+                const response = await tasksService.createTask({
+                    title: taskContent.split('\n')[0] || 'New Task',
+                    description: taskContent.trim(),
+                    goalId: goalId,
+                    dueDate: taskDueDate || undefined,
+                    priority: taskPriority,
+                    status: TaskStatus.Todo
+                });
+                if (response) {
+                    setTaskContent('');
+                    setTaskDueDate('');
+                    success = true;
+                    await mutateTasks();
+                }
+            }
+            else if (activeTab === "events" && eventContent.trim()) {
+                const startDateTime = `${eventStartDate}T${eventStartTime}:00`;
+                const endDateTime = `${eventEndDate}T${eventEndTime}:00`;
+                
+                const response = await eventService.createEvent({
+                    title: eventTitle || eventContent.split('\n')[0] || 'New Event',
+                    description: eventDescription || eventContent,
+                    goalId: goalId,
+                    scheduledStartsAt: startDateTime,
+                    scheduledEndsAt: endDateTime
+                });
+                
+                if (response?._id) {
+                    setEventContent('');
+                    setEventTitle('');
+                    setEventDescription('');
+                    setEventStartDate('');
+                    setEventStartTime('');
+                    setEventEndDate('');
+                    setEventEndTime('');
+                    success = true;
+                    await mutateEvents();
+                }
+            }
+
+            // Call the onSave callback if provided and save was successful
+            if (success) {
+                onSave?.();
+            }
+        } catch (error) {
+            console.error('Failed to save:', error);
+            // You might want to show an error message to the user here
+        }
+    };
+
     if (activeTab === "notes") {
         return (
             <>
@@ -89,16 +191,21 @@ export const TabContent: React.FC<TabContentProps> = ({
                         value={noteContent}
                         style={{ height: '200px' }}
                         renderHTML={text => mdParser.render(text)}
-                        onChange={data => handleEditorChange(data, 'notes')}
+                        onChange={data => setNoteContent(data.text)}
                         placeholder="Write your note here..."
-                        config={editorConfig}
                     />
                     <div className={styles.contentFooter}>
                         <div className={styles.tagIndicator}>
                             <span className={styles.tagDot}></span>
                             <span>Personal</span>
                         </div>
-                        <button type="button" className={styles.saveButton}>
+                        <button 
+                            type="button" 
+                            style={{ cursor: 'pointer',     backgroundColor: '#D24D21',}}
+                            className={styles.saveButton}
+                            onClick={handleSave}
+                            disabled={!noteContent.trim()}
+                        >
                             Save
                         </button>
                     </div>
@@ -135,38 +242,41 @@ export const TabContent: React.FC<TabContentProps> = ({
                         value={taskContent}
                         style={{ height: '200px' }}
                         renderHTML={text => mdParser.render(text)}
-                        onChange={data => handleEditorChange(data, 'tasks')}
+                        onChange={data => setTaskContent(data.text)}
                         placeholder="Add your task details here..."
-                        config={editorConfig}
                     />
                     <div className={styles.contentFooter}>
                         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
                             <select
+                                value={taskPriority}
+                                onChange={(e) => setTaskPriority(e.target.value as TaskPriority)}
                                 style={{
                                     padding: "5px",
                                     borderRadius: "4px",
-                                    border: "1px solid #CED4DA",
-                                    fontFamily: "'Montserrat', sans-serif",
-                                    fontSize: "14px"
+                                    border: "1px solid #CED4DA"
                                 }}
                             >
-                                <option>No tag</option>
-                                <option>Personal</option>
-                                <option>Work</option>
-                                <option>Travel</option>
+                                <option value={TaskPriority.Low}>Low Priority</option>
+                                <option value={TaskPriority.Medium}>Medium Priority</option>
+                                <option value={TaskPriority.High}>High Priority</option>
                             </select>
                             <input
                                 type="date"
+                                value={taskDueDate}
+                                onChange={(e) => setTaskDueDate(e.target.value)}
                                 style={{
                                     padding: "5px",
                                     borderRadius: "4px",
-                                    border: "1px solid #CED4DA",
-                                    fontFamily: "'Montserrat', sans-serif",
-                                    fontSize: "14px"
+                                    border: "1px solid #CED4DA"
                                 }}
                             />
                         </div>
-                        <button type="button" className={styles.saveButton}>
+                        <button 
+                            type="button" 
+                            className={styles.saveButton}
+                            onClick={handleSave}
+                            disabled={!taskContent.trim()}
+                        >
                             Save
                         </button>
                     </div>
@@ -185,38 +295,78 @@ export const TabContent: React.FC<TabContentProps> = ({
         return (
             <>
                 <div className={styles.contentBox}>
+                    <input
+                        type="text"
+                        value={eventTitle}
+                        onChange={(e) => setEventTitle(e.target.value)}
+                        placeholder="Event Title"
+                        className={styles.eventInput}
+                    />
                     <MdEditor
                         value={eventContent}
                         style={{ height: '200px' }}
                         renderHTML={text => mdParser.render(text)}
-                        onChange={data => handleEditorChange(data, 'events')}
+                        onChange={data => {
+                            setEventContent(data.text);
+                            setEventDescription(data.text);
+                        }}
                         placeholder="Add your event details here..."
-                        config={editorConfig}
                     />
                     <div className={styles.contentFooter}>
                         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                            <input
-                                type="date"
-                                style={{
-                                    padding: "5px",
-                                    borderRadius: "4px",
-                                    border: "1px solid #CED4DA",
-                                    fontFamily: "'Montserrat', sans-serif",
-                                    fontSize: "14px"
-                                }}
-                            />
-                            <input
-                                type="time"
-                                style={{
-                                    padding: "5px",
-                                    borderRadius: "4px",
-                                    border: "1px solid #CED4DA",
-                                    fontFamily: "'Montserrat', sans-serif",
-                                    fontSize: "14px"
-                                }}
-                            />
+                            <div>
+                                <label>Start:</label>
+                                <input
+                                    type="date"
+                                    value={eventStartDate}
+                                    onChange={(e) => setEventStartDate(e.target.value)}
+                                    style={{
+                                        padding: "5px",
+                                        borderRadius: "4px",
+                                        border: "1px solid #CED4DA"
+                                    }}
+                                />
+                                <input
+                                    type="time"
+                                    value={eventStartTime}
+                                    onChange={(e) => setEventStartTime(e.target.value)}
+                                    style={{
+                                        padding: "5px",
+                                        borderRadius: "4px",
+                                        border: "1px solid #CED4DA"
+                                    }}
+                                />
+                            </div>
+                            <div>
+                                <label>End:</label>
+                                <input
+                                    type="date"
+                                    value={eventEndDate}
+                                    onChange={(e) => setEventEndDate(e.target.value)}
+                                    style={{
+                                        padding: "5px",
+                                        borderRadius: "4px",
+                                        border: "1px solid #CED4DA"
+                                    }}
+                                />
+                                <input
+                                    type="time"
+                                    value={eventEndTime}
+                                    onChange={(e) => setEventEndTime(e.target.value)}
+                                    style={{
+                                        padding: "5px",
+                                        borderRadius: "4px",
+                                        border: "1px solid #CED4DA"
+                                    }}
+                                />
+                            </div>
                         </div>
-                        <button type="button" className={styles.saveButton}>
+                        <button 
+                            type="button" 
+                            className={styles.saveButton}
+                            onClick={handleSave}
+                            disabled={!eventContent.trim() || !eventStartDate || !eventStartTime || !eventEndDate || !eventEndTime}
+                        >
                             Save
                         </button>
                     </div>

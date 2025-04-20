@@ -1,7 +1,8 @@
-import { NextPage } from 'next';
+"use client";
+
+import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import Head from 'next/head';
-import { useState, useCallback, useMemo, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import moment from 'moment';
 import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
@@ -20,13 +21,19 @@ import { ActivityLog } from './components/ActivityLog';
 
 import GoalsService from '@/services/goals/goals.service';
 import { DefaultSort, DefaultPagination, isDateRangeAllowed } from '@/common/helpers';
-import { GoalsQueryVariables, GoalStatus, Frequency } from 'types';
+import { GoalsQueryVariables, GoalStatus, Task, Note, Event } from 'types';
+import { TaskStatus } from '@/types/task.types';
+import NotesService from '@/services/notes/notes.service';
+import TasksService from '@/services/tasks/tasks.service';
+import { EventService } from '@/services/event/event.service';
 
 import styles from './goals.module.scss';
 
-const GoalsPage: NextPage = () => {
+const GoalsPage = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const params = useParams();
+  const id = params?.id as string;
+  
   const [filters, setFilters] = useState<GoalsQueryVariables>({
     pagination: DefaultPagination,
     sort: DefaultSort,
@@ -39,11 +46,62 @@ const GoalsPage: NextPage = () => {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState<HTMLElement | null>(null);
   const [selectedDate, setSelectedDate] = useState<moment.Moment | null>(moment());
 
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
+
   const goalsService = useMemo(() => new GoalsService(), []);
+  const notesService = useMemo(() => new NotesService(), []);
+  const tasksService = useMemo(() => new TasksService(), []);
+  const eventService = useMemo(() => new EventService(), []);
 
   const { data: goalData, error: goalError } = useSWR(
     id ? ['goal', id] : null,
-    () => goalsService.getGoalById({ id: id as string }),
+    () => goalsService.getGoalById({ id }),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false
+    }
+  );
+
+  const { data: notesData, mutate: mutateNotes } = useSWR(
+    ['notes', id],
+    () => notesService.getNotes({
+      filters: {
+        eq: {
+          field: 'goalId',
+          value: id
+        }
+      }
+    }),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false
+    }
+  );
+
+  const { data: tasksData, mutate: mutateTasks } = useSWR(
+    ['tasks', id],
+    () => tasksService.getTasks({
+        eq: {
+          field: 'goalId',
+          value: id
+        }
+    }),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false
+    }
+  );
+
+  const { data: eventsData, mutate: mutateEvents } = useSWR(
+    ['events', id],
+    () => eventService.getEvents({
+        eq: {
+          field: 'goalId',
+          value: id
+        }
+    }),
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false
@@ -59,27 +117,23 @@ const GoalsPage: NextPage = () => {
     }
   }, [goal]);
 
-  if (goalError) {
-    console.error('Failed to fetch goal:', goalError);
-    return <div>Error loading goal</div>;
-  }
+  useEffect(() => {
+    if (notesData?.notes?.data) {
+      setNotes(notesData.notes.data as Note[]);
+    }
+  }, [notesData]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    if (tasksData?.data) {
+      setTasks(tasksData.data as Task[]);
+    }
+  }, [tasksData]);
 
-  // const handleCalendarOpen = useCallback((event: React.MouseEvent<HTMLElement>) => {
-  //   setCalendarAnchorEl(event.currentTarget);
-  // }, []);
-
-  // const handleCalendarClose = useCallback(() => {
-  //   setCalendarAnchorEl(null);
-  // }, []);
-
-  // const handleDateChange = useCallback((date: moment.Moment | null) => {
-  //   setSelectedDate(date);
-  //   setCalendarAnchorEl(null);
-  // }, []);
+  useEffect(() => {
+    if (eventsData?.data) {
+      setEvents(eventsData.data as Event[]);
+    }
+  }, [eventsData]);
 
   const applyFormatting = useCallback((type: string, contentType: string) => {
     const textArea = document.getElementById(`${contentType}-textarea`) as HTMLTextAreaElement;
@@ -137,6 +191,19 @@ const GoalsPage: NextPage = () => {
 
   const isCalendarOpen = Boolean(calendarAnchorEl);
 
+  const refreshData = useCallback(() => {
+    mutateNotes();
+    mutateTasks();
+    mutateEvents();
+  }, [mutateNotes, mutateTasks, mutateEvents]);
+
+  const handleCheckboxChange = async (taskId: string, checked: boolean) => {
+    await tasksService.updateTask(taskId, {
+      status: checked ? TaskStatus.Done : TaskStatus.Todo
+    });
+    await mutateTasks();
+  };
+
   return (
     <>
       <Head>
@@ -190,7 +257,7 @@ const GoalsPage: NextPage = () => {
                           isRecurring: Boolean(goal?.recurrenceDetails),
                           status: goal?.status || GoalStatus.Todo,
                           tagIds: goal?.tagIds || [],
-                          taskIds: goal?.taskIds || [],
+                          taskIds: tasks.map(task => task._id) || [],
                           recurrenceDetails: goal?.recurrenceDetails || null
                         }}
                         enableReinitialize={true}
@@ -337,17 +404,20 @@ const GoalsPage: NextPage = () => {
                           button.disabled = true;
                           button.textContent = 'Saving...';
 
-                          goalsService.createGoal(
-                            { createGoalDto: goalData },
+                          goalsService.updateGoal(
+                            { 
+                              id,
+                              updateGoalDto: goalData 
+                            },
                             context
                           )
                             .then(response => {
-                              if (response?.createGoal?._id) {
-                                router.push(`/goals/${response.createGoal._id}`);
+                              if (response?.updateGoal?._id) {
+                                router.push(`/goals/${response.updateGoal._id}`);
                               }
                             })
                             .catch(error => {
-                              console.error('Failed to create goal:', error);
+                              console.error('Failed to update goal:', error);
                               alert("Error: " + error.message);
                             })
                             .finally(() => {
@@ -366,33 +436,112 @@ const GoalsPage: NextPage = () => {
                           className={`${styles.tabItem} ${activeTab === "notes" ? styles.activeTab : ''}`}
                           onClick={() => setActiveTab("notes")}
                         >
-                          Notes (03)
+                          Notes ({notes?.length || 0})
                         </div>
                         <div
                           className={`${styles.tabItem} ${activeTab === "tasks" ? styles.activeTab : ''}`}
                           onClick={() => setActiveTab("tasks")}
                         >
-                          Tasks (02)
+                          Tasks ({tasks?.length || 0})
                         </div>
                         <div
                           className={`${styles.tabItem} ${activeTab === "events" ? styles.activeTab : ''}`}
                           onClick={() => setActiveTab("events")}
                         >
-                          Events (02)
+                          Events ({events?.length || 0})
                         </div>
                       </div>
 
                       <div className={styles.tabContent}>
-                        <TabContent
-                          activeTab={activeTab}
-                          noteContent={noteContent}
-                          taskContent={taskContent}
-                          eventContent={eventContent}
-                          setNoteContent={setNoteContent}
-                          setTaskContent={setTaskContent}
-                          setEventContent={setEventContent}
-                          applyFormatting={applyFormatting}
-                        />
+                        <div className={styles.tabPanel}>
+                          {/* Show existing items first */}
+                          {activeTab === "notes" && notes.map((note) => (
+                            <div key={note._id} className={styles.listItem} style={{
+                              backgroundColor: '#f5f5f5',
+                              borderRadius: '8px',
+                              padding: '16px',
+                              marginBottom: '12px',
+                              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                            }}>
+                              <div className={styles.itemContent}>
+                                {note.content}
+                              </div>
+                              <div className={styles.itemMeta}>
+                                {moment(note.createdAt).format('MMM D, YYYY')}
+                              </div>
+                            </div>
+                          ))}
+                          
+                          {activeTab === "tasks" && tasks.map((task) => (
+                            <div key={task._id} className={styles.listItem}>
+                              <div className={styles.itemContent}>
+                                <input
+                                  type="checkbox"
+                                  checked={task.status === TaskStatus.Done}
+                                  onChange={async () => {
+                                    await handleCheckboxChange(task._id, !task.status);
+                                  }}
+                                  className={styles.checkbox}
+                                />
+                                {task.status === TaskStatus.Done && (
+                                  <s className="text-gray-500">{task.title}</s>
+                                )}
+                                {task.status !== TaskStatus.Done && task.title}
+                              </div>
+                              <div className={styles.itemMeta} style={{
+                                backgroundColor: '#f5f5f5',
+                                borderRadius: '8px',
+                                padding: '16px',
+                                marginBottom: '12px',
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                              }}>
+                                {task.dueDate && (
+                                  <span className={styles.dueDate}>
+                                    Due: {moment(task.dueDate).format('MMM D, YYYY')}
+                                  </span>
+                                )}
+                                <span className={`${styles.priority} ${styles[task.priority.toLowerCase()]}`}>
+                                  {task.priority}
+                                </span>
+                                {moment(task.createdAt).format('MMM D, YYYY')}
+                              </div>
+                            </div>
+                          ))}
+                          
+                          {activeTab === "events" && events.map((event) => (
+                            <div key={event._id} className={styles.listItem}>
+                              <div className={styles.itemContent} style={{
+                                backgroundColor: '#f5f5f5',
+                                borderRadius: '8px', 
+                                padding: '16px',
+                                marginBottom: '12px',
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                              }}>
+                                {event.description}
+                              </div>
+                              <div className={styles.itemMeta}>
+                                {moment(event.createdAt).format('MMM D, YYYY')}
+                              </div>
+                            </div>
+                          ))}
+
+                          {/* Tab Content Editor */}
+                          <TabContent
+                            activeTab={activeTab}
+                            noteContent={noteContent}
+                            taskContent={taskContent}
+                            eventContent={eventContent}
+                            setNoteContent={setNoteContent}
+                            setTaskContent={setTaskContent}
+                            setEventContent={setEventContent}
+                            applyFormatting={applyFormatting}
+                            goalId={id as string}
+                            onSave={refreshData}
+                            mutateNotes={mutateNotes}
+                            mutateTasks={mutateTasks}
+                            mutateEvents={mutateEvents}
+                          />
+                        </div>
                       </div>
                     </div>
 
@@ -403,7 +552,6 @@ const GoalsPage: NextPage = () => {
                     <div className={styles.dateStatusContainer}>
                       <div className={styles.dueDateContainer}>
                         <div
-                          // onClick={handleCalendarOpen}
                           className={styles.calendarIcon}
                         >
                           <CalendarIcon size={16} color="#000000" />
@@ -421,7 +569,6 @@ const GoalsPage: NextPage = () => {
                       <Popover
                         open={isCalendarOpen}
                         anchorEl={calendarAnchorEl}
-                        // onClose={handleCalendarClose}
                         anchorOrigin={{
                           vertical: 'bottom',
                           horizontal: 'right',
@@ -434,7 +581,6 @@ const GoalsPage: NextPage = () => {
                         <LocalizationProvider dateAdapter={AdapterMoment}>
                           <DateCalendar
                             value={selectedDate}
-                            // onChange={handleDateChange}
                             sx={{
                               '& .MuiButtonBase-root.MuiPickersDay-root.Mui-selected': {
                                 backgroundColor: '#0D6EFD',
@@ -453,6 +599,6 @@ const GoalsPage: NextPage = () => {
       </main>
     </>
   );
-};
+} 
 
-export default GoalsPage; 
+export default GoalsPage;

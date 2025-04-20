@@ -1,3 +1,5 @@
+"use client";
+
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useState, useCallback, useMemo } from 'react';

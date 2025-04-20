@@ -33,10 +33,15 @@ const Login = () => {
       </Head>
       <div className={styles.leftContainer}>
         <div className={styles.header}>
-          {/* {client?.logo && <img src={client?.logo || ''} height={40} width={100} alt="logo" />} */}
+          <img 
+            src="/images/OURA.1 - Primary Logo large canvas.png" 
+            width={120} 
+            height={40} 
+            alt="OURA.1 Logo" 
+          />
         </div>
         <div className={styles.imageContainer}>
-          {/* <img src={client?.appSnapshotImage} alt="Dashboard Image" /> */}
+          <img src="/images/MVP AI Banner long [.png].png" alt="Dashboard Image" />
         </div>
       </div>
 
@@ -46,7 +51,12 @@ const Login = () => {
             {!loader ? (
               <div className={styles.welcomeTitle}>
                 <div className={styles.brandIconTitle}>
-                  {/* <img src={client?.icon ?? ''} width={50} height={55} alt={`${client?.name} Logo`} /> */}
+                  <img 
+                    src="/images/OURA.1 - Primary Logo large canvas.png" 
+                    width={50} 
+                    height={55} 
+                    alt="OURA.1 Logo" 
+                  />
                   <Typography variant="h1-bold">Oura1</Typography>
                 </div>
                 <Typography variant="subtitle-regular" color={ouraColors['text-600']}>
@@ -65,11 +75,10 @@ const Login = () => {
             )}
           </div>
           <div className={styles.formField}>
-              <LoginForm />
-       
+            <LoginForm />
             <Typography variant="body-medium">
               {/* Optimize your retail media campaign today!{' '} */}
-              <Link className={styles.inviteLink} href={ ''}>
+              <Link href={""} className={styles.inviteLink}>
                 Get in touch
               </Link>
               .

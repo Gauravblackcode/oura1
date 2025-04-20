@@ -5,58 +5,68 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useState } from 'react';
-import Navigation from '../components/navigation/Navigation';
+import Navigation from '@/components/navigation/Navigation';
+import useSWR from 'swr';
+import { EventService } from '@/services/event/event.service';
+import {  FiltersDto, PaginationDto, SortDto, SortOrder } from 'types';
 
-const CalendarPage: NextPage = () => {
-  // Get dates for today, yesterday, and tomorrow
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + 1);
+const eventService = new EventService();
 
-  const [events, setEvents] = useState([
-    {
-      title: 'Yesterday Meeting',
-      start: yesterday.toISOString().split('T')[0] + 'T10:00:00',
-      end: yesterday.toISOString().split('T')[0] + 'T11:00:00',
-      backgroundColor: '#F3F6FF',
-      borderColor: '#4C9AFF',
-      textColor: '#1D1B20',
-    },
-    {
-      title: 'Today Team Sync',
-      start: today.toISOString().split('T')[0] + 'T14:00:00',
-      end: today.toISOString().split('T')[0] + 'T15:00:00',
-      backgroundColor: '#D24D21',
-      borderColor: '#D24D21',
-      textColor: 'white',
-    },
-    {
-      title: 'Client Presentation',
-      start: today.toISOString().split('T')[0] + 'T16:00:00',
-      end: today.toISOString().split('T')[0] + 'T17:00:00',
-      backgroundColor: '#D24D21',
-      borderColor: '#D24D21',
-      textColor: 'white',
-    },
-    {
-      title: 'Tomorrow Planning',
-      start: tomorrow.toISOString().split('T')[0] + 'T09:00:00',
-      end: tomorrow.toISOString().split('T')[0] + 'T10:00:00',
-      backgroundColor: '#F8FBFF',
-      borderColor: '#4C9AFF',
-      textColor: '#1D1B20',
-    },
-    {
-      title: 'Project Review',
-      start: tomorrow.toISOString().split('T')[0] + 'T11:00:00',
-      end: tomorrow.toISOString().split('T')[0] + 'T12:00:00',
-      backgroundColor: '#F8FBFF',
-      borderColor: '#4C9AFF',
-      textColor: '#1D1B20',
-    },
-  ]);
+const fetcher = async ([_, params]: [string, { filters: FiltersDto; sort: SortDto; pagination: PaginationDto }]) => {
+  const { filters, sort, pagination } = params;
+  return eventService.getEvents(filters, pagination, sort);
+};
+
+const Events: NextPage = () => {
+  const [filters, setFilters] = useState<FiltersDto>({});
+  const [sort, setSort] = useState<SortDto>({ field: 'scheduledStartsAt', order: SortOrder.Asc });
+  const [pagination, setPagination] = useState<PaginationDto>({
+    pageSize: 100, // Larger page size for calendar view
+    pageNo: 1
+  });
+
+  const { data, error, isLoading } = useSWR(
+    ['events', { filters, sort, pagination }],
+    fetcher
+  );
+
+  console.log(data);
+  const formattedEvents = data?.data?.map(event => ({
+    id: event._id,
+    title: event.title,
+    start: event.scheduledStartsAt,
+    end: event.scheduledEndsAt,
+    backgroundColor: event.isGeneratedByAime ? '#F3F6FF' : '#D24D21',
+    borderColor: event.isGeneratedByAime ? '#4C9AFF' : '#D24D21',
+    textColor: event.isGeneratedByAime ? '#1D1B20' : 'white',
+    extendedProps: {
+      description: event.description,
+      isGeneratedByAime: event.isGeneratedByAime,
+      goalId: event.goalId,
+      taskIds: event.taskIds
+    }
+  })) || [];
+
+  if (isLoading) {
+    return (
+      <div className="p-6">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
+          <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+          <div className="h-32 bg-gray-200 rounded mb-4"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="text-red-500">Failed to load events</div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -204,15 +214,12 @@ const CalendarPage: NextPage = () => {
               position: "relative",
               background: "#F9FAFB"
             }}>
-              {/* Sidebar */}
               <Navigation />
 
-              {/* Main Content */}
               <div style={{
                 padding: "30px",
                 width: "100%"
               }}>
-                {/* Calendar */}
                 <div style={{
                   background: "white",
                   borderRadius: "10px",
@@ -227,7 +234,7 @@ const CalendarPage: NextPage = () => {
                       center: 'title',
                       right: 'dayGridMonth,timeGridWeek,timeGridDay',
                     }}
-                    events={events}
+                    events={formattedEvents}
                     editable={true}
                     selectable={true}
                     selectMirror={true}
@@ -253,4 +260,4 @@ const CalendarPage: NextPage = () => {
   );
 };
 
-export default CalendarPage; 
+export default Events; 

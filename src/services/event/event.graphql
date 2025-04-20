@@ -1,0 +1,96 @@
+query Event($id: String!) {
+  event(id: $id) {
+    _id
+    createdAt
+    deletedAt
+    description
+    endedAt
+    goalId
+    isDeleted
+    isGeneratedByAime
+    noteIds
+    scheduledEndsAt
+    scheduledStartsAt
+    startedAt
+    tagIds
+    taskIds
+    title
+    userId
+  }
+}
+
+query EventCount($filters: FiltersDto) {
+  eventCount(filters: $filters)
+}
+
+query Events($filters: FiltersDto, $pagination: PaginationDto, $sort: SortDto) {
+  events(filters: $filters, pagination: $pagination, sort: $sort) {
+    pageNo
+    pageSize
+    totalRecords
+    data {
+      _id
+      createdAt
+      deletedAt
+      description
+      endedAt
+      goalId
+      isDeleted
+      isGeneratedByAime
+      noteIds
+      scheduledEndsAt
+      scheduledStartsAt
+      startedAt
+      tagIds
+      taskIds
+      title
+      userId
+    }
+  }
+}
+
+mutation CreateEvent($createEventDto: CreateEventDto!) {
+  createEvent(createEventDto: $createEventDto) {
+    _id
+    createdAt
+    deletedAt
+    description
+    endedAt
+    goalId
+    isDeleted
+    isGeneratedByAime
+    noteIds
+    scheduledEndsAt
+    scheduledStartsAt
+    startedAt
+    tagIds
+    taskIds
+    title
+    userId
+  }
+}
+
+mutation DeleteEvent($id: String!) {
+  deleteEvent(id: $id)
+}
+
+mutation UpdateEvent($id: String!, $updateEventDto: UpdateEventDto!) {
+  updateEvent(id: $id, updateEventDto: $updateEventDto) {
+    _id
+    createdAt
+    deletedAt
+    description
+    endedAt
+    goalId
+    isDeleted
+    isGeneratedByAime
+    noteIds
+    scheduledEndsAt
+    scheduledStartsAt
+    startedAt
+    tagIds
+    taskIds
+    title
+    userId
+  }
+} 

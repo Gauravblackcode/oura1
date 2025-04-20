@@ -1,4 +1,4 @@
-    import { CreateGoalDocument, CreateGoalMutation, CreateGoalMutationVariables, DeleteGoalDocument, DeleteGoalMutation, DeleteGoalMutationVariables, GoalsDocument, GoalsQuery, GoalsQueryVariables, GoalDocument,  GoalQuery, GoalQueryVariables } from 'types';
+    import { CreateGoalDocument, CreateGoalMutation, CreateGoalMutationVariables, DeleteGoalDocument, DeleteGoalMutation, DeleteGoalMutationVariables, GoalsDocument, GoalsQuery, GoalsQueryVariables, GoalDocument,  GoalQuery, GoalQueryVariables, UpdateGoalMutation, UpdateGoalMutationVariables, UpdateGoalDocument } from 'types';
 import logger from '@/common/logger';
 import { AdvanceApolloContext } from '@/index';
 import GRAPHQL_CLIENT from '../network/graphql.service';
@@ -71,4 +71,21 @@ export default class GoalsService {
       return undefined;
     }
   } 
+
+  async updateGoal(
+    variables: UpdateGoalMutationVariables,
+    context?: AdvanceApolloContext,
+  ): Promise<UpdateGoalMutation | undefined> {
+    try {
+      const response = await GRAPHQL_CLIENT.mutate({
+        mutation: UpdateGoalDocument,
+        variables,
+        context,
+      });
+      return response.data as UpdateGoalMutation;
+    } catch (error) {
+      logger.error(error);
+      return undefined;
+    }
+  }
 }

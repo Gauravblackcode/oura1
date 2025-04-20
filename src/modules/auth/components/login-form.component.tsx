@@ -102,7 +102,7 @@ const LoginForm = () => {
         </div>
       </div>
       <div className={styles.formField}></div>
-      <Button title="Log in" variant="primary" type="submit" className={styles.submit_button} />
+      <Button title="Log in" style={{ backgroundColor: 'var(--primary-default)' }} variant="primary" type="submit" className={styles.submit_button} />
     </form>
   );
 };
