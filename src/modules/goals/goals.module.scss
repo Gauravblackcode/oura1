@@ -1,38 +1,320 @@
 .container {
-  height: 100vh;
-  background: white;
-  overflow: auto;
-  border-radius: 8px;
-  outline: 2px #ced4da solid;
-  outline-offset: -2px;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  display: inline-flex;
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .innerContainer {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  background: rgba(0, 0, 0, 0);
+  flex: 1;
+  display: flex;
+  overflow: hidden;
 }
 
 .contentWrapper {
+  display: flex;
   width: 100%;
   height: 100%;
-  left: 0px;
-  top: 0px;
-  display: flex;
   position: relative;
-  background: #f9fafb;
+}
+
+.mobileMenuButton {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 100;
+  background-color: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    display: flex;
+  }
+}
+
+.navigation {
+  @media (max-width: 768px) {
+    position: fixed;
+    left: -256px;
+    top: 0;
+    height: 100vh;
+    z-index: 99;
+    transition: left 0.3s ease;
+  }
+}
+
+.showNavigation {
+  @media (max-width: 768px) {
+    left: 0;
+  }
 }
 
 .mainContent {
-  padding: 30px;
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+
+  @media (max-width: 768px) {
+    padding-top: 4rem; /* Add space for the menu button */
+  }
+
+  @media (min-width: 769px) {
+    padding: 2rem;
+  }
+}
+
+.goalsContainer {
+  margin-top: 1.5rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.statusTabs {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 640px) {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+}
+
+.statusCard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f9fafb;
+  }
+
+  @media (max-width: 640px) {
+    padding: 0.5rem;
+  }
+}
+
+.statusIcon {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+
+  @media (max-width: 640px) {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    margin-right: 0.5rem;
+  }
+}
+
+.statusTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.statusCount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  line-height: 1.2;
+
+  @media (max-width: 640px) {
+    font-size: 1.25rem;
+    margin-bottom: 0.1rem;
+  }
+}
+
+.statusCard:nth-child(2) .statusCount {
+  color: #e05252;
+}
+
+.statusCard:nth-child(3) .statusCount {
+  color: #22c55e;
+}
+
+.statusLabel {
+  font-size: 0.8rem;
+  color: #6b7280;
+  line-height: 1.2;
+
+  @media (max-width: 640px) {
+    font-size: 0.75rem;
+  }
+}
+
+.goalsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  /* Hide scrollbar but allow scrolling */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+}
+
+.goalCard {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  }
+}
+
+.goalHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.goalTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+
+  @media (min-width: 768px) {
+    font-size: 1.125rem;
+  }
+}
+
+.goalFrequency {
+  background-color: #fef2f2;
+  color: #ef4444;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  align-self: flex-start;
+
+  @media (min-width: 640px) {
+    align-self: auto;
+  }
+}
+
+.goalDates {
+  color: #6b7280;
+  font-size: 0.75rem;
+  margin-bottom: 1rem;
+  word-break: break-word;
+
+  @media (min-width: 768px) {
+    font-size: 0.875rem;
+  }
+}
+
+.goalTasks {
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.taskHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.taskExpand {
+  margin-left: auto;
+}
+
+.goalProgress {
+  margin-top: 0.5rem;
+}
+
+.progressBar {
+  height: 4px;
+  background-color: #e5e7eb;
+  border-radius: 2px;
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 2px;
+}
+
+.progressDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  position: absolute;
+  top: -2px;
+}
+
+.progressText {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.newGoalButton {
   width: 100%;
-  overflow: auto;
+  border: 2px dashed #d1d5db;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  background-color: white;
+  margin-top: 1rem;
+
+  &:hover {
+    background-color: #f9fafb;
+  }
+}
+
+.plusIcon {
+  font-size: 1.25rem;
+  font-weight: 300;
 }
 
 .twoColumnLayout {
@@ -329,4 +611,120 @@
   font-size: 14px;
   font-weight: 500;
   color: #b2b2b2;
+}
+
+.goalsListContainer {
+  overflow-y: auto;
+  height: calc(100% - 150px); /* Adjust based on your layout */
+  padding-bottom: 100px; /* Increased padding to prevent content from being visible */
+}
+
+.newGoalButtonContainer {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background-color: #f9f9f9; /* Match your page background color */
+  padding: 20px 20px 30px 20px; /* Added more padding at the bottom */
+  margin-top: 20px;
+  width: 100%;
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Status cards styling for responsive view */
+@media (max-width: 768px) {
+  .statusTabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 8px;
+    background-color: white;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    gap: 0;
+  }
+
+  .statusCard {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 2px;
+    min-width: 0;
+  }
+
+  .statusIcon {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  .statusIcon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .statusTextContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    overflow: hidden;
+    margin-left: 4px;
+  }
+
+  .statusCount {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .statusLabel {
+    font-size: 10px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  /* New Goal button styling */
+  .newGoalButtonContainer {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    background-color: #f9f9f9;
+    padding: 16px;
+    width: 100%;
+  }
+
+  .newGoalButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    border: 1px dashed #ccc;
+    border-radius: 12px;
+    background-color: transparent;
+    color: #666;
+    font-size: 16px;
+  }
+
+  .plusIcon {
+    font-size: 20px;
+    color: #666;
+  }
 }

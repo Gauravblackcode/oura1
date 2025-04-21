@@ -124,7 +124,7 @@ export const TabContent: React.FC<TabContentProps> = ({
                         title: noteContent.split('\n')[0] || 'New Note',
                         content: noteContent.trim(),
                         goalId: goalId
-                    }   
+                    }
                 });
                 if (response?._id) {
                     setNoteContent('');
@@ -151,7 +151,7 @@ export const TabContent: React.FC<TabContentProps> = ({
             else if (activeTab === "events" && eventContent.trim()) {
                 const startDateTime = `${eventStartDate}T${eventStartTime}:00`;
                 const endDateTime = `${eventEndDate}T${eventEndTime}:00`;
-                
+
                 const response = await eventService.createEvent({
                     title: eventTitle || eventContent.split('\n')[0] || 'New Event',
                     description: eventDescription || eventContent,
@@ -159,7 +159,7 @@ export const TabContent: React.FC<TabContentProps> = ({
                     scheduledStartsAt: startDateTime,
                     scheduledEndsAt: endDateTime
                 });
-                
+
                 if (response?._id) {
                     setEventContent('');
                     setEventTitle('');
@@ -199,9 +199,9 @@ export const TabContent: React.FC<TabContentProps> = ({
                             <span className={styles.tagDot}></span>
                             <span>Personal</span>
                         </div>
-                        <button 
-                            type="button" 
-                            style={{ cursor: 'pointer',     backgroundColor: '#D24D21',}}
+                        <button
+                            type="button"
+                            style={{ cursor: 'pointer', backgroundColor: '#D24D21', }}
                             className={styles.saveButton}
                             onClick={handleSave}
                             disabled={!noteContent.trim()}
@@ -271,8 +271,8 @@ export const TabContent: React.FC<TabContentProps> = ({
                                 }}
                             />
                         </div>
-                        <button 
-                            type="button" 
+                        <button
+                            type="button"
                             className={styles.saveButton}
                             onClick={handleSave}
                             disabled={!taskContent.trim()}
@@ -361,8 +361,8 @@ export const TabContent: React.FC<TabContentProps> = ({
                                 />
                             </div>
                         </div>
-                        <button 
-                            type="button" 
+                        <button
+                            type="button"
                             className={styles.saveButton}
                             onClick={handleSave}
                             disabled={!eventContent.trim() || !eventStartDate || !eventStartTime || !eventEndDate || !eventEndTime}
