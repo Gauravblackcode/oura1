@@ -1,0 +1,43 @@
+/* Hide all scrollbars throughout the application */
+* {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  background-color: #f9faf7;
+}
+
+#__next {
+  height: 100%;
+}
+
+/* Ensure content areas can still scroll */
+.content,
+.mainContent,
+.container,
+[class*='content'],
+[class*='container'] {
+  overflow-y: auto;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.content::-webkit-scrollbar,
+.mainContent::-webkit-scrollbar,
+.container::-webkit-scrollbar,
+[class*='content']::-webkit-scrollbar,
+[class*='container']::-webkit-scrollbar {
+  display: none !important;
+}

@@ -12,7 +12,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import useSWR from 'swr';
 
-import Navigation from '@/components/navigation/Navigation';
 import Header from '@/components/header/Header';
 import StatusIndicator from '@/components/status/StatusIndicator';
 import { CalendarIcon } from '@/lib/icons';
@@ -33,7 +32,7 @@ const GoalsPage = () => {
   const router = useRouter();
   const params = useParams();
   const id = params?.id as string;
-  
+
   const [filters, setFilters] = useState<GoalsQueryVariables>({
     pagination: DefaultPagination,
     sort: DefaultSort,
@@ -45,6 +44,7 @@ const GoalsPage = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [calendarAnchorEl, setCalendarAnchorEl] = useState<HTMLElement | null>(null);
   const [selectedDate, setSelectedDate] = useState<moment.Moment | null>(moment());
+  const [statusAnchorEl, setStatusAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const [notes, setNotes] = useState<Note[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -83,10 +83,10 @@ const GoalsPage = () => {
   const { data: tasksData, mutate: mutateTasks } = useSWR(
     ['tasks', id],
     () => tasksService.getTasks({
-        eq: {
-          field: 'goalId',
-          value: id
-        }
+      eq: {
+        field: 'goalId',
+        value: id
+      }
     }),
     {
       revalidateOnFocus: false,
@@ -97,10 +97,10 @@ const GoalsPage = () => {
   const { data: eventsData, mutate: mutateEvents } = useSWR(
     ['events', id],
     () => eventService.getEvents({
-        eq: {
-          field: 'goalId',
-          value: id
-        }
+      eq: {
+        field: 'goalId',
+        value: id
+      }
     }),
     {
       revalidateOnFocus: false,
@@ -190,6 +190,7 @@ const GoalsPage = () => {
   }, []);
 
   const isCalendarOpen = Boolean(calendarAnchorEl);
+  const isStatusMenuOpen = Boolean(statusAnchorEl);
 
   const refreshData = useCallback(() => {
     mutateNotes();
@@ -204,6 +205,19 @@ const GoalsPage = () => {
     await mutateTasks();
   };
 
+  const handleStatusClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setStatusAnchorEl(event.currentTarget);
+  };
+
+  const handleStatusClose = () => {
+    setStatusAnchorEl(null);
+  };
+
+  const handleStatusChange = (status: string) => {
+    console.log('Status changed to:', status);
+    handleStatusClose();
+  };
+
   return (
     <>
       <Head>
@@ -211,12 +225,11 @@ const GoalsPage = () => {
         <meta name="description" content={goal?.description || 'Goal management for Oura 1'} />
       </Head>
       <main style={{ height: "100vh", overflow: "hidden" }}>
-        <div className={styles.container}>
-          <div className={styles.innerContainer}>
-            <div className={styles.contentWrapper}>
-              <Navigation />
+        <div className={styles.goalsContainer}>
+          <div>
+            <div>
 
-              <div className={styles.mainContent}>
+              <div>
                 <Header
                   title={goal?.title || 'Loading...'}
                   breadcrumbs={[
@@ -233,10 +246,66 @@ const GoalsPage = () => {
                 />
 
                 <div className={styles.twoColumnLayout}>
+                  <div className={styles.mobileRightColumn}>
+                    <div className={styles.dateStatusContainer}>
+                      <div className={styles.dueDateContainer}>
+                        <div className={styles.calendarIcon}>
+                          <CalendarIcon size={16} color="#000000" />
+                        </div>
+                        <span className={styles.dueDateText}>Due Date</span>
+                      </div>
+
+                      <button
+                        type="button"
+                        className={styles.todoButton}
+                        onClick={handleStatusClick}
+                      >
+                        To do
+                      </button>
+
+                      <Popover
+                        open={isStatusMenuOpen}
+                        anchorEl={statusAnchorEl}
+                        onClose={handleStatusClose}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'left',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'left',
+                        }}
+                        PaperProps={{
+                          style: {
+                            borderRadius: '8px',
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                            marginTop: '10px',
+                          },
+                        }}
+                      >
+                        <div className={styles.statusMenu}>
+                          <div
+                            className={styles.statusMenuItem}
+                            onClick={() => handleStatusChange('inProgress')}
+                          >
+                            In Progress
+                          </div>
+                          <div
+                            className={styles.statusMenuItem}
+                            onClick={() => handleStatusChange('completed')}
+                          >
+                            Completed
+                            <span className={styles.checkIcon}>✓</span>
+                          </div>
+                        </div>
+                      </Popover>
+                    </div>
+                  </div>
+
                   <div className={styles.leftColumn}>
                     <div className={styles.completionPercentage}>
                       <span className={styles.completionPercentageText}>
-                        {goal?.completedTaskCount && goal?.totalTaskCount 
+                        {goal?.completedTaskCount && goal?.totalTaskCount
                           ? `${Math.round((goal.completedTaskCount / goal.totalTaskCount) * 100)}% Completed`
                           : '0% Completed'}
                       </span>
@@ -405,9 +474,9 @@ const GoalsPage = () => {
                           button.textContent = 'Saving...';
 
                           goalsService.updateGoal(
-                            { 
+                            {
                               id,
-                              updateGoalDto: goalData 
+                              updateGoalDto: goalData
                             },
                             context
                           )
@@ -471,7 +540,7 @@ const GoalsPage = () => {
                               </div>
                             </div>
                           ))}
-                          
+
                           {activeTab === "tasks" && tasks.map((task) => (
                             <div key={task._id} className={styles.listItem}>
                               <div className={styles.itemContent}>
@@ -507,12 +576,12 @@ const GoalsPage = () => {
                               </div>
                             </div>
                           ))}
-                          
+
                           {activeTab === "events" && events.map((event) => (
                             <div key={event._id} className={styles.listItem}>
                               <div className={styles.itemContent} style={{
                                 backgroundColor: '#f5f5f5',
-                                borderRadius: '8px', 
+                                borderRadius: '8px',
                                 padding: '16px',
                                 marginBottom: '12px',
                                 boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
@@ -549,47 +618,7 @@ const GoalsPage = () => {
                   </div>
 
                   <div className={styles.rightColumn}>
-                    <div className={styles.dateStatusContainer}>
-                      <div className={styles.dueDateContainer}>
-                        <div
-                          className={styles.calendarIcon}
-                        >
-                          <CalendarIcon size={16} color="#000000" />
-                        </div>
-                        <span className={styles.dueDateText}>Due Date</span>
-                      </div>
-
-                      <button
-                        type="button"
-                        className={styles.todoButton}
-                      >
-                        Todo
-                      </button>
-
-                      <Popover
-                        open={isCalendarOpen}
-                        anchorEl={calendarAnchorEl}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'right',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'right',
-                        }}
-                      >
-                        <LocalizationProvider dateAdapter={AdapterMoment}>
-                          <DateCalendar
-                            value={selectedDate}
-                            sx={{
-                              '& .MuiButtonBase-root.MuiPickersDay-root.Mui-selected': {
-                                backgroundColor: '#0D6EFD',
-                              }
-                            }}
-                          />
-                        </LocalizationProvider>
-                      </Popover>
-                    </div>
+                    {/* ... existing right column content ... */}
                   </div>
                 </div>
               </div>
@@ -599,6 +628,6 @@ const GoalsPage = () => {
       </main>
     </>
   );
-} 
+}
 
 export default GoalsPage;

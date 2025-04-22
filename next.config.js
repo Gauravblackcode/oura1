@@ -8,7 +8,7 @@ const isProduction = process.env.NODE_ENV;
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
-    appDir: true
+    appDir: true,
   },
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
   async redirects() {

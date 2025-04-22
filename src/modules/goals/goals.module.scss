@@ -16,6 +16,13 @@
   width: 100%;
   height: 100%;
   position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
 }
 
 .mobileMenuButton {
@@ -56,126 +63,67 @@
 }
 
 .mainContent {
-  flex: 1;
-  padding: 1.5rem;
+  height: 100%;
   overflow-y: auto;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 24px;
 
   @media (max-width: 768px) {
-    padding-top: 4rem; /* Add space for the menu button */
+    padding: 16px;
   }
-
-  @media (min-width: 769px) {
-    padding: 2rem;
-  }
-}
-
-.goalsContainer {
-  margin-top: 1.5rem;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .statusTabs {
   display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  background-color: white;
-  padding: 1rem;
-  border-radius: 1rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-
-  @media (max-width: 640px) {
-    padding: 0.75rem;
-    gap: 0.5rem;
-  }
+  justify-content: space-around;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 20px;
 }
 
 .statusCard {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex: 1;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #f9fafb;
-  }
-
-  @media (max-width: 640px) {
-    padding: 0.5rem;
-  }
+  text-align: center;
 }
 
 .statusIcon {
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-  border-radius: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 0.75rem;
-
-  @media (max-width: 640px) {
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    margin-right: 0.5rem;
-  }
+  margin-bottom: 5px;
 }
 
-.statusTextContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+.statusIcon img,
+.statusIcon svg {
+  width: 24px;
+  height: 24px;
 }
 
 .statusCount {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
-  line-height: 1.2;
-
-  @media (max-width: 640px) {
-    font-size: 1.25rem;
-    margin-bottom: 0.1rem;
-  }
+  font-size: 20px;
+  font-weight: bold;
 }
 
-.statusCard:nth-child(2) .statusCount {
-  color: #e05252;
+.statusTabs div:nth-child(1) .statusCount {
+  color: #3b82f6;
 }
 
-.statusCard:nth-child(3) .statusCount {
-  color: #22c55e;
+.statusTabs div:nth-child(2) .statusCount {
+  color: #ef4444;
+}
+
+.statusTabs div:nth-child(3) .statusCount {
+  color: #10b981;
 }
 
 .statusLabel {
-  font-size: 0.8rem;
+  font-size: 12px;
   color: #6b7280;
-  line-height: 1.2;
-
-  @media (max-width: 640px) {
-    font-size: 0.75rem;
-  }
 }
 
 .goalsList {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-
-  /* Hide scrollbar but allow scrolling */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-
-  &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
-  }
 }
 
 .goalCard {
@@ -185,36 +133,36 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 16px;
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   }
+
+  @media (max-width: 640px) {
+    padding: 1rem;
+  }
 }
 
 .goalHeader {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-
-  @media (min-width: 640px) {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-  }
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  width: 100%;
 }
 
 .goalTitle {
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 600;
   color: #111827;
   margin: 0;
-
-  @media (min-width: 768px) {
-    font-size: 1.125rem;
-  }
+  flex: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .goalFrequency {
@@ -224,29 +172,25 @@
   border-radius: 1rem;
   font-size: 0.75rem;
   font-weight: 500;
-  align-self: flex-start;
-
-  @media (min-width: 640px) {
-    align-self: auto;
-  }
+  white-space: nowrap;
+  margin-left: 0.5rem;
 }
 
 .goalDates {
   color: #6b7280;
-  font-size: 0.75rem;
-  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
   word-break: break-word;
-
-  @media (min-width: 768px) {
-    font-size: 0.875rem;
-  }
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .goalTasks {
-  background-color: #f9fafb;
+  background-color: #f3f4f6;
   border-radius: 0.5rem;
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
+  cursor: pointer;
 }
 
 .taskHeader {
@@ -265,17 +209,24 @@
   margin-top: 0.5rem;
 }
 
-.progressBar {
+.progressBarContainer {
   height: 4px;
   background-color: #e5e7eb;
-  border-radius: 2px;
+  border-radius: 4px;
   position: relative;
-  margin-bottom: 0.5rem;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  width: 100%;
 }
 
-.progressFill {
+.progressBarFill {
   height: 100%;
-  border-radius: 2px;
+  background-color: #22c55e;
+  border-radius: 4px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: width 0.3s ease;
 }
 
 .progressDot {
@@ -285,54 +236,109 @@
   background-color: #22c55e;
   position: absolute;
   top: -2px;
+  transform: translateX(-50%);
+  transition: left 0.3s ease;
 }
 
 .progressText {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   color: #6b7280;
+  margin-top: 4px;
 }
 
-.newGoalButton {
-  width: 100%;
-  border: 2px dashed #d1d5db;
-  border-radius: 1rem;
-  padding: 1.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  color: #6b7280;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  background-color: white;
-  margin-top: 1rem;
+.goalsListContainer {
+  overflow-y: auto;
+  height: auto;
+  max-height: calc(100vh - 250px);
+  padding-bottom: 120px;
 
-  &:hover {
-    background-color: #f9fafb;
+  @media (max-width: 768px) {
+    max-height: calc(100vh - 220px);
+    padding-bottom: 100px;
   }
 }
 
+/* New Goal Button - matching the New Task button styling */
+.newGoalButtonContainer {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 10;
+}
+
+.newGoalButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.newGoalButton:hover {
+  background-color: #4338ca;
+  transform: translateY(-2px);
+}
+
 .plusIcon {
-  font-size: 1.25rem;
-  font-weight: 300;
+  font-size: 18px;
+  margin-right: 8px;
+  font-weight: 600;
 }
 
 .twoColumnLayout {
+  width: 100%;
+  max-width: 100%;
   display: flex;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  gap: 30px;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
 }
 
-.leftColumn {
-  width: 50%;
+.mobileRightColumn,
+.leftColumn,
+.rightColumn {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.mobileRightColumn {
+  margin-bottom: 20px;
+  display: block;
+  padding: 10px 0;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
 }
 
 .rightColumn {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  display: none;
+
+  @media (min-width: 768px) {
+    display: block;
+    width: 30%;
+    padding-left: 20px;
+  }
+}
+
+.leftColumn {
+  width: 100%;
+
+  @media (min-width: 768px) {
+    width: 70%;
+  }
 }
 
 .completionPercentage {
@@ -371,21 +377,11 @@
   font-size: 14px;
 }
 
-.formInput {
-  width: 100%;
-  padding: 10px 0;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-bottom: 1px solid #49454f;
-  background-color: transparent;
-  outline: none;
-  font-family: 'Baloo 2', cursive;
-  font-size: 16px;
-}
-
+.formInput,
 .formTextarea {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 10px 0;
   border-top: none;
   border-left: none;
@@ -393,13 +389,15 @@
   border-bottom: 1px solid #49454f;
   background-color: transparent;
   outline: none;
-  resize: vertical;
-  min-height: 80px;
   font-family: 'Baloo 2', cursive;
   font-size: 16px;
 }
 
 .tabsContainer {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
   background-color: #f5f3eb;
   border-radius: 8px;
   padding: 0;
@@ -408,6 +406,10 @@
 }
 
 .tabsHeader {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
   display: flex;
   border-bottom: 1px solid #dee2e6;
 }
@@ -434,32 +436,81 @@
 .dateStatusContainer {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
+
+  @media (min-width: 769px) {
+    justify-content: flex-start;
+  }
+
+  @media (max-width: 768px) {
+    justify-content: space-between;
+  }
 }
 
 .dueDateContainer {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
 }
 
 .calendarIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
   cursor: pointer;
 }
 
 .dueDateText {
-  color: #000000;
+  font-size: 14px;
+  color: #4b5563;
 }
 
 .todoButton {
   background-color: transparent;
   color: #4c9aff;
   border: 1px solid #4c9aff;
-  border-radius: 4px;
-  padding: 5px 25px;
-  cursor: pointer;
+  border-radius: 5px;
+  padding: 6px 16px;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background-color: rgba(76, 154, 255, 0.1);
+  }
+
+  @media (max-width: 768px) {
+    margin-left: auto;
+  }
+}
+
+.statusMenu {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  min-width: 180px;
+}
+
+.statusMenuItem {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+.checkIcon {
+  color: #d24d21;
+  font-size: 20px;
 }
 
 // Markdown editor styles
@@ -613,23 +664,6 @@
   color: #b2b2b2;
 }
 
-.goalsListContainer {
-  overflow-y: auto;
-  height: calc(100% - 150px); /* Adjust based on your layout */
-  padding-bottom: 100px; /* Increased padding to prevent content from being visible */
-}
-
-.newGoalButtonContainer {
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  background-color: #f9f9f9; /* Match your page background color */
-  padding: 20px 20px 30px 20px; /* Added more padding at the bottom */
-  margin-top: 20px;
-  width: 100%;
-  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
-}
-
 /* Status cards styling for responsive view */
 @media (max-width: 768px) {
   .statusTabs {
@@ -646,7 +680,6 @@
 
   .statusCard {
     display: flex;
-    flex-direction: row;
     align-items: center;
     justify-content: center;
     flex: 1;
@@ -692,8 +725,8 @@
     font-size: 10px;
     color: #666;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    // overflow: hidden;
+    // text-overflow: ellipsis;
     width: 100%;
     line-height: 1.1;
     margin: 0;
@@ -727,4 +760,648 @@
     font-size: 20px;
     color: #666;
   }
+}
+
+// Fix the layout issues while preserving the existing design
+
+// Main container styles
+.goalDetailContainer {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// Header area with title and back button
+.headerArea {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.backButton {
+  margin-right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+// Status and date area
+.statusDateArea {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.progressBar {
+  margin-bottom: 20px;
+  width: 100%;
+  height: 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: #4c9aff;
+  width: 0%; // Will be set dynamically
+}
+
+// Todo button with proper styling
+.todoButton {
+  background-color: transparent;
+  color: #4c9aff;
+  border: 1px solid #4c9aff;
+  border-radius: 5px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background-color: rgba(76, 154, 255, 0.1);
+  }
+}
+
+// Tab navigation
+.tabsContainer {
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.tabList {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tabItem {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+
+  &.active {
+    border-bottom-color: #4c9aff;
+    color: #4c9aff;
+  }
+}
+
+// Content area for notes, tasks, events
+.contentArea {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+// Editor area
+.editorContainer {
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.editorToolbar {
+  display: flex;
+  padding: 8px;
+  border-bottom: 1px solid #e0e0e0;
+  flex-wrap: wrap;
+}
+
+.editorContent {
+  min-height: 150px;
+  padding: 16px;
+}
+
+.editorFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.saveButton {
+  background-color: #d24d21;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 16px;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Fix for the specific layout issues
+.mainContentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// Ensure proper spacing
+.titleInput,
+.descriptionInput {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+// Fix for the date picker
+.dueDatePicker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+// Fix the scrollbar issue - make it apply to the whole page
+
+// Remove fixed height and overflow properties from containers
+.goalDetailContainer,
+.contentArea,
+.editorContent {
+  overflow: visible;
+  height: auto;
+}
+
+// Main container styles
+.goalDetailContainer {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// Fix for the sticky new goal button
+.newGoalButtonContainer {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background-color: #f9f9f9;
+  padding: 20px;
+  width: 100%;
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+}
+
+.newGoalButton {
+  width: 100%;
+  border: 2px dashed #d1d5db;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  background-color: white;
+}
+
+// Status cards styling
+.statusTabs {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: white;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.statusCard {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+}
+
+.statusIcon {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.statusCount {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.statusLabel {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+// Goal list items
+.goalItem {
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e7eb;
+  cursor: pointer;
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  margin-bottom: 0;
+
+  &:hover {
+    background-color: transparent;
+  }
+}
+
+.goalTitle {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.goalDates {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+.goalProgress {
+  margin-top: 8px;
+  width: 100%;
+  height: 4px;
+  background-color: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.goalProgressFill {
+  height: 100%;
+  background-color: #10b981;
+}
+
+// Ensure the main content area takes full height but allows scrolling
+.mainLayout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.mainContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .statusTabs {
+    padding: 8px;
+  }
+
+  .statusCard {
+    padding: 2px;
+  }
+
+  .statusIcon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .statusCount {
+    font-size: 14px;
+  }
+
+  .newGoalButtonContainer {
+    padding: 16px;
+  }
+
+  .newGoalButton {
+    padding: 1rem;
+  }
+}
+
+// Specific colors for each status
+.todoStatus {
+  color: #0d6efd;
+}
+
+.inProgressStatus {
+  color: #dc3545;
+}
+
+.completedStatus {
+  color: #198754;
+}
+
+/* Desktop view - larger sizes */
+@media (min-width: 769px) {
+  .statusTabs {
+    padding: 16px;
+  }
+
+  .statusIcon {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+
+  /* Larger icon images for desktop */
+  .statusIcon img,
+  .statusIcon svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .statusCount {
+    font-size: 28px;
+    margin-bottom: 4px;
+    text-align: center;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .statusLabel {
+    font-size: 16px;
+    text-align: center;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .statusCard {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Mobile view adjustments */
+@media (max-width: 768px) {
+  .goalsContainer {
+    height: 100vh;
+    min-height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
+  }
+
+  .goalsListContainer {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    padding-bottom: 100px; /* Add extra padding at the bottom for scrolling */
+  }
+
+  /* Use a class that will be applied to the container instead of targeting global elements */
+  .container {
+    height: auto !important;
+    overflow: auto !important;
+  }
+}
+
+// Add these styles to fix horizontal scrolling issues
+
+.goalsContainer {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  padding: 0 16px; /* Add some padding on the sides */
+  box-sizing: border-box; /* Make sure padding is included in width calculation */
+}
+
+// Make sure all child elements respect container width
+.twoColumnLayout {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+.mobileRightColumn,
+.leftColumn,
+.rightColumn {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+// Ensure form elements don't overflow
+.formInput,
+.formTextarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+// Fix any potential table or overflow issues
+.tabsContainer,
+.tabsHeader,
+.tabContent,
+.tabPanel {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+// Ensure list items don't cause overflow
+.listItem {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-break: break-word; /* Allow long words to break */
+}
+
+// New Goal Form - matching goals container UI
+.newGoalForm {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.formField {
+  margin-bottom: 15px;
+}
+
+.formLabel {
+  font-weight: 500;
+  margin-bottom: 5px;
+  font-family: 'Montserrat', sans-serif;
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+.formInput,
+.formTextarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 10px 0;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #dee2e6;
+  background-color: transparent;
+  outline: none;
+  font-size: 16px;
+}
+
+.tabsContainer {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  background-color: #f5f3eb;
+  border-radius: 8px;
+  padding: 0;
+  margin-bottom: 20px;
+  border: 1px solid #dee2e6;
+}
+
+.tabsHeader {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  display: flex;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.tabItem {
+  padding: 10px 15px;
+  color: #6c757d;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  flex: 1;
+  font-size: 14px;
+}
+
+.activeTab {
+  border-bottom: 2px solid #fd7e14;
+  color: #fd7e14;
+}
+
+.tabContent {
+  padding: 20px;
+}
+
+.tabTextarea {
+  width: 100%;
+  min-height: 100px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 10px;
+  outline: none;
+  resize: vertical;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.cancelButton {
+  padding: 8px 16px;
+  background-color: transparent;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
+}
+
+.saveButton {
+  padding: 8px 16px;
+  background-color: #fd7e14;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #e8710e;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// New Task Button
+.newTaskButtonContainer {
+  position: fixed;
+  width: 83%;
+  margin-left: 16%;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  z-index: 10;
+  background-color: #f9faf7;
+
+  @media (max-width: 640px) {
+    bottom: 20px;
+    margin-left: 10%;
+  }
+}
+
+.newTaskButton {
+  width: 100%;
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  background-color: white;
+
+  &:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+  }
+}
+
+.plusIcon {
+  font-size: 18px;
 }

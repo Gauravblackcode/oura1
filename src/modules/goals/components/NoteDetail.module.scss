@@ -1,0 +1,330 @@
+.noteDetailContainer {
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  padding: 1rem;
+
+  @media (min-width: 768px) {
+    padding: 2rem;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+
+  span {
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .separator {
+    margin: 0 0.5rem;
+    cursor: default;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .current {
+    color: #333;
+    cursor: default;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.noteContent {
+  background-color: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.content {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+  white-space: pre-wrap;
+}
+
+.formatToolbar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.formatButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  color: #6b7280;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f9fafb;
+  }
+}
+
+.tagContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  background-color: #f3f4f6;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  color: #4b5563;
+
+  span {
+    margin-right: 0.375rem;
+  }
+}
+
+.personalIcon {
+  color: #3b82f6;
+}
+
+.travelIcon {
+  color: #f59e0b;
+}
+
+.addTagButton {
+  display: flex;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  background: none;
+  border: 1px dashed #d1d5db;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  cursor: pointer;
+
+  span {
+    margin-right: 0.25rem;
+  }
+
+  &:hover {
+    background-color: #f9fafb;
+  }
+}
+
+.aimeAssist {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  color: #d24d21;
+  font-weight: 500;
+}
+
+.aimeIcon {
+  margin-right: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.metaInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.generatedInfo {
+  display: flex;
+  align-items: center;
+  color: #22c55e;
+
+  svg {
+    margin-right: 0.375rem;
+  }
+}
+
+.linkedSections {
+  margin-bottom: 1.5rem;
+}
+
+.linkedSection {
+  background-color: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+
+  svg {
+    margin-right: 0.5rem;
+  }
+}
+
+.sectionActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.collapseButton,
+.addButton {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  color: #6b7280;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f9fafb;
+  }
+}
+
+.taskItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+}
+
+.taskContent {
+  flex: 1;
+}
+
+.taskTitle {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.taskMeta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.frequency {
+  background-color: #fee2e2;
+  color: #ef4444;
+  padding: 0.125rem 0.5rem;
+  border-radius: 1rem;
+}
+
+.taskTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  background-color: #f3f4f6;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  color: #4b5563;
+
+  span {
+    margin-right: 0.25rem;
+  }
+}
+
+.moreButton {
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem;
+
+  &:hover {
+    color: #4b5563;
+  }
+}
+
+.activityLog {
+  background-color: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.activityHeader {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+
+  svg {
+    margin-right: 0.5rem;
+  }
+}

@@ -8,5 +8,7 @@ export default {
     LOGOUT: '/auth/logout',
   },
   GOALS: '/goals',
+  GOAL_DETAIL: (id: string) => `/goals/${id}`,
+  NOTE_DETAIL: (goalId: string, noteId: string) => `/goals/${goalId}/notes/${noteId}`,
   CALENDAR: '/calendar',
 };

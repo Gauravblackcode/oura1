@@ -13,12 +13,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import useSWR, { mutate } from 'swr';
 
-import Navigation from '@/components/navigation/Navigation';
 import Header from '@/components/header/Header';
 import StatusIndicator from '@/components/status/StatusIndicator';
 import { CalendarIcon } from '@/lib/icons';
 import { TabContent } from './components/TabContent';
 import { ActivityLog } from './components/ActivityLog';
+import { formatDate } from '@/utils/dateFormat';
 
 import GoalsService from '@/services/goals/goals.service';
 import { DefaultSort, DefaultPagination, isDateRangeAllowed } from '@/common/helpers';
@@ -35,9 +35,14 @@ const GoalsListPage: NextPage = () => {
     pagination: DefaultPagination,
     sort: DefaultSort,
   });
+  const [showNewGoalForm, setShowNewGoalForm] = useState(false);
   const [newGoalTitle, setNewGoalTitle] = useState('');
+  const [newGoalDescription, setNewGoalDescription] = useState('');
+  const [activeTab, setActiveTab] = useState("notes");
+  const [noteContent, setNoteContent] = useState("");
+  const [taskContent, setTaskContent] = useState("");
+  const [eventContent, setEventContent] = useState("");
   const [isCreating, setIsCreating] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(false);
 
   const goalsService = useMemo(() => new GoalsService(), []);
   const { data: goalsData } = useSWR(
@@ -51,10 +56,6 @@ const GoalsListPage: NextPage = () => {
 
   const goals = useMemo(() => goalsData?.goals || [], [goalsData]);
 
-  const toggleSidebar = () => {
-    setShowSidebar(!showSidebar);
-  };
-
   const handleCreateGoal = async () => {
     if (!newGoalTitle.trim()) return;
 
@@ -62,7 +63,7 @@ const GoalsListPage: NextPage = () => {
     try {
       const goalData = {
         title: newGoalTitle,
-        description: '',
+        description: newGoalDescription,
         startDate: moment().format('YYYY-MM-DD'),
         endDate: moment().add(1, 'day').format('YYYY-MM-DD'),
         isGeneratedByAime: false,
@@ -79,6 +80,8 @@ const GoalsListPage: NextPage = () => {
 
       if (response?.createGoal?._id) {
         setNewGoalTitle('');
+        setNewGoalDescription('');
+        setShowNewGoalForm(false);
         // Trigger a revalidation of the goals list
         mutate(['goals', filters]);
       }
@@ -88,8 +91,6 @@ const GoalsListPage: NextPage = () => {
       setIsCreating(false);
     }
   };
-
-
 
   const statusCounts = {
     todo: 3,
@@ -104,129 +105,219 @@ const GoalsListPage: NextPage = () => {
         <meta name="description" content="Goals management for Oura 1" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <main style={{ height: "100vh", overflow: "hidden", backgroundColor: "#f9f9f9" }}>
-        <div className={styles.container}>
-          <div className={styles.innerContainer}>
-            <div className={styles.contentWrapper}>
-              {/* Mobile menu button */}
-              <div className={styles.mobileMenuButton} onClick={toggleSidebar}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3 12H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M3 6H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+      <main >
+        <Header
+          title="Goals"
+          breadcrumbs={[
+            { label: "Home", path: "/home" },
+            { label: "Goals", path: "/goals" },
+          ]}
+        />
+
+        <div className={styles.goalsContainer}>
+          {/* Status Tabs */}
+          <div className={styles.statusTabs}>
+            <div className={styles.statusCard}>
+              <div className={styles.statusIcon} style={{ backgroundColor: '#EEF4FF' }}>
+                <Image src={TodoIcon} alt="Todo" width={15} height={15} />
               </div>
-
-              {/* Navigation with responsive class */}
-              <div className={`${styles.navigation} ${showSidebar ? styles.showNavigation : ''}`}>
-                <Navigation />
+              <div className={styles.statusTextContainer}>
+                <div className={styles.statusCount}>03</div>
+                <div className={styles.statusLabel}>To do</div>
               </div>
+            </div>
 
-              <div className={styles.mainContent}>
-                <Header
-                  title="Goals"
-                  breadcrumbs={[
-                    { label: "Home", path: "/home" },
-                    { label: "Goals", path: "/goals" },
-                  ]}
-                />
+            <div className={styles.statusCard}>
+              <div className={styles.statusIcon} style={{ backgroundColor: '#FEF2F2' }}>
+                <Image src={InProgressIcon} alt="In Progress" width={15} height={15} />
+              </div>
+              <div className={styles.statusTextContainer}>
+                <div className={styles.statusCount}>02</div>
+                <div className={styles.statusLabel}>In Progress</div>
+              </div>
+            </div>
 
-                <div className={styles.goalsContainer}>
-                  {/* Status Tabs */}
-                  <div className={styles.statusTabs}>
-                    <div className={styles.statusCard}>
-                      <div className={styles.statusIcon} style={{ backgroundColor: '#EEF4FF' }}>
-                        <Image src={TodoIcon} alt="Todo" width={24} height={24} />
-                      </div>
-                      <div className={styles.statusTextContainer}>
-                        <div className={styles.statusCount}>03</div>
-                        <div className={styles.statusLabel}>To do</div>
-                      </div>
-                    </div>
-
-                    <div className={styles.statusCard}>
-                      <div className={styles.statusIcon} style={{ backgroundColor: '#FEF2F2' }}>
-                        <Image src={InProgressIcon} alt="In Progress" width={24} height={24} />
-                      </div>
-                      <div className={styles.statusTextContainer}>
-                        <div className={styles.statusCount}>02</div>
-                        <div className={styles.statusLabel}>In Progress</div>
-                      </div>
-                    </div>
-
-                    <div className={styles.statusCard}>
-                      <div className={styles.statusIcon} style={{ backgroundColor: '#DCFCE7' }}>
-                        <Image src={CompletedIcon} alt="Completed" width={24} height={24} />
-                      </div>
-                      <div className={styles.statusTextContainer}>
-                        <div className={styles.statusCount}>01</div>
-                        <div className={styles.statusLabel}>Completed</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Goals List with scrollable container */}
-                  <div className={styles.goalsListContainer}>
-                    <div className={styles.goalsList}>
-                      {goals && goals?.data?.map((goal) => (
-                        <div key={goal._id} className={styles.goalCard} onClick={() => router.push(`/goals/${goal._id}`)}>
-                          <div className={styles.goalHeader}>
-                            <h3 className={styles.goalTitle}>{goal.title}</h3>
-                            <span className={styles.goalFrequency}>{goal.frequency}</span>
-                          </div>
-
-                          <div className={styles.goalDates}>
-                            Start Date: {goal.startDate} | End Date: {goal.endDate}
-                          </div>
-
-                          {goal.title === 'Design portfolio website' || goal.title === 'Real estate website development' ? (
-                            <div className={styles.goalTasks}>
-                              <div className={styles.taskHeader}>
-                                <span className={styles.taskIcon}>
-                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                                    <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5C15 6.10457 14.1046 7 13 7H11C9.89543 7 9 6.10457 9 5Z" stroke="currentColor" strokeWidth="2" />
-                                  </svg>
-                                </span>
-                                <span>Tasks</span>
-                                <span className={styles.taskExpand}>
-                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                  </svg>
-                                </span>
-                              </div>
-                            </div>
-                          ) : null}
-
-                          <div className={styles.goalProgress}>
-                            <div className={styles.progressBar}>
-                              <div
-                                className={styles.progressFill}
-                                style={{
-                                  width: `${goal.progress}%`,
-                                  backgroundColor: goal.progress > 0 ? '#22C55E' : '#E5E7EB'
-                                }}
-                              ></div>
-                              <div className={styles.progressDot} style={{ right: '0' }}></div>
-                            </div>
-                            <div className={styles.progressText}>{goal.progress}% completed</div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Fixed New Goal Button */}
-                  <div className={styles.newGoalButtonContainer}>
-                    <div className={styles.newGoalButton} onClick={() => router.push('/goals/new')}>
-                      <span className={styles.plusIcon}>+</span>
-                      <span>New Goal</span>
-                    </div>
-                  </div>
-                </div>
+            <div className={styles.statusCard}>
+              <div className={styles.statusIcon} style={{ backgroundColor: '#DCFCE7' }}>
+                <Image src={CompletedIcon} alt="Completed" width={15} height={15} />
+              </div>
+              <div className={styles.statusTextContainer}>
+                <div className={styles.statusCount}>01</div>
+                <div className={styles.statusLabel}>Completed</div>
               </div>
             </div>
           </div>
+
+          {/* New Goal Form */}
+          {showNewGoalForm && (
+            <div className={styles.newGoalForm}>
+              <div className={styles.formField}>
+                <div className={styles.formLabel}>Title</div>
+                <input
+                  type="text"
+                  value={newGoalTitle}
+                  onChange={(e) => setNewGoalTitle(e.target.value)}
+                  placeholder="Enter goal title..."
+                  className={styles.formInput}
+                />
+              </div>
+
+              <div className={styles.formField}>
+                <div className={styles.formLabel}>Description</div>
+                <textarea
+                  value={newGoalDescription}
+                  onChange={(e) => setNewGoalDescription(e.target.value)}
+                  placeholder="Enter goal description..."
+                  className={styles.formTextarea}
+                />
+              </div>
+
+              <div className={styles.tabsContainer}>
+                <div className={styles.tabsHeader}>
+                  <div
+                    className={`${styles.tabItem} ${activeTab === "notes" ? styles.activeTab : ''}`}
+                    onClick={() => setActiveTab("notes")}
+                  >
+                    Notes
+                  </div>
+                  <div
+                    className={`${styles.tabItem} ${activeTab === "tasks" ? styles.activeTab : ''}`}
+                    onClick={() => setActiveTab("tasks")}
+                  >
+                    Tasks
+                  </div>
+                  <div
+                    className={`${styles.tabItem} ${activeTab === "events" ? styles.activeTab : ''}`}
+                    onClick={() => setActiveTab("events")}
+                  >
+                    Events
+                  </div>
+                </div>
+
+                <div className={styles.tabContent}>
+                  {activeTab === "notes" && (
+                    <textarea
+                      value={noteContent}
+                      onChange={(e) => setNoteContent(e.target.value)}
+                      placeholder="Add notes here..."
+                      className={styles.tabTextarea}
+                    />
+                  )}
+
+                  {activeTab === "tasks" && (
+                    <textarea
+                      value={taskContent}
+                      onChange={(e) => setTaskContent(e.target.value)}
+                      placeholder="Add tasks here..."
+                      className={styles.tabTextarea}
+                    />
+                  )}
+
+                  {activeTab === "events" && (
+                    <textarea
+                      value={eventContent}
+                      onChange={(e) => setEventContent(e.target.value)}
+                      placeholder="Add events here..."
+                      className={styles.tabTextarea}
+                    />
+                  )}
+                </div>
+              </div>
+
+              <div className={styles.formActions}>
+                <button
+                  className={styles.cancelButton}
+                  onClick={() => setShowNewGoalForm(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className={styles.saveButton}
+                  onClick={handleCreateGoal}
+                  disabled={isCreating || !newGoalTitle.trim()}
+                >
+                  {isCreating ? 'Saving...' : 'Save Goal'}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Goals List with scrollable container */}
+          {!showNewGoalForm && (
+            <div className={styles.goalsListContainer}>
+              <div className={styles.goalsList}>
+                {goals && goals?.data?.map((goal) => {
+                  // Calculate progress percentage based on completed and in-progress tasks
+                  let progressPercentage = 0;
+
+                  if (goal.totalTaskCount > 0) {
+                    // Completed tasks count as 100%, in-progress tasks count as 50%
+                    const completedValue = goal.completedTaskCount || 0;
+                    const inProgressValue = (goal.inProgressTaskCount || 0) * 0.5;
+
+                    progressPercentage = Math.round(((completedValue + inProgressValue) / goal.totalTaskCount) * 100);
+                  }
+
+                  return (
+                    <div key={goal._id} className={styles.goalCard} onClick={() => router.push(`/goals/${goal._id}`)}>
+                      <div className={styles.goalHeader}>
+                        <h3 className={styles.goalTitle}>{goal.title}</h3>
+                        <span className={styles.goalFrequency}>{goal.frequency || "Daily"}</span>
+                      </div>
+
+                      <div className={styles.goalDates}>
+                        Start Date: {formatDate(goal.startDate)} | End Date: {formatDate(goal.endDate)}
+                      </div>
+
+                      {goal.totalTaskCount > 0 && (
+                        <div className={styles.goalTasks}>
+                          <div className={styles.taskHeader}>
+                            <span className={styles.taskIcon}>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5C15 6.10457 14.1046 7 13 7H11C9.89543 7 9 6.10457 9 5Z" stroke="currentColor" strokeWidth="2" />
+                              </svg>
+                            </span>
+                            <span>Tasks</span>
+                            <span className={styles.taskExpand}>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                              </svg>
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className={styles.progressBarContainer}>
+                        <div
+                          className={styles.progressBarFill}
+                          style={{ width: `${progressPercentage}%` }}
+                        ></div>
+                        <div className={styles.progressDot} style={{ left: `${progressPercentage}%` }}></div>
+                      </div>
+                      <div className={styles.progressText}>
+                        {progressPercentage}% completed
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {!showNewGoalForm && (
+            <div className={styles.newTaskButtonContainer}>
+              <button
+                className={styles.newTaskButton}
+                onClick={() => setShowNewGoalForm(true)}
+              >
+                <span className={styles.plusIcon}>+</span>
+                <span>New Goal</span>
+              </button>
+            </div>
+          )}
+
+
         </div>
       </main>
     </>

@@ -1,4 +1,3 @@
-import Navigation from '@/components/navigation/Navigation';
 import React, { FC, useEffect, useState } from 'react';
 import GoalsService from '@/services/goals/goals.service';
 import TasksService from '@/services/tasks/tasks.service';
@@ -54,14 +53,13 @@ const DashboardContainer = () => {
 
   return (
     <div style={{ display: 'flex' }}>
-      <Navigation />
       <div style={{ marginLeft: 30, marginTop: 30, width: '100%' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '30px' }}>
-          <img 
-            src="/images/OURA.1 - Primary Logo large canvas.png" 
-            width={50} 
-            height={55} 
-            alt="OURA.1 Logo" 
+          <img
+            src="/images/OURA.1 - Primary Logo large canvas.png"
+            width={50}
+            height={55}
+            alt="OURA.1 Logo"
           />
           <h1>Dashboard</h1>
         </div>
@@ -77,8 +75,8 @@ const DashboardContainer = () => {
               padding: 50,
               width: 300,
             }}>
-              <h3 style={{color: 'white', textAlign: 'left'}}>{goal.title}</h3>
-              <p style={{color: 'white'}}>Completion: {goal.totalTaskCount > 0 ? Math.round((goal.completedTaskCount / goal.totalTaskCount) * 100) : 0}%</p>
+              <h3 style={{ color: 'white', textAlign: 'left' }}>{goal.title}</h3>
+              <p style={{ color: 'white' }}>Completion: {goal.totalTaskCount > 0 ? Math.round((goal.completedTaskCount / goal.totalTaskCount) * 100) : 0}%</p>
             </div>
           ))}
         </div>
@@ -110,7 +108,7 @@ const DashboardContainer = () => {
                       </div>
                     )}
                   </div>
-                  <span style={{ 
+                  <span style={{
                     color: task.status === 'COMPLETED' ? 'var(--green-400)' : 'var(--orange-400)',
                     padding: '4px 8px',
                     borderRadius: '4px',
@@ -125,7 +123,7 @@ const DashboardContainer = () => {
 
           {/* Events Section */}
           <div style={{
-            background: 'var(--white-100)', 
+            background: 'var(--white-100)',
             padding: '20px',
             borderRadius: '8px',
             boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)'
@@ -136,7 +134,7 @@ const DashboardContainer = () => {
                 const startDate = new Date(event.scheduledStartsAt);
                 const endDate = new Date(event.scheduledEndsAt);
                 const isUpcoming = startDate > new Date();
-                
+
                 return (
                   <div key={event._id} style={{
                     padding: '12px',
@@ -156,14 +154,14 @@ const DashboardContainer = () => {
                       justifyContent: 'center',
                       flexShrink: 0
                     }}>
-                      <div style={{ 
+                      <div style={{
                         fontSize: '0.8em',
                         fontWeight: 'bold',
                         color: isUpcoming ? 'var(--blue-400)' : 'var(--grey-400)'
                       }}>
                         {startDate.toLocaleDateString('en-US', { month: 'short' })}
                       </div>
-                      <div style={{ 
+                      <div style={{
                         fontSize: '1.1em',
                         fontWeight: 'bold',
                         color: isUpcoming ? 'var(--blue-400)' : 'var(--grey-400)'
@@ -172,18 +170,18 @@ const DashboardContainer = () => {
                       </div>
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ 
+                      <div style={{
                         color: 'var(--text-color-primary)',
                         fontWeight: '500'
                       }}>
                         {event.title}
                       </div>
-                      <div style={{ 
+                      <div style={{
                         fontSize: '0.9em',
                         color: 'var(--text-color-secondary)',
                         marginTop: '4px'
                       }}>
-                        {startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - 
+                        {startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -
                         {endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>

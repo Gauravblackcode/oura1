@@ -9,6 +9,9 @@ import NotesService from '@/services/notes/notes.service';
 import TasksService from '@/services/tasks/tasks.service';
 import { EventService } from '@/services/event/event.service';
 import { TaskPriority, TaskStatus } from '@/types/task.types';
+import { useRouter } from 'next/router';
+import Oura1Dialog from '@/components/dialogs/Oura1Dialog';
+import routes from '@/common/routes';
 
 // Dynamically import the editor to avoid SSR issues
 const MdEditor = dynamic(() => import('react-markdown-editor-lite'), {
@@ -49,6 +52,7 @@ export const TabContent: React.FC<TabContentProps> = ({
 }) => {
     // Initialize markdown parser on client side only
     const [mdParser, setMdParser] = useState<any>(null);
+    const router = useRouter();
 
     // Initialize services
     const notesService = new NotesService();
@@ -66,6 +70,9 @@ export const TabContent: React.FC<TabContentProps> = ({
     // State for task inputs
     const [taskDueDate, setTaskDueDate] = useState('');
     const [taskPriority, setTaskPriority] = useState<TaskPriority>(TaskPriority.Medium);
+
+    const [selectedNote, setSelectedNote] = useState(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     useEffect(() => {
         // Initialize markdown-it parser on client side
@@ -180,6 +187,31 @@ export const TabContent: React.FC<TabContentProps> = ({
         } catch (error) {
             console.error('Failed to save:', error);
             // You might want to show an error message to the user here
+        }
+    };
+
+    // Navigate to note detail page
+    const handleNoteClick = (note) => {
+        router.push(routes.NOTE_DETAIL(goalId, note._id));
+    };
+
+    // Create a draft note and navigate to its detail page
+    const handleTextareaClick = () => {
+        if (activeTab === "notes" && noteContent.trim()) {
+            const draftNote = {
+                _id: 'draft',
+                title: noteContent.split('\n')[0] || 'New Note',
+                content: noteContent,
+                createdAt: new Date().toISOString(),
+                isGeneratedByAime: true
+            };
+
+            // Save draft to localStorage
+            const draftKey = `draft_note_${goalId}`;
+            localStorage.setItem(draftKey, JSON.stringify(draftNote));
+
+            // Navigate to draft note detail page
+            router.push(routes.NOTE_DETAIL(goalId, 'draft'));
         }
     };
 
@@ -381,5 +413,17 @@ export const TabContent: React.FC<TabContentProps> = ({
         );
     }
 
-    return null;
+    return (
+        <>
+            {/* ... existing JSX */}
+
+            <Oura1Dialog
+                open={isDialogOpen} // Make sure this is always defined
+                onClose={() => setIsDialogOpen(false)}
+                title="Dialog Title"
+            >
+                Dialog content
+            </Oura1Dialog>
+        </>
+    );
 };
