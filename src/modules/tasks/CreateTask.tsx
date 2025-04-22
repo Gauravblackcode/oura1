@@ -114,7 +114,7 @@ const CreateTask = () => {
       <div className="mb-6">
         <h1 className="text-2xl font-normal">Create New Task</h1>
       </div>
-      
+
       <Formik
         initialValues={initialValues}
         validationSchema={CreateTaskSchema}
@@ -130,9 +130,8 @@ const CreateTask = () => {
                 value={values.title}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className={`w-full px-3 py-2 border rounded-md ${
-                  touched.title && errors.title ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`w-full px-3 py-2 border rounded-md ${touched.title && errors.title ? 'border-red-500' : 'border-gray-300'
+                  }`}
               />
               {touched.title && errors.title && (
                 <p className="text-red-500 text-sm mt-1">{errors.title}</p>
@@ -146,9 +145,8 @@ const CreateTask = () => {
                 value={values.description}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className={`w-full px-3 py-2 border rounded-md ${
-                  touched.description && errors.description ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`w-full px-3 py-2 border rounded-md ${touched.description && errors.description ? 'border-red-500' : 'border-gray-300'
+                  }`}
                 rows={4}
               />
               {touched.description && errors.description && (
@@ -165,9 +163,8 @@ const CreateTask = () => {
                   value={values.dueDate}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className={`w-full px-3 py-2 border rounded-md ${
-                    touched.dueDate && errors.dueDate ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md ${touched.dueDate && errors.dueDate ? 'border-red-500' : 'border-gray-300'
+                    }`}
                 />
                 {touched.dueDate && errors.dueDate && (
                   <p className="text-red-500 text-sm mt-1">{errors.dueDate}</p>
@@ -180,9 +177,8 @@ const CreateTask = () => {
                   name="priority"
                   value={values.priority}
                   onChange={handleChange}
-                  className={`w-full px-3 py-2 border rounded-md ${
-                    touched.priority && errors.priority ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md ${touched.priority && errors.priority ? 'border-red-500' : 'border-gray-300'
+                    }`}
                 >
                   {Object.values(TaskPriority).map(priority => (
                     <option key={priority} value={priority}>
@@ -202,9 +198,8 @@ const CreateTask = () => {
                 name="status"
                 value={values.status}
                 onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-md ${
-                  touched.status && errors.status ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`w-full px-3 py-2 border rounded-md ${touched.status && errors.status ? 'border-red-500' : 'border-gray-300'
+                  }`}
               >
                 {Object.values(TaskStatus).map(status => (
                   <option key={status} value={status}>

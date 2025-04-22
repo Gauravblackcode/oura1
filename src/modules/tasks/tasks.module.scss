@@ -1,0 +1,717 @@
+.tasksContainer {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  padding: 0 16px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+
+// Sort by dropdown
+.sortByContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.sortByLabel {
+  font-size: 14px;
+  color: #6b7280;
+  margin-right: 4px;
+}
+
+.sortByIcon {
+  color: #6b7280;
+}
+
+// Filter tabs
+.filterTabs {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 4px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.filterTab {
+  padding: 8px 16px;
+  color: #e78565;
+  background-color: transparent;
+  border: 1px solid #e78565;
+  border-radius: 5px;
+  font-size: 14px;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(231, 133, 101, 0.1);
+  }
+
+  @media (max-width: 640px) {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+.activeFilter {
+  background-color: #e78565 !important;
+  color: #ffffff;
+  border-color: #e78565;
+}
+
+// AI Suggestion - matching the image exactly
+.aiSuggestion {
+  background-color: #b0b0b01a;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.aiSuggestionTitle {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: #d24d21;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.aiSuggestionTitle svg {
+  margin-right: 8px;
+}
+
+.aiSuggestionText {
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 12px;
+}
+
+.aiSuggestionActions {
+  display: flex;
+  gap: 12px;
+}
+
+.createEventButton {
+  padding: 6px 12px;
+  background-color: transparent;
+  border: 1px solid #d24d21;
+  border-radius: 4px;
+  color: #d24d21;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(210, 77, 33, 0.05);
+  }
+}
+
+.dismissButton {
+  padding: 6px 12px;
+  background-color: transparent;
+  border: none;
+  color: #6b7280;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    color: #4b5563;
+  }
+}
+
+// Status Cards - fixed width to fit without scrolling
+.statusTabs {
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 640px) {
+    background-color: white;
+    border-radius: 16px;
+    padding: 12px;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    overflow-x: hidden;
+  }
+}
+
+.statusCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  @media (max-width: 640px) {
+    align-items: center;
+    gap: 4px;
+    width: 33.33%;
+    justify-content: center;
+  }
+}
+
+.statusIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 640px) {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+  }
+}
+
+.statusTextContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusCount {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+
+  @media (max-width: 640px) {
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  .statusCard:nth-child(1) & {
+    color: #4b7bf5;
+  }
+
+  .statusCard:nth-child(2) & {
+    color: #ef4444;
+  }
+
+  .statusCard:nth-child(3) & {
+    color: #22c55e;
+  }
+}
+
+.statusLabel {
+  font-size: 16px;
+  color: #6b7280;
+
+  @media (max-width: 640px) {
+    font-size: 10px;
+  }
+}
+
+// Task cards - matching the image exactly
+.tasksListContainer {
+  padding-bottom: 100px;
+}
+
+.taskCard {
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  &.completedTask {
+    border-left: 3px solid #22c55e;
+  }
+}
+
+.taskCardHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.taskStatusIcon {
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.taskTitle {
+  flex: 1;
+  font-weight: 500;
+  font-size: 16px;
+  color: #111827;
+}
+
+.taskOptions {
+  cursor: pointer;
+}
+
+.taskDueDate {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.taskTimeInfo {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.taskTimeEstimate {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background-color: #fee2e2;
+  color: #ef4444;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.taskSubtasks {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.subtaskItem {
+  display: flex;
+  align-items: center;
+  background-color: #dcfce7;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.subtaskCheckbox {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.subtaskText {
+  font-size: 14px;
+  color: #166534;
+}
+
+.taskEvent {
+  font-size: 14px;
+  color: #6b7280;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+// New Task Button
+.newTaskButtonContainer {
+  position: fixed;
+  width: 83%;
+  margin-left: 16%;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  z-index: 10;
+  background-color: #f9faf7;
+
+  @media (max-width: 640px) {
+    bottom: 20px;
+    margin-left: 5%;
+  }
+}
+
+.newTaskButton {
+  width: 100%;
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  background-color: white;
+
+  &:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+  }
+}
+
+.plusIcon {
+  font-size: 18px;
+}
+
+// Loading state
+.loadingContainer {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.loadingPulse {
+  width: 100%;
+  max-width: 600px;
+
+  &::before {
+    content: '';
+    display: block;
+    height: 24px;
+    background-color: #e5e7eb;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    animation: pulse 1.5s infinite;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    height: 200px;
+    background-color: #e5e7eb;
+    border-radius: 8px;
+    animation: pulse 1.5s infinite;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.taskTime {
+  font-size: 14px;
+  color: #6b7280;
+  margin-top: 8px;
+}
+
+.taskDescription {
+  font-size: 14px;
+  color: #4b5563;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+/* Form container styling */
+.newTaskFormContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #f9f9f7;
+  z-index: 50;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.newTaskForm {
+  flex: 1;
+  padding: 16px 24px 80px;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #f9f9f7;
+}
+
+/* Header styling */
+.formHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-top: 8px;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-right: 8px;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.formTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+/* Breadcrumbs styling */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 24px;
+}
+
+.breadcrumbs span:not(:last-child)::after {
+  content: '/';
+  margin-left: 8px;
+  color: #9ca3af;
+}
+
+/* Form fields styling */
+.formSection {
+  margin-bottom: 20px;
+}
+
+.formLabel {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 8px;
+  display: block;
+  font-weight: 500;
+}
+
+.formInput,
+.formTextarea,
+.formSelect {
+  width: 100%;
+  padding: 8px 0;
+  border: none;
+  background-color: transparent;
+  font-size: 16px;
+  color: #1f2937;
+  outline: none;
+}
+
+.formTextarea {
+  min-height: 80px;
+  resize: none;
+  line-height: 1.5;
+}
+
+.formDivider {
+  height: 1px;
+  background-color: #e5e7eb;
+  margin: 8px 0;
+  width: 100%;
+}
+
+/* Date picker styling */
+.dateInputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dateInput {
+  -webkit-appearance: none;
+  color-scheme: light;
+  cursor: pointer;
+  padding-right: 30px !important;
+  background-color: transparent !important;
+}
+
+.dateInput::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.calendarIcon {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Select styling */
+.selectContainer {
+  position: relative;
+}
+
+.formSelect {
+  appearance: none;
+  padding: 4px 24px 4px 4px;
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+
+.selectArrow {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Form layout for status and priority side by side */
+.formRow {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.formColumn {
+  flex: 1;
+}
+
+/* Save button styling */
+.formActions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 24px;
+  background-color: #f9f9f7;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: center;
+  z-index: 51;
+}
+
+.saveButton {
+  width: 100%;
+  max-width: 600px;
+  background-color: #d24d21;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 20px;
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.saveButton:hover {
+  background-color: #c04420;
+}
+
+.saveButton:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .formActions {
+    padding: 20px 24px;
+  }
+
+  .newTaskForm {
+    padding: 24px 32px 100px;
+  }
+
+  .formTitle {
+    font-size: 22px;
+  }
+}
+
+/* Status dropdown styling - exactly matching the image */
+.statusSelectContainer {
+  background-color: #dcfce7;
+  border-radius: 6px;
+  padding: 6px 12px;
+  width: fit-content;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.statusSelect {
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  color: #16a34a;
+  font-weight: 500;
+  font-size: 14px;
+  padding-right: 20px;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Priority dropdown styling - matching the image */
+.prioritySelectContainer {
+  background-color: white;
+  border-radius: 16px;
+  padding: 6px 12px;
+  width: fit-content;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.prioritySelect {
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  color: #eab308;
+  font-weight: 500;
+  font-size: 14px;
+  padding-right: 20px;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Select arrow positioning */
+.selectArrow {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Date input placeholder styling */
+.dateInput::placeholder {
+  color: #9ca3af;
+}
+
+/* Repeat dropdown styling - matching the image */
+.repeatSelectContainer {
+  background-color: #f3f4f6;
+  border-radius: 6px;
+  padding: 8px 12px;
+  width: 40%;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.repeatIconWrapper {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.repeatSelect {
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  color: #374151;
+  font-weight: 500;
+  font-size: 14px;
+  padding-right: 20px;
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  z-index: 2;
+}
