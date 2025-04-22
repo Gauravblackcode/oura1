@@ -1,13 +1,5 @@
-query Goals(
-  $filters: FiltersDto
-  $sort: SortDto
-  $pagination: PaginationDto
-) {
-  goals(
-    filters: $filters
-    sort: $sort 
-    pagination: $pagination
-  ) {
+query Goals($filters: FiltersDto, $sort: SortDto, $pagination: PaginationDto) {
+  goals(filters: $filters, sort: $sort, pagination: $pagination) {
     pageNo
     pageSize
     totalRecords
@@ -15,11 +7,11 @@ query Goals(
       _id
       completedTaskCount
       createdAt
-      deletedAt
+
       description
       endDate
       inProgressTaskCount
-      isDeleted
+
       isGeneratedByAime
       startDate
       tagIds
@@ -27,7 +19,7 @@ query Goals(
       title
       totalTaskCount
       updatedAt
-      userId
+
       activityLogs {
         _id
         actionType
@@ -41,21 +33,21 @@ query Goals(
         _id
         closedAt
         content
-        deletedAt
+
         eventId
         goalId
         isClosed
-        isDeleted
+
         taskId
-        userId
+
         event {
           _id
           createdAt
-          deletedAt
+
           description
           endedAt
           goalId
-          isDeleted
+
           isGeneratedByAime
           noteIds
           scheduledEndsAt
@@ -64,7 +56,7 @@ query Goals(
           tagIds
           taskIds
           title
-          userId
+
           recurrenceDetails {
             daysOfWeek
             endDate
@@ -84,11 +76,11 @@ query Goal($id: String!) {
     _id
     completedTaskCount
     createdAt
-    deletedAt
+
     description
     endDate
     inProgressTaskCount
-    isDeleted
+
     isGeneratedByAime
     startDate
     tagIds
@@ -96,7 +88,7 @@ query Goal($id: String!) {
     title
     totalTaskCount
     updatedAt
-    userId
+
     activityLogs {
       _id
       actionType
@@ -110,21 +102,21 @@ query Goal($id: String!) {
       _id
       closedAt
       content
-      deletedAt
+
       eventId
       goalId
       isClosed
-      isDeleted
+
       taskId
-      userId
+
       event {
         _id
         createdAt
-        deletedAt
+
         description
         endedAt
         goalId
-        isDeleted
+
         isGeneratedByAime
         noteIds
         scheduledEndsAt
@@ -133,7 +125,7 @@ query Goal($id: String!) {
         tagIds
         taskIds
         title
-        userId
+
         recurrenceDetails {
           daysOfWeek
           endDate
@@ -162,4 +154,3 @@ mutation UpdateGoal($id: String!, $updateGoalDto: UpdateGoalDto!) {
     _id
   }
 }
-

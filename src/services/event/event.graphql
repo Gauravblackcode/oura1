@@ -2,11 +2,11 @@ query Event($id: String!) {
   event(id: $id) {
     _id
     createdAt
-    deletedAt
+
     description
     endedAt
     goalId
-    isDeleted
+
     isGeneratedByAime
     noteIds
     scheduledEndsAt
@@ -15,7 +15,6 @@ query Event($id: String!) {
     tagIds
     taskIds
     title
-    userId
   }
 }
 
@@ -31,11 +30,11 @@ query Events($filters: FiltersDto, $pagination: PaginationDto, $sort: SortDto) {
     data {
       _id
       createdAt
-      deletedAt
+
       description
       endedAt
       goalId
-      isDeleted
+
       isGeneratedByAime
       noteIds
       scheduledEndsAt
@@ -44,7 +43,6 @@ query Events($filters: FiltersDto, $pagination: PaginationDto, $sort: SortDto) {
       tagIds
       taskIds
       title
-      userId
     }
   }
 }
@@ -53,11 +51,11 @@ mutation CreateEvent($createEventDto: CreateEventDto!) {
   createEvent(createEventDto: $createEventDto) {
     _id
     createdAt
-    deletedAt
+
     description
     endedAt
     goalId
-    isDeleted
+
     isGeneratedByAime
     noteIds
     scheduledEndsAt
@@ -66,7 +64,6 @@ mutation CreateEvent($createEventDto: CreateEventDto!) {
     tagIds
     taskIds
     title
-    userId
   }
 }
 
@@ -78,11 +75,11 @@ mutation UpdateEvent($id: String!, $updateEventDto: UpdateEventDto!) {
   updateEvent(id: $id, updateEventDto: $updateEventDto) {
     _id
     createdAt
-    deletedAt
+
     description
     endedAt
     goalId
-    isDeleted
+
     isGeneratedByAime
     noteIds
     scheduledEndsAt
@@ -91,6 +88,5 @@ mutation UpdateEvent($id: String!, $updateEventDto: UpdateEventDto!) {
     tagIds
     taskIds
     title
-    userId
   }
-} 
+}

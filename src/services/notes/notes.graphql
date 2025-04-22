@@ -3,15 +3,14 @@ query Note($id: String!) {
     _id
     content
     createdAt
-    deletedAt
+
     eventIds
     goalId
-    isDeleted
+
     isGeneratedByAime
     tagIds
     taskIds
     title
-    userId
   }
 }
 
@@ -28,15 +27,14 @@ query Notes($filters: FiltersDto, $pagination: PaginationDto, $sort: SortDto) {
       _id
       content
       createdAt
-      deletedAt
+
       eventIds
       goalId
-      isDeleted
+
       isGeneratedByAime
       tagIds
       taskIds
       title
-      userId
     }
   }
 }
@@ -46,15 +44,14 @@ mutation CreateNote($createNoteDto: CreateNoteDto!) {
     _id
     content
     createdAt
-    deletedAt
+
     eventIds
     goalId
-    isDeleted
+
     isGeneratedByAime
     tagIds
     taskIds
     title
-    userId
   }
 }
 
@@ -69,14 +66,13 @@ mutation UpdateNote($id: String!, $updateNoteDto: UpdateNoteDto!) {
     _id
     content
     createdAt
-    deletedAt
+
     eventIds
     goalId
-    isDeleted
+
     isGeneratedByAime
     tagIds
     taskIds
     title
-    userId
   }
-} 
+}

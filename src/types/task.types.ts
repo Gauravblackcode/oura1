@@ -1,24 +1,23 @@
 export enum TaskPriority {
   Low = 'LOW',
   Medium = 'MEDIUM',
-  High = 'HIGH'
+  High = 'HIGH',
 }
 
 export enum TaskStatus {
   Todo = 'TODO',
   InProgress = 'IN_PROGRESS',
   Done = 'DONE',
-  Cancelled = 'CANCELLED'
+  Cancelled = 'CANCELLED',
 }
 
 export interface Task {
   _id: string;
   createdAt: string;
-  deletedAt?: string;
+
   description?: string;
   dueDate?: string;
   goalId?: string;
-  isDeleted?: boolean;
   isGeneratedByAime?: boolean;
   priority: TaskPriority;
   status: TaskStatus;
@@ -72,4 +71,4 @@ export interface TaskResponse {
   pageSize: number;
   totalRecords: number;
   data: Task[];
-} 
+}

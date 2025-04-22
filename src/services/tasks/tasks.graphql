@@ -3,16 +3,15 @@ query Task($id: String!) {
   task(id: $id) {
     _id
     createdAt
-    deletedAt
+
     description
     dueDate
     goalId
-    isDeleted
+
     isGeneratedByAime
     priority
     status
     title
-    userId
   }
 }
 
@@ -28,16 +27,15 @@ query Tasks($sort: SortDto, $pagination: PaginationDto, $filters: FiltersDto) {
     data {
       _id
       createdAt
-      deletedAt
+
       description
       dueDate
       goalId
-      isDeleted
+
       isGeneratedByAime
       priority
       status
       title
-      userId
     }
   }
 }
@@ -47,16 +45,15 @@ mutation CreateTask($createTaskDto: CreateTaskDto!) {
   createTask(createTaskDto: $createTaskDto) {
     _id
     createdAt
-    deletedAt
+
     description
     dueDate
     goalId
-    isDeleted
+
     isGeneratedByAime
     priority
     status
     title
-    userId
   }
 }
 
@@ -64,16 +61,15 @@ mutation DeleteTask($id: String!) {
   deleteTask(id: $id) {
     _id
     createdAt
-    deletedAt
+
     description
     dueDate
     goalId
-    isDeleted
+
     isGeneratedByAime
     priority
     status
     title
-    userId
   }
 }
 
@@ -81,18 +77,14 @@ mutation UpdateTask($id: String!, $updateTaskDto: UpdateTaskDto!) {
   updateTask(id: $id, updateTaskDto: $updateTaskDto) {
     _id
     createdAt
-    deletedAt
+
     description
     dueDate
     goalId
-    isDeleted
+
     isGeneratedByAime
     priority
     status
     title
-    userId
   }
 }
-
-
-

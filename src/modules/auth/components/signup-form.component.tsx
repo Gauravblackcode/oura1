@@ -84,6 +84,7 @@ const SignupForm = () => {
             usageInterest: values.usageInterest,
             additionalMessage: values.additionalMessage,
             invitationToken: values.invitationToken,
+            password: values.password,
             device: {
               locale: navigator.language,
               userAgent: navigator.userAgent,
@@ -205,11 +206,11 @@ const SignupForm = () => {
             value={{
               date: moment(values.dateOfBirth)
             }}
-            
+
             mode='single'
             withTimezone={false}
             timeZone="UTC"
-            
+
             calendarProps={{
               datePicker: {
                 views: ['year', 'month', 'day'],
@@ -226,7 +227,7 @@ const SignupForm = () => {
               });
             }}
           />
-           
+
         </div>
       </div>
 
@@ -333,7 +334,7 @@ const SignupForm = () => {
         />
       </div>
 
-   
+
     </form>
   );
 };
