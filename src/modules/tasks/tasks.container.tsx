@@ -11,7 +11,8 @@ import { formatDate } from '@/utils/dateFormat';
 import optionsIcon from '@/assets/images/Vector (2).svg';
 import styles from './tasks.module.scss';
 import Image from 'next/image';
-
+import AimeIcon from '@/assets/images/mdi_magic (1).svg';
+import TitleIcon from '@/assets/images/Vector (2).svg';
 const tasksService = new TasksService();
 
 interface FetcherParams {
@@ -172,7 +173,7 @@ const TasksContainer = () => {
       />
 
       <div className={styles.tasksContainer}>
-        {/* Filter tabs */}
+        {/* Filter tabs - always visible */}
         <div className={styles.filterTabs}>
           <button
             className={`${styles.filterTab} ${activeFilter === 'all' ? styles.activeFilter : ''}`}
@@ -200,7 +201,24 @@ const TasksContainer = () => {
           </button>
         </div>
 
-        {/* Status Cards */}
+        {/* AI Suggestion - always visible */}
+        <div className={styles.aiSuggestion}>
+          <div>
+            <div className={styles.aiSuggestionTitle}>
+              <Image src={AimeIcon} alt="Aime" width={20} height={20} />
+              Aime's suggestion
+            </div>
+            <div className={styles.aiSuggestionText}>
+              Based on your notes, would you like to create a event for "Weekly team activity"?
+            </div>
+            <div className={styles.aiSuggestionActions}>
+              <button className={styles.createEventButton}>Create Event</button>
+              <button className={styles.dismissButton}>Dismiss</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Status Cards - always visible */}
         <div className={styles.statusTabs}>
           <div className={styles.statusCard}>
             <div className={styles.statusIcon} style={{ backgroundColor: '#EEF4FF' }}>
@@ -231,52 +249,8 @@ const TasksContainer = () => {
           </div>
         </div>
 
-        {/* Task List */}
-        <div className={styles.tasksListContainer}>
-          {data.data.map((task: Task) => (
-            <div key={task._id} className={styles.taskCard}>
-              <h2 className={styles.taskTitle}>{task.title}</h2>
-              <p className={styles.taskDescription}>{task.description}</p>
-              <div className={styles.taskMeta}>
-                <span className={styles.taskStatus}>Status: {task.status}</span>
-                {task.dueDate && (
-                  <span className={styles.taskDueDate}>Due: {formatDate(task.dueDate)}</span>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Pagination */}
-        {data.totalRecords > pagination.pageSize && (
-          <div className={styles.paginationContainer}>
-            <div className={styles.pagination}>
-              {Array.from({ length: Math.ceil(data.totalRecords / pagination.pageSize) }).map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => handlePageChange(i + 1)}
-                  className={`${styles.pageButton} ${pagination.pageNo === i + 1 ? styles.activePage : ''}`}
-                >
-                  {i + 1}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* New Task Button */}
-        <div className={styles.newTaskButtonContainer}>
-          <button
-            className={styles.newTaskButton}
-            onClick={() => setShowNewTaskForm(true)}
-          >
-            <span className={styles.plusIcon}>+</span>
-            <span>New Task</span>
-          </button>
-        </div>
-
-        {/* New Task Form */}
-        {showNewTaskForm && (
+        {/* Conditional rendering for task list or form */}
+        {showNewTaskForm ? (
           <div className={styles.newTaskFormContainer}>
             <div className={styles.newTaskForm}>
               <div className={styles.formHeader}>
@@ -342,7 +316,6 @@ const TasksContainer = () => {
 
               {/* Repeat section with styling matching image */}
               <div className={styles.formSection}>
-                <label className={styles.formLabel}>Repeat</label>
                 <div className={styles.repeatSelectContainer}>
                   <div className={styles.repeatIconWrapper}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -422,7 +395,63 @@ const TasksContainer = () => {
               </div>
             </div>
           </div>
+        ) : (
+          <>
+            {/* Task List */}
+            <div className={styles.tasksListContainer}>
+              {data.data.map((task: Task) => (
+                <div key={task._id} className={styles.taskCard}>
+                  <div className={styles.taskTitleContainer}>
+                    <Image src={TitleIcon} alt="Title" width={20} height={20} />
+                    <h2 className={styles.taskTitle}>{task.title}</h2>
+                    <div className={styles.taskOptions}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 12C6 12.5523 5.55228 13 5 13C4.44772 13 4 12.5523 4 12C4 11.4477 4.44772 11 5 11C5.55228 11 6 11.4477 6 12Z" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M13 12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12Z" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M20 12C20 12.5523 19.5523 13 19 13C18.4477 13 18 12.5523 18 12C18 11.4477 18.4477 11 19 11C19.5523 11 20 11.4477 20 12Z" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  </div>
+                  <p className={styles.taskDescription}>{task.description}</p>
+                  <div className={styles.taskMeta}>
+                    <span className={styles.taskStatus}>Status: {task.status}</span>
+                    {task.dueDate && (
+                      <span className={styles.taskDueDate}>Due: {formatDate(task.dueDate)}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {data.totalRecords > pagination.pageSize && (
+              <div className={styles.paginationContainer}>
+                <div className={styles.pagination}>
+                  {Array.from({ length: Math.ceil(data.totalRecords / pagination.pageSize) }).map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handlePageChange(i + 1)}
+                      className={`${styles.pageButton} ${pagination.pageNo === i + 1 ? styles.activePage : ''}`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
         )}
+
+        {/* New Task Button - always visible */}
+        <div className={styles.newTaskButtonContainer}>
+          <button
+            className={styles.newTaskButton}
+            onClick={() => setShowNewTaskForm(true)}
+          >
+            <span className={styles.plusIcon}>+</span>
+            <span>New Task</span>
+          </button>
+        </div>
       </div>
     </main>
   );

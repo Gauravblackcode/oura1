@@ -1,0 +1,394 @@
+.eventsPage {
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+    'Helvetica Neue', sans-serif;
+  background-color: #fff;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  color: #6b7280;
+
+  &:hover {
+    color: #374151;
+  }
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.searchContainer {
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+
+  &::placeholder {
+    color: #9ca3af;
+  }
+}
+
+.controlsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.sortBy {
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-right: 0.5rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+}
+
+.sortSelect {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  background-color: white;
+  color: #374151;
+}
+
+.viewDropdown {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  background-color: white;
+  color: #374151;
+  min-width: 120px;
+}
+
+.filterTabs {
+  display: flex;
+  padding: 0 1.5rem;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+}
+
+.filterTab {
+  padding: 0.5rem 1rem;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f9fafb;
+  }
+}
+
+.activeFilterTab {
+  background-color: #f97316;
+  color: white;
+  border-color: #f97316;
+
+  &:hover {
+    background-color: #ea580c;
+  }
+}
+
+.statusTabs {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: white;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.statusCard {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+}
+
+.statusIcon {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.statusTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.statusCount {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.statusLabel {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.calendarContainer {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.calendarTitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.calendarNavigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: #f3f4f6;
+  }
+}
+
+.viewControls {
+  display: flex;
+  gap: 4px;
+}
+
+.viewButton {
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: none;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+
+  &.active {
+    background-color: #1f2937;
+    color: white;
+  }
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-collapse: collapse;
+}
+
+.weekdayHeader {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.weekday {
+  padding: 12px 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.dateCell {
+  border-right: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  min-height: 100px;
+  padding: 8px;
+  position: relative;
+
+  &:nth-child(7n) {
+    border-right: none;
+  }
+
+  &.otherMonth {
+    background-color: #f9fafb;
+
+    .dateNumber {
+      color: #9ca3af;
+    }
+  }
+
+  &.today {
+    .dateNumber {
+      color: #f97316;
+      font-weight: 600;
+    }
+  }
+}
+
+.dateNumber {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+.event {
+  margin-bottom: 4px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &.todo {
+    background-color: #fef3f2;
+    color: #b42318;
+  }
+
+  &.inProgress {
+    background-color: #fffaeb;
+    color: #b54708;
+  }
+
+  &.completed {
+    background-color: #ecfdf3;
+    color: #027a48;
+  }
+}
+
+.newEventButton {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f9fafb;
+  }
+}
+
+@media (max-width: 768px) {
+  .statusTabs {
+    padding: 8px;
+    background-color: white;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    gap: 0;
+  }
+
+  .statusCard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 2px;
+    min-width: 0;
+  }
+
+  .statusIcon {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  .statusIcon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .statusTextContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    overflow: hidden;
+    margin-left: 4px;
+  }
+
+  .statusCount {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .statusLabel {
+    font-size: 10px;
+    color: #666;
+    white-space: nowrap;
+    width: 100%;
+    line-height: 1.1;
+    margin: 0;
+  }
+}

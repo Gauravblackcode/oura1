@@ -79,6 +79,7 @@
   color: #d24d21;
   margin-bottom: 8px;
   font-size: 14px;
+  gap: 8px;
 }
 
 .aiSuggestionTitle svg {
@@ -100,7 +101,7 @@
   padding: 6px 12px;
   background-color: transparent;
   border: 1px solid #d24d21;
-  border-radius: 4px;
+  border-radius: 8px;
   color: #d24d21;
   font-size: 14px;
   cursor: pointer;
@@ -225,6 +226,14 @@
   }
 }
 
+.taskTitleContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  position: relative;
+}
+
 .taskCardHeader {
   display: flex;
   align-items: center;
@@ -245,13 +254,35 @@
 }
 
 .taskOptions {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   cursor: pointer;
+  color: #6b7280;
+}
+
+.taskDescription {
+  font-size: 14px;
+  color: #4b5563;
+  margin-top: 0;
+  margin-bottom: 8px;
+  margin-left: 28px;
+}
+
+.taskMeta {
+  margin-left: 28px;
+}
+
+.taskStatus {
+  font-size: 14px;
+  color: #6b7280;
+  margin-right: 12px;
 }
 
 .taskDueDate {
   font-size: 14px;
   color: #6b7280;
-  margin-bottom: 8px;
 }
 
 .taskTimeInfo {
@@ -393,22 +424,13 @@
   margin-top: 8px;
 }
 
-.taskDescription {
-  font-size: 14px;
-  color: #4b5563;
-  margin-top: 8px;
-  margin-bottom: 8px;
-}
-
 /* Form container styling */
 .newTaskFormContainer {
-  position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  height: 100%;
   background-color: #f9f9f7;
-  z-index: 50;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -417,10 +439,16 @@
 .newTaskForm {
   flex: 1;
   padding: 16px 24px 80px;
-  max-width: 600px;
+  padding-left: calc(16% + 24px);
+  max-width: 100%;
   width: 100%;
-  margin: 0 auto;
+  margin: 0;
   background-color: #f9f9f7;
+  box-sizing: border-box;
+
+  @media (max-width: 640px) {
+    padding-left: 24px;
+  }
 }
 
 /* Header styling */
@@ -572,18 +600,23 @@
   flex: 1;
 }
 
-/* Save button styling */
+/* Form actions styling */
 .formActions {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   padding: 16px 24px;
+  padding-left: calc(16% + 24px);
   background-color: #f9f9f7;
   border-top: 1px solid #e5e7eb;
   display: flex;
   justify-content: center;
-  z-index: 51;
+  z-index: 1001;
+
+  @media (max-width: 640px) {
+    padding-left: 24px;
+  }
 }
 
 .saveButton {
@@ -627,10 +660,11 @@
 
 /* Status dropdown styling - exactly matching the image */
 .statusSelectContainer {
-  background-color: #dcfce7;
+  background-color: transparent;
+  border: 1px solid #16a34a;
   border-radius: 6px;
   padding: 6px 12px;
-  width: fit-content;
+  width: 80%;
   position: relative;
   display: flex;
   align-items: center;
@@ -687,7 +721,7 @@
 
 /* Repeat dropdown styling - matching the image */
 .repeatSelectContainer {
-  background-color: #f3f4f6;
+  background-color: #3f3f3f1a;
   border-radius: 6px;
   padding: 8px 12px;
   width: 40%;
